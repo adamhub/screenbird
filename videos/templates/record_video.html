@@ -1,0 +1,205 @@
+{% extends "base.html" %}
+{% block extrahead %}
+<script type="text/javascript" src="{{ MEDIA_URL }}js/jquery-1.5.1.min.js"></script>
+<script src="{{ MEDIA_URL }}js/jquery.simplemodal.1.4.1.min.js"></script>
+<script type="text/javascript">
+	function getOperatingSystemName(){
+		var OSName="Unknown OS";
+		if (navigator.appVersion.indexOf("Win")!=-1) OSName="Windows";
+		if (navigator.appVersion.indexOf("Mac")!=-1) OSName="MacOS";
+		if (navigator.appVersion.indexOf("X11")!=-1) OSName="UNIX";
+		if (navigator.appVersion.indexOf("Linux")!=-1) OSName="Linux";
+
+		return OSName;
+	}
+
+	function AlertIfLinux(){
+		var OSName = getOperatingSystemName();
+		if(OSName == "Linux" || OSName == "UNIX")
+		{
+            $("#popup").modal({onClose: function (dialog) {
+                dialog.data.fadeOut('fast', function () {
+                    dialog.container.hide('fast', function () {
+                        dialog.overlay.slideUp('fast', function () {
+                            $.modal.close();
+                        });
+                    });
+                });
+            }});
+		}
+	}
+	
+	$(document).ready(function(){
+		AlertIfLinux();
+	});
+</script>
+<style type="text/css">
+    div#popup
+    {
+        font-size: 10px;
+    }
+</style>
+{% endblock %}
+{% block title %} | Record Video{% endblock %}
+{% block content %}
+	<input type="hidden" id="closed" value="false">
+{% if max_time %}
+	<h1>Video Recording</h1>
+	<p>You have already maxed out your allowable upload time. You could delete another video or <strong>upgrade your account</strong> to continue uploading more videos. Thanks.</p>
+{% else %}
+    <div id="recorder_message">
+		<h1>Opening recorder... so don't go!</h1>
+		<p> Once you see the recording controls, hit the capture button to record. To share your video, hit the upload button, and share the provided URL. You can upload a recorded video any time in the future if you aren't ready for the primetime. Log-in if you would like to rename, redescribe or remove video.</p>
+		{% if not user.is_authenticated %}
+			<p>You are currently not logged in, this means you cannot edit or delete anything you record.</p>
+		{% endif %}
+		<br>
+		{% include 'record_video_form.html' %}
+ 	</div>
+	<script type="text/javascript"> 
+		function setHidden(value){
+		   document.getElementById('closed').value = value;
+		};
+		function redirectHome(){
+			//Override closing handler
+			window.onbeforeunload = undefined;
+		    {% if request.user.is_authenticated %}
+		    submitForm();
+		    {% else %}
+		    window.location = "http://{{ request.META.HTTP_HOST }}/";
+		    {% endif %}
+		};
+		function closeRecorderForm(){
+			//Used for handling multiple instances
+			
+			//Override closing handler
+			window.onbeforeunload = undefined;
+			
+			//If user is using FireFox, we can not close window using javascript
+			if (navigator.userAgent.indexOf("Firefox") != -1) {
+				
+				//Grab the wrapper element of the web content
+				var recorder_element = document.getElementById('recorder_message');
+				//Rewrite web page
+				recorder_element.innerHTML =  "<h1>Found open Screenbird application...</h1>";
+				recorder_element.innerHTML += "<p>You may only have one Screenbird application open at a time. Please use the previous opened application.</p>"
+			} else {
+				//All other browsers
+				//Close applet by closing tab
+			    window.open('', '_self', '');
+			    self.close();
+			    window.close();
+		    }
+		};
+	</script>
+	<script type="text/javascript">
+		window.onbeforeunload = function (e) {
+			var e = e || window.event;
+		  	messagePrompt = 'Warning: Leaving this page will close Screenbird Recorder. Any video not uploaded or saved will be lost!';
+		  	//IE & Firefox
+		  	var closed = document.getElementById('closed').value;
+		  	if (closed==='true'){
+		  		//Do something else
+		  	}else{
+			  	if (e) {
+					e.returnValue = messagePrompt;
+			  	}
+			  	// For Safari
+			  	return messagePrompt;
+		  	}
+		};
+	</script>
+{% endif %}
+
+
+<div id="popup">
+    <script type="text/javascript">
+    document.getElementById('popup').style.display = 'none';
+    </script>
+        <h1><strong>Warning</strong></h1>
+        <p>
+            <h3>
+                We have detected some version of Linux. <br/>
+                That's great, but you will have to use Sun's version of Java, not the open variants. <br/>
+                Here's some commands to help you get going in case the recoder isn't working for you:<br/>
+            </h3>
+        </p>
+        <h2 id="InstallJava7onUbuntu">
+            Install Java 7 on Ubuntu
+        </h2>
+        <p>
+            <strong>Reference</strong> 
+            <a href="http://askubuntu.com/questions/55848/how-do-i-install-oracle-java-jdk-7">
+                http://askubuntu.com/questions/55848/how-do-i-install-oracle-java-jdk-7
+            </a> 
+            <br/>
+        </p>
+        <h2>Information</h2>
+        <ul>
+            <li>
+                Tested on Ubuntu Lucid Lynx 10.04
+            </li>
+            <li>
+                Enables use of Screenbird's screen recorder in Chrome, Chromium, and Firefox
+            </li>
+            <li>
+                Also gets rid of the <strong>Java Plugin is out of date</strong> warning
+            </li>
+        </ul>
+        <p>
+            <strong>Download the binary from here</strong>
+            <br/>
+            <a href="http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1637583.html">
+                <span class="icon">&nbsp;</span>http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1637583.html
+            </a>
+        </p>
+        <p>
+            <strong>Unzip it</strong>
+            <br/>
+        </p>
+        <pre>
+            tar -xzvf jdk-7u5-linux-i586.tar.gz
+        </pre>
+        <p>
+            <strong>Move it in place</strong> 
+            <br/>
+        </p>
+        <pre>
+            sudo mv /usr/lib/jvm/jdk1.7.0_05 /usr/lib/jvm/jdk1.7.0_05
+        </pre>
+        <p>
+            <strong>Load Java</strong>
+            <br/>
+        </p>
+        <pre>
+            sudo update-alternatives --install "/usr/bin/java" "java" "/usr/lib/jvm/jdk1.7.0_05/bin/java" 1
+            sudo update-alternatives --install "/usr/bin/javac" "javac" "/usr/lib/jvm/jdk1.7.0_05/bin/javac" 1
+            sudo update-alternatives --install "/usr/bin/javaws" "javaws" "/usr/lib/jvm/jdk1.7.0_05/bin/javaws" 1
+        </pre>
+        <p>
+            <strong>
+                If there is more than one version of java, for each binary, select which the one you wish to be default. In this case select the Java with the path starting with "/usr/lib/jvm/jdk1.7.0_05/"
+            </strong>
+            <br/>
+        </p>
+        <pre>
+            sudo update-alternatives --config java
+            sudo update-alternatives --config javac
+            sudo update-alternatives --config javaws
+        </pre>
+        <p>
+            <strong>Delete your previous plugin</strong>
+            <br/>
+        </p>
+        <pre>
+            rm ~/.mozilla/plugins/libnpjp2.so
+        </pre>
+        <p>
+            <strong>Load the new plugin</strong>
+            <br/>
+        </p>
+        <pre>
+            ln -s /usr/lib/jvm/jdk1.7.0_05/jre/lib/i386/libnpjp2.so ~/.mozilla/plugins/
+        </pre>
+</div>
+{% endblock %}

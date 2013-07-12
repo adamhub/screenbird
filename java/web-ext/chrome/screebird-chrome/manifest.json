@@ -1,0 +1,13 @@
+{
+  "name": "Screenbird Recorder",
+  "version": "1.0",
+  "description": "Open Screenbird Recorder",
+  "background_page": "screenbird-record.html",
+  "browser_action": {
+    "default_title": "Screenbird Recorder",
+    "default_icon": "favicon.ico"
+  },
+  "permissions": [
+    "tabs"
+  ]
+}

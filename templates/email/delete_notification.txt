@@ -1,0 +1,11 @@
+Hi {{ admin }},
+
+    This video's owner transferred ownership to you.
+    Select "Delete video permanently" to completely remove the video from your list.
+
+    {{ link }}
+
+
+-------------------------
+Screenbird Team 
+

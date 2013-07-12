@@ -1,0 +1,11 @@
+Hi {{ admin }},
+
+    This video needs approval.
+    Select "Publish" or "Deny" accordingly.
+
+    {{ link }}
+
+
+-------------------------
+Screenbird Team 
+

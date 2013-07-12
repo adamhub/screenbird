@@ -1,0 +1,143 @@
+{% extends "site_base.html" %}
+{% load auth_tags %}
+
+{% block google_opt_script %}
+<!-- Google Website Optimizer Control Script -->
+<script>
+function utmx_section(){}function utmx(){}
+(function(){var k='0555033716',d=document,l=d.location,c=d.cookie;function f(n){
+if(c){var i=c.indexOf(n+'=');if(i>-1){var j=c.indexOf(';',i);return escape(c.substring(i+n.
+length+1,j<0?c.length:j))}}}var x=f('__utmx'),xx=f('__utmxx'),h=l.hash;
+d.write('<sc'+'ript src="'+
+'http'+(l.protocol=='https:'?'s://ssl':'://www')+'.google-analytics.com'
++'/siteopt.js?v=1&utmxkey='+k+'&utmx='+(x?x:'')+'&utmxx='+(xx?xx:'')+'&utmxtime='
++new Date().valueOf()+(h?'&utmxhash='+escape(h.substr(1)):'')+
+'" type="text/javascript" charset="utf-8"></sc'+'ript>')})();
+</script>
+<!-- End of Google Website Optimizer Control Script -->
+<!-- Google Website Optimizer Tracking Script -->
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['gwo._setAccount', 'UA-17767625-8']);
+  _gaq.push(['gwo._trackPageview', '/0555033716/test']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+<!-- End of Google Website Optimizer Tracking Script -->
+{% endblock google_opt_script %}
+
+{% block header %}{% endblock %}
+
+{% block body_id %}id="index-page"{% endblock %}
+
+    {% block content %}
+        <div id="intro">
+            <h1>Record your screen like a boss</h1>
+            
+            <div id="start">
+                <div id="some-features">
+                    <h2>Features</h2>
+                    <ul>
+                        <li>No sign-in screen recording</li>
+                        <li>Public or private links</li>
+                        <li>Record whole or part of screen</li>
+                        <li>Redo parts of recording</li>
+                        <li>Unlimited team members</li>
+                        <li>Create video outlines</li>
+                        <li><a href="{% url features %}">…see more!</a></li>
+                    </ul>
+                </div><!-- /some-features -->
+                <p id="record-nao"><a href="{% url record-video %}">&#9679; Start Recording!</a></p>
+                
+                {% comment %}
+                <p id="example-url"><a href="http://screenbird.com/GYRM8L0C">e.g. http://screenbird.com/GYRM8L0C</a></p>
+                {% endcomment %}
+                <p id="example-url"><a href="http://screenbird.com/G43Q91ZQ/">e.g. http://screenbird.com/G43Q91ZQ/</a></p>
+            </div><!-- /start -->
+            
+        </div><!-- /intro -->
+				
+        <div id="video-list">
+            <div id="latest-videos">
+                <h3>Latest videos</h3>
+                <ul>
+                {% for vid in new_videos %}
+                    <li>
+                        <h4><a href="{% url watch-video vid.slug %}" title="{{ vid.title }}">{{ vid.title }}</a></h4>
+                        <p>by 
+                            {% if vid.uploader.username %}
+                                {% if vid.uploader.userprofile.is_anonymous %}
+                                    <a href='{% url user_videos vid.uploader.username %}'>Anonymous User</a>
+                                {% else %}
+                                    <a href='{% url user_videos vid.uploader.username %}'>{% if vid.uploader.userprofile.nickname %}
+                                        {{ vid.uploader.userprofile.nickname }}
+                                    {% else %}
+                                        {% if vid.uploader.first_name %}
+                                            {{ vid.uploader.first_name }}
+                                        {% else %}
+                                            {% if vid.uploader.username %}
+                                                {{ vid.uploader.username }}
+                                            {% else %}
+                                                {{ vid.uploader.email|get_email_localpart }}
+                                            {% endif %}
+                                        {% endif %}
+                                    {% endif %}</a>
+                                {% endif %}
+                            {% else %}
+                                {% if vid.uploader.email %}
+                                    {{ vid.uploader.email|get_email_localpart }}
+                                {% else %}
+                                    <strong>Anonymous User</strong>
+                                {% endif %}
+                            {% endif %} on {{vid.created|date:"M d, Y" }}</p>
+                {% empty %}
+                    <li>No Videos Available.</li>
+                {% endfor %}
+                </ul>
+            </div><!-- /latest-videos -->
+					
+            <div id="popular-videos">
+                <h3>Popular videos</h3>
+                <ul>
+                {% for video in popular_videos %}
+                    <li>
+                        <h4><a href="{% url watch-video video.slug %}" title="{{ video.title }}">{{ video.title }}</a></h4>
+                        <p>by 
+                            {% if video.uploader.username %}
+                                {% if video.uploader.userprofile.is_anonymous %}
+                                    <a href='{% url user_videos video.uploader.username %}'>Anonymous User</a>
+                                {% else %}
+                                    <a href='{% url user_videos video.uploader.username %}'>{% if video.uploader.userprofile.nickname %}
+                                        {{ video.uploader.userprofile.nickname }}
+                                    {% else %}
+                                        {% if video.uploader.first_name %}
+                                            {{ video.uploader.first_name }}
+                                        {% else %}
+                                            {% if video.uploader.username %}
+                                                {{ video.uploader.username }}
+                                            {% else %}
+                                                {{ video.uploader.email|get_email_localpart }}
+                                            {% endif %}
+                                        {% endif %}
+                                    {% endif %}</a>
+                                {% endif %}
+                            {% else %}
+                                {% if video.uploader.email %}
+                                {{ video.uploader.email|get_email_localpart }}
+                                {% else %}
+                                <strong>Anonymous User</strong>
+                                {% endif %}
+                            {% endif %} on {{video.created|date:"M d, Y" }}</p>
+                {% empty %}
+                    <li>No Videos Available.</li>
+                {% endfor %}
+                </ul>
+            </div><!-- /popular-videos -->
+        </div><!-- /video-list -->
+        {% if videos_count > limit %}
+            <div class="see-more"><a href="{% url videos %}">See all {{ videos_count }} Videos &rarr;</a></div>
+        {% endif %}
+   {% endblock content %}

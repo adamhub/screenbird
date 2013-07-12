@@ -1,0 +1,19 @@
+<!-- ADMIN NOTES -->
+<div class="admin_notes">
+    <div class="admin_notes_padding">
+        <span style="display:inline-block; float:left; font-weight:bold;"><span style="font-size:18px; ">Admin Notes </span><span style="font-size:14px;">by </span><span style="font-size:14px; color:#dd4444;">{{ cocreate.owner.first_name }} </span></span>
+        <br>
+        <br>
+        <span class="admin_note_inner" style="font-size:16px; display:inline-block; float:left; width:600px;">
+        {{ cocreate.notes }}
+    </span>
+    {% if is_owner %}
+    	<a class="grey_button" href="#">edit</a>
+    {% endif %}
+    <!-- SUBMIT AND CANCEL BUTTONS FOR AFTER EDIT IS CLICKED
+    <a href="#" class="grey_button">submit</a>
+    <a href="#" class="grey_button">cancel</a>
+    -->
+    <div class="clear"></div>
+    </div>
+</div>

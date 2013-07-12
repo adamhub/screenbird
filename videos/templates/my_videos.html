@@ -1,0 +1,337 @@
+{% extends "base.html" %}
+{% load auth_tags %}
+{% load videos_tags %}
+
+{% block title %}| My Videos{% endblock %}
+{% block extrahead %}
+<script type="text/javascript" src="{{ MEDIA_URL }}js/jquery-1.5.1.min.js"></script>
+<script src="{{ MEDIA_URL }}js/mediaelementjs/mediaelement-and-player.min.js"></script>
+<script src="{{ MEDIA_URL }}js/jquery.simplemodal.1.4.1.min.js"></script>
+<script src="{{ MEDIA_URL }}js/script.js"></script>
+<!-- Pat css -->
+<link rel="stylesheet" href="{{ MEDIA_URL }}css/grid.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="{{ MEDIA_URL }}css/normalize.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="{{ MEDIA_URL }}css/styles.css" type="text/css" media="screen" />
+<script type="text/javascript">
+
+function changeLink(){
+    $.ajax({
+        type: "POST",
+        url: "{% url change-rlink request.user.id %}", 
+        success: function(data, status, xhr){
+            if(status=="success"){
+                $("#embed-code").html(data);
+            }
+        }
+    });
+}
+$(document).ready(function() {
+    $('img').click(function(){
+        var msg = "";
+        
+        {% for key,value in popupinfo.items %}
+        if($(this).attr("id") == "{{ key }}"){
+            msg = "{{ value|replace_newlines }}";
+            if (msg != "") {
+                msg = '<div style="width:500px; padding:2px;">{{ value|replace_newlines_js }}</div>';
+            }
+        }
+        {% endfor %}
+        
+        if (msg != "") {
+            $.modal(msg, {
+                onClose: function (dialog) {
+                    dialog.data.fadeOut('fast', function () {
+                        dialog.container.hide('fast', function () {
+                            dialog.overlay.slideUp('fast', function () {
+                                $.modal.close();
+                            });
+                        });
+                    });
+                }
+            });
+        }
+        
+        
+    });
+    
+    $("#id_scroll, #id_pages, #id_show_channel").change(function(){
+        var embedCode = $("#id_embed_code").val();
+        var splitList = embedCode.split("src='");
+        var splitStart = splitList[0] + "src='";
+        var splitEnd = "' style" + splitList[1].split("' style")[1];
+        var embedURL = "{{ embed_code_url }}";
+        var scroll = $("#id_scroll").attr("checked");
+        var numPages = $("#id_pages").val();
+        var showChannels = $("#id_show_channel").attr("checked");
+        if (scroll) {
+            $("#id_embed_code").val(splitStart + embedURL + "?pages=" + numPages + "&show_channel=" + showChannels + "&scroll=on" + splitEnd);
+        }
+        else {
+            $("#id_embed_code").val(splitStart + embedURL + "?pages=" + numPages + "&show_channel=" + showChannels + splitEnd);
+        }
+    });
+    
+    $('div#embed a.get_embed').click(function(e) {
+        e.preventDefault();
+        var msg = ''
+        if($(this).attr("id") == "rlink"){
+            msg = '<h2><strong>Screenbird Recording Link</strong></h2>'+
+                    '<textarea id="embed-code" style="width:500px;height:20px;padding:2px;">{{ recording_link }}</textarea><br />'+
+                    '<a href="javascript:changeLink();" style="font-size: 10px;float:right;margin-top: 2px;">Change your recording link </a>';
+            $.modal(    msg,
+                    {onClose: function (dialog) {
+                        dialog.data.fadeOut('fast', function () {
+                            dialog.container.hide('fast', function () {
+                                dialog.overlay.slideUp('fast', function () {
+                                    $.modal.close();
+                                });
+                            });
+                        });
+            }});
+        }else{
+            $("#embed-popup").modal({
+                onClose: function(dialog){
+                    dialog.data.fadeOut('fast', function () {
+                        dialog.container.hide('fast', function () {
+                            dialog.overlay.slideUp('fast', function () {
+                                $.modal.close();
+                            });
+                        });
+                    });
+                },
+                minWidth: 500
+            });
+        }
+    });
+    
+    $("a.inactive").click(function(e){
+        e.preventDefault();
+        return false;
+    });
+});
+</script>
+{% endblock %}
+
+{% block body_id %}id="youtube-page"{% endblock %}
+
+{% block content %}
+<div id="myvideos-page" class="videos-page">
+    <h1>
+        {% if user.is_anonymous %}
+            Anonymous User's
+        {% else %}
+            {% if user.userprofile.nickname %}
+              {{ user.userprofile.nickname|apostrophe_rule }}
+            {% else %}
+              {% if user.first_name %}
+                {{ user.first_name|apostrophe_rule }}
+              {% else %}
+                    {% if user.username %}
+                        {{ user.username|apostrophe_rule }}
+                    {% else %}
+                    {{ user.email|get_email_localpart|apostrophe_rule }}
+                    {% endif %}
+              {% endif %}
+            {% endif %}
+        {% endif %}
+    Uploaded Videos 
+    </h1>
+
+    {% if not user.is_authenticated %}
+        <p>This is the video management area, which allows you to change or
+        remove the videos you have previously recorded. <a href="{% url register %}">Make an account to
+        use it</a>. Videos you recently made will show up here upon creating
+        your account.</p>
+    {% endif %}
+
+    <form method='POST' action=''>{% csrf_token %}
+        <div id="controls">
+            {% if user.is_authenticated %}<input type="submit" value="Delete Selected Videos" id="delete-button" class="button">{% endif %}
+            <input type="button" value="Upload Your Video Now" id="upload-button" class="button" onclick="location.href='{% url upload-video %}'">
+        </div><!-- /controls -->
+        <table>
+            <tr>
+                <th></th>
+                <th>Name</th>
+                <th>Status</th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th>Channel</th>
+            </tr>
+            {% for l in latest_submissions_page.object_list %}
+                <tr{% cycle '' ' class="odd"' %}>
+                    <td><input type="checkbox" name="item" value="{{ l.video.id }}"></td>
+                    <td class="td_title">{% if l.video.is_public %}<img src="{{ MEDIA_URL }}gfx/public-icon-cropped.png" height="15" width="10">{% else %}<img src="{{ MEDIA_URL }}gfx/private-icon-cropped.png" height="15" width="10">{% endif %}&nbsp;&nbsp;<a href="{{ l.video.get_absolute_url }}">{{ l.video.title }}</a></td>
+                    {% if l.account_level.pk == 1 and not l.video.youtube_embed_url %}
+                        <td class="expiry">{% if not l.video.expired %}{{ l.days_left }} day{{ l.days_left|pluralize }} left{% else %}Expired!{% endif %}</td>
+                    {% else %}
+                        <td class="expiry">∞</td>
+                    {% endif %}
+                    <td class="edit"><a href="{% url my-videos-edit l.video.slug %}">Edit</a></td>
+                    <td>
+                        {% if l.video.youtube_embed_url %}
+                            <a href="{{ l.video.get_absolute_url }}"><img src="{{ MEDIA_URL }}gfx/ytgreyedout.png" alt="Link to YouTube video"></a>
+                        {% else %}
+                            <a href="{% url upload-youtube l.video.slug %}"><img src="{{ MEDIA_URL }}gfx/yt.png" alt="Upload to YouTube" title="Upload this video to YouTube!"></a>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if not l.video.youtube_embed_url %}
+                            <a href="{% url download-video l.video.slug %}" title="Download video">⇩</a>
+                        {% else %}
+                            <a href="#" style="cursor:default" title="Video deleted" class="inactive">⇩</a>
+                        {% endif %}
+                    </td>
+                    <td class="td_channel"><a href="{{ l.video.channel.get_absolute_url }}">{{ l.video.channel|default:"&nbsp;" }}</a></td>
+                </tr>
+             {% empty %}
+                <tr>
+                    <td colspan="6">No videos uploaded yet.</td>
+                </tr>
+             {% endfor %}
+        </table>
+        
+        {% if paginator.num_pages > 1 %}
+        <div id="pagination">
+            <p>
+                {% if latest_submissions_page.has_previous %}
+                    <a href="?page={{ latest_submissions_page.previous_page_number }}"><font color="#ccc">previous</font></a>
+                {% endif %}
+                Page {{ latest_submissions_page.number }} of {{ paginator.num_pages }}
+
+                {% if latest_submissions_page.has_next %}
+                    <a href="?page={{ latest_submissions_page.next_page_number }}"><font color="#ccc">next</font></a>
+                {% endif %}
+            </p>
+        </div><!-- /pagination -->
+        {% endif %}
+    </form>
+
+    <div id="embed">
+        {% if recording_link and request.user.id %}
+        <div class="alignleft">
+            <img class="info alignright" id="rlink_info" src="{{ MEDIA_URL }}gfx/question.png">
+            <a href="#" id="rlink" class="get_embed alignleft">Show Recording Link&nbsp;&nbsp;</a>
+        </div>
+        {% endif %}
+        <div class="alignright">
+            <img class="info alignright" id="elink_info" src="{{ MEDIA_URL }}gfx/question.png">
+            <a href="#" id="elink" class="get_embed alignleft">Embed Video Page&nbsp;&nbsp;</a>
+        </div>
+    </div>
+
+    <!-- List of cocreated videos by this user -->
+    <div class="clearfix"><br/><br/></div>
+    <section class="content-block cocreated channels">
+        <div>
+            <h1>My Co-created Videos <img class="info" id="cocreated_videos_info" src="{{MEDIA_URL}}gfx/question.png" style="width:20px;"/></h1>
+            {% if cocreated %}
+                <table>
+                    <thead>
+                        <tr>
+                            <th colspan="3">Co-create Videos</th>
+                        </tr>
+                    </thead>
+                    {% for co in cocreated %}
+                        <tr>
+                            <td><a href="{% url cocreate co.id %}">{{ co.title }}</a></td>
+                            <td>by {% if co.owner = user %}you{% else %}{{ co.owner }}{% endif %}</td>
+                            <td>{% if co.owner = user %}<a href="{% url cocreate_compile co.pk %}">Compile</a>{% endif %}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            {% else %}
+                <p>No cocreated videos to display.</p>
+            {% endif %}
+
+            <button class="wide alignright" onclick="location.href='{% url cocreate_new %}'">Create New</button>
+        </div>
+    </section>
+    
+    <!-- List of channels by this user -->
+    <div class="clearfix"></div>
+    <section class="content-block channels">
+        <div>
+            <h1>My Channels <img class="info" id="channel_grps_info" src="{{ MEDIA_URL }}gfx/question.png"></h1>
+            
+            {% if channels %}
+                <table border="0" cellpadding="10" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Channel</th>
+                            <th>Recording Link</th>
+                            <th>Api Link</th>
+                        </tr>
+                    </thead>
+                    {% for c in channels %}
+                    <tr>
+                        <td><a href="{% url update_channel c.id %}">{{ c.name }}</a></td>
+                        <td>{{ c.recording_link }}</td>
+                        <td>{{ c.api_link }}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            {% else %}
+                <p>No channels to display.</p>
+            {% endif %}
+            
+            <button class="wide alignright" onclick="location.href='{% url create_channel %}'">Create New</button>
+        </div>
+    </section>
+
+    <!-- List of cocreate members by this user -->
+    <div class="clearfix"></div>
+    <section class="content-block cocreate-members channels">
+        <div>
+            <h1>Co-create Members</h1>
+            {% if cocreators %}
+            <table border="0" cellpadding="10" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>User</th>
+                        <th>Co-create Videos</th>
+                    </tr>
+                </thead>
+                {% for cc, ccvideos in cocreators %}
+                <tr>
+                    <td>{% if cc.last_login == cc.date_joined %}{{ cc.email }}{% else %}{{ cc }}{% endif %}</td>
+                    <td>{% for ccv in ccvideos %}{{ ccv }}{% if not forloop.last %}, {% endif %}{% endfor %}</td>
+                </tr>
+                {% endfor %}
+            </table>
+            {% else %}
+                <p>No co-create members to display.</p>
+            {% endif %}
+        </div>
+    </section>
+</div><!-- /myvideos-page -->
+
+<div id="embed-popup" style="display:none">
+    <h2 style="margin-bottom:0px;"><strong>Video List Embed Code</strong></h2>
+    <form action="" method="GET">
+        <h4>Filter Menu</h4>
+        <div>
+            <div style="float:left;margin-right:20px;">
+                <input type="checkbox" id="id_scroll" name="scroll" {%if scroll%}checked="checked"{%endif%} style="margin-top:3px"> 
+                <label for="scroll">Show Scroll Bar</label>
+            </div>
+            <div style="float:left;margin-right:20px;">
+                <label for="pages">Videos per page: </label>
+                <select id="id_pages" name="pages" >
+                    {% for i in 5|get_page_range %}
+                       <option {%ifequal i pages%}selected="selected"{%endifequal%} value="{{i}}">{{i}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div style="float:left;margin-right:20px;">
+                <input id="id_show_channel" type="checkbox" name="show_channel" value="true" checked="checked" style="margin-top:3px"> Show videos from my channels
+            </div>
+            <br>
+            <br>
+            <textarea id="id_embed_code" style="width:500px;height:50px;padding:2px;">{{ embed_code }}</textarea><br>
+        </div>
+    </form>
+</div>
+{% endblock content %}

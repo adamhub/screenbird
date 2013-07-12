@@ -1,0 +1,288 @@
+{% extends "site_base.html" %}
+
+{% block title %}| Update Channel{% endblock %}
+
+{% block extrahead %}{{ block.super }}
+<script src="{{ MEDIA_URL }}js/mediaelementjs/jquery.js"></script>
+<script type="text/javascript">
+    $(document).ajaxSend(function(event, xhr, settings) {
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie != '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = jQuery.trim(cookies[i]);
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        function sameOrigin(url) {
+            // url could be relative or scheme relative or absolute
+            var host = document.location.host; // host + port
+            var protocol = document.location.protocol;
+            var sr_origin = '//' + host;
+            var origin = protocol + sr_origin;
+            // Allow absolute or scheme relative URLs to same origin
+            return (url == origin || url.slice(0, origin.length + 1) == origin + '/') ||
+                (url == sr_origin || url.slice(0, sr_origin.length + 1) == sr_origin + '/') ||
+                // or any other URL that isn't scheme relative or absolute i.e relative.
+                !(/^(\/\/|http:|https:).*/.test(url));
+        }
+        function safeMethod(method) {
+            return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+        }
+
+        if (!safeMethod(settings.type) && sameOrigin(settings.url)) {
+            xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+        }
+    });
+    $(document).ready(function(e) {
+        {% if request.user != channel.owner %}
+            $("input").attr("readonly", true);
+        {% endif %}
+        // remove channel_member
+        $(".remove_user").live("click", function(e) {
+            e.preventDefault();
+            yes = confirm("Are you sure you want to remove this user from the group?");
+            if (yes) {
+                window.location.href = $(this).attr("href");
+            }
+        });
+    });
+    function cancel_invitation(id){
+        node = $("#u" + id);
+        invitation_id = node.attr("invitation-id");
+        url = "{% url cancel_invitation 0 %}".replace('0', invitation_id);
+        $.ajax({
+            type: 'GET',
+            url : url,
+            success : function(data){
+                if(data=='OK!'){
+                    node.hide();
+                }
+            }
+        });
+    }
+    function remove_channel_member(channel_id, user_id){
+        url = "{% url remove_channel_member 0,1 %}".replace('0', channel_id).replace('1', user_id);
+        
+        $.ajax({
+            type: 'POST',
+            url : url,
+            success : function(data){
+                window.location = '{% url update_channel channel.id %}';
+            }
+        });
+    }
+</script>
+{% endblock %}
+
+{% block extrastyles_block %}
+<link rel="stylesheet" href="{{ MEDIA_URL }}css/grid.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="{{ MEDIA_URL }}css/normalize.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="{{ MEDIA_URL }}css/styles.css" type="text/css" media="screen" />
+{% endblock %}
+
+{% block body_id %}class="home"{% endblock %}
+
+{% block content %}
+    <div class="videos-page">
+    {% if channel.owner == request.user %}
+        <h1>Update Channel</h1>
+        <section class="content-block">
+            <h4>Name</h4>
+            <form method="post" action="." class="box channel-form">{% csrf_token %}
+                <table>
+                    <tr>
+                        <td>
+                            <label>Group Name</label>
+                        </td>
+                        <td>
+                            {{ channel_form.name }}
+                            {% if channel_form.errors.name %}<span class="spanInputError"></span>{% endif %}<span class="error">{{ channel_form.errors.name }}</span>
+                        </td>
+                    </tr>
+                    {% if request.user.get_profile.is_paid or request.user.get_profile.is_using_trial%}
+                    <tr>
+                        <td>
+                            <label>Api Link</label>
+                        </td>
+                        <td>
+                            {{ channel_form.api_link }}
+                            {% if channel_form.errors.api_link %}<span class="spanInputError"></span>{% endif %}<span class="error">{{ channel_form.errors.api_link }}</span>
+                        </td>
+                    </tr>
+                    {% endif %}
+                </table>
+                {% if request.user == channel.owner %}
+                    <button id="submitForm" type="submit"name="create-group" value="Update">Update</button><br>
+                    <hr class="alt">
+                {% endif %}
+            </form>
+        </section>
+        <br>
+    {% endif %}
+
+        <section class="content-block">
+            <h4>Videos</h4>
+            <form class="box bg-blue" method="POST" action="">{% csrf_token %}
+            {% if videos %}
+                <input type="hidden" id="id_action" name="action" value="delete">
+                {% if user.is_authenticated %}<button type="submit" value="Remove from Channel" id="delete-button" class="alignleft">Remove from Channel</button>{% endif %}
+                <button type="button" value="Upload Your Video Now" id="upload-button" class="alignright" onclick="location.href='{% url upload-video %}'">Upload Your Video Now</button>
+                <br>
+                <table border="0" cellpadding="10" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Name</th>
+                            <th>Date Created</th>
+                            <th>Expiration</th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                {% for v in videos %}
+                    <tr>
+                        <td><input type="checkbox" name="item" value="{{ v.id }}"></td>
+                        <td><a href="{{ v.get_absolute_url }}">{{ v }}</a></td>
+                        <td>{{ v.created }}</td>
+                        <td class="expiry">
+                        {% if user.get_profile.account_level.pk == 1 and v.videoupload and not v.youtube_embed_url %}
+                            {% if not v.expired %}
+                                {{ v.expiry_date }}
+                            {% else %}
+                                Expired!
+                            {% endif %}
+                        {% else %}
+                        ∞
+                        {% endif %}
+                        </td>
+                        <td class="edit"><a href="{% url my-videos-edit v.slug %}">Edit</a></td>
+                            <td>
+                                {% if v.youtube_embed_url %}
+                                    <a href="{{ v.get_absolute_url }}"><img src="{{ MEDIA_URL }}gfx/yt.png" alt="Link to YouTube video" /></a>
+                                {% else %}
+                                    {% if v.videoupload %}
+                                        <a href="{% url upload-youtube v.slug %}"><img src="{{ MEDIA_URL }}gfx/yt.png" alt="Upload to YouTube" title="Upload this video to YouTube!" /></a>
+                                    {% else %}
+                                        <a href="#" onclick="file_unavailable('{{v.title}}'); return false;"><img src="{{ MEDIA_URL }}gfx/yt.png" alt="Upload to YouTube" title="Upload this video to YouTube!" /></a>
+                                    {% endif %}
+                                {% endif %}
+                            </td>
+                    </tr>
+                {% endfor %}
+                </table>
+            {% else %}
+            <p>No videos yet.</p>
+            {% endif %}
+            </form>
+        </section>
+        <br/>
+
+        <section>
+        <h4>Channel Members</h4>
+        <form method="post" action="{% url update_channel_member_permissions channel.id %}" class="box">
+        {% if channel_members|length > 1 %}
+            {% if channel.owner == request.user %}
+            {% csrf_token %}
+            <table style="margin-top:0px">
+                <thead>
+                    <tr>
+                        <th>Channel Member</th>
+                        <th>Status</th>
+                        <th>Video Upload Needs Approval</th>
+                        <th align="right"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for c in channel_members %}
+                    {% if c != request.user %}
+                    <tr>
+                        {% if c.perm_form %}
+                            <td>{{ c.username|default:c.email }}</td>
+                            <td>{% if c.status == 'confirmed' %}active{% else %}{{ c.status }}{% endif %}</td>                   
+                            <td style="text-align: center">{{ c.perm_form.needs_approval }}{{ c.perm_form.needs_approval.errors }}</td>
+                            <td><a href="javascript:remove_channel_member({{channel.id}}, {{c.id}})" class="remove_user">(remove)</a></td>
+                        {% else %}
+                            <td id="u{{ forloop.counter }}" invitation-id="{{ c.id }}">{{ c.username|default:c.email }}</td>
+                            <td>Pending</td> 
+                            <td>&nbsp;</td>
+                            <td><a href="javascript:cancel_invitation({{ forloop.counter }});" class="">(cancel)</a></td>                     
+                        {% endif %}
+                    </tr>
+                    {% endif %}
+                {% endfor %}
+                </tbody>
+            </table>
+            <br />
+            <input type="submit" class="button-submit" value="Update Permissions" />
+            {% else %}
+            <ul>
+            {% for c in channel_members %}
+                <li>{{ c.username }}</li>
+            {% endfor %}
+            </ul>
+            {% endif %}
+        {% else %}
+            <p>No channel members yet.</p>
+        {% endif %}
+        </form>
+        </section>
+        <br />
+
+        <section>
+        {% if request.user.is_superuser %}<!-- as requested by bryant -->
+        <br/>
+            <p><b><i>NOTE: You are logged in as superuser. (payment not required)</i></b></p>
+            <h4>Invite Channel Members</h4>
+            {% if channel %}
+            <form method="post" action="{% url add_channel_member channel.id %}" class="box channel-form">
+                {% csrf_token %}
+                {% comment %}
+                <label>Name</label>
+                {{ invite_form.name }}
+                {% if invite_form.errors.name %}<span class="spanInputError"></span>{% endif %}<span class="error">{{ invite_form.errors.name }}</span><br/><hr/>
+                {% endcomment %}
+
+                <label>Email</label>
+                {{ invite_form.email }}
+                {% if invite_form.errors.email %}<span class="spanInputError"></span>{% endif %}<span class="error">{{ invite_form.errors.email }}</span><br/><hr/>
+                
+                {% comment %}
+                <label>Message</label>
+                {{ invite_form.message }}
+                {% if invite_form.errors.message %}<span class="spanInputError"></span>{% endif %}<span class="error">{{ invite_form.errors.message }}</span><br/><hr/>
+                {% endcomment %}
+
+                <label>&nbsp;</label>
+                <input id="submitForm" type="submit"  class="input-submit" value="Send Invite">
+            </form>
+            {% endif %}
+        {% else %}
+                {% if request.user == channel.owner %}
+                    <h3>Invite Channel Members</h3>
+                    {% if request.user.get_profile.is_paid or request.user.get_profile.is_using_trial %}
+                        {% if channel %}
+                        <form method="post" action="{% url add_channel_member channel.id %}"  class="box channel-form">{% csrf_token %}
+                            <label>Email</label>
+                            {{ invite_form.email }}
+                            {% if invite_form.errors.email %}<span class="spanInputError"></span>{% endif %}<span class="error">{{ invite_form.errors.email }}</span><br/><hr/>
+                            <label>&nbsp;</label>
+                            <input id="submitForm" type="submit"  class="input-submit" value="Send Invite">
+                        </form>                     
+                        {% endif %}
+                    {% else %}
+                        <p>For Paid Accounts Only</p>
+                    {% endif %}
+                {% endif %}
+            {% endif %}
+        </section>
+    </div>
+
+{% endblock %}

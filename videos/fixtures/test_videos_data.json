@@ -1,0 +1,76 @@
+[
+    {
+        "pk": 1,
+        "model": "videos.video",
+        "fields": {
+            "uploader": 2,
+            "title": "Test Video 1",
+            "video_duration": 1,
+            "video_type": "mp4",
+            "slug": "X24A3F",
+            "description": "Test Video 1",
+            "is_public": true,
+            "created": "2012-01-01",
+            "channel": 1
+        }
+    },
+    {
+        "pk": 2,
+        "model": "videos.video",
+        "fields": {
+            "uploader": 2,
+            "title": "Test Video 2",
+            "video_duration": 1,
+            "video_type": "mp4",
+            "slug": "S2FE4Q",
+            "description": "Test Video 2",
+            "is_public": true,
+            "created": "2012-01-02",
+            "channel": 1
+        }
+    },
+    {
+        "pk": 3,
+        "model": "videos.video",
+        "fields": {
+            "uploader": 2,
+            "title": "Test Video 3",
+            "video_duration": 1,
+            "video_type": "mp4",
+            "slug": "S2FSTX",
+            "description": "Test Video 3",
+            "is_public": true,
+            "created": "2012-01-01"
+        }
+    },
+    {
+        "pk": 1,
+        "model": "videos.videostatus",
+        "fields": {
+            "video_slug": "X24A3F",
+            "is_encoding": false,
+            "web_available": true,
+            "mobile_available": true
+        }
+    },
+    {
+        "pk": 2,
+        "model": "videos.videostatus",
+        "fields": {
+            "video_slug": "S2FE4Q",
+            "is_encoding": false,
+            "web_available": true,
+            "mobile_available": true
+        }
+    },
+    {
+        "pk": 3,
+        "model": "videos.videostatus",
+        "fields": {
+            "video_slug": "S2FSTX",
+            "is_encoding": true,
+            "web_available": false,
+            "mobile_available": false
+        }
+    }
+]

@@ -1,0 +1,5 @@
+grant {
+    permission java.security.AllPermission;
+    permission java.io.FilePermission "<<ALL FILES>>","write";
+};
+

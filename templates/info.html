@@ -1,0 +1,15 @@
+{% extends "site_base.html" %}
+
+{% block content %}
+<div>
+  <h1>User Information:</h1>
+  <table>
+    <tr><th>Id: </th><td>&nbsp;<td> <td>{{ user.id }}</td></tr>
+    <tr><th>Username: </th><td>&nbsp;<td> <td>{{ user.username }}</td></tr>
+    <tr><th>Email: </th><td>&nbsp;<td> <td>{{ user.email|default:"Not provided" }}</td></tr>
+    <tr><th>First name: </th><td>&nbsp;<td> <td>{{ user.first_name|default:"Not provided" }}</td></tr>
+    <tr><th>Last name: </th><td>&nbsp;<td> <td>{{ user.last_name|default:"Not provided" }}</td></tr>
+  </table>
+</div>
+
+{% endblock %}

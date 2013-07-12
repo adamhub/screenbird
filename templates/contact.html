@@ -1,0 +1,22 @@
+{% extends "site_base.html" %}
+
+{% block header %}{% endblock %}
+
+{% block content %}
+<h1>Inquiry Form:</h1>
+<form method="post">{% csrf_token %}
+    <p>{{ form.non_field_errors }}</p>
+    {% for field in form %}
+      <div class="fieldWrapper">
+          <div class="wrap">
+              <div class="inline">
+              <label><strong>{{ field.label_tag }}:</strong></label><br>{{ field }}<span class="error">{{ field.errors }}</span><br>
+              <div class="help_text">{{ field.help_text }}</div>
+              </div>
+          </div>
+      </div>
+    {% endfor %}
+    <br>
+    <input type="submit" value="Submit" />
+</form>
+{% endblock %}

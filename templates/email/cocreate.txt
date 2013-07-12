@@ -1,0 +1,11 @@
+Hello {{ user }},
+
+ You are invited to cocreate a video with {{ owner }}'s account on Screenbird.
+ 
+ Follow the link below to view and edit your assigned section (login-required).
+
+   {{ cocreate_link }}
+   
+-------------------------
+Screenbird Team 
+

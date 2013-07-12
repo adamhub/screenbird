@@ -1,0 +1,29 @@
+ <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+
+<jnlp codebase="http://screenbird.com/media/" href="applet/launch.jnlp" spec="1.0+">
+   
+     <information>
+        <title>Screenbird</title>
+         <vendor>Bixly</vendor>
+         <homepage href="www.bixly.com"/>
+        <description>Screenbird</description>
+        <description kind="short">Screenbird</description>
+        
+    	<icon kind="splash" href="gfx/favicon2.jpg" width="32" height="32" size="2305"/>
+     </information>
+	
+	<update check="always"/>
+		
+     <resources>
+		<j2se java-vm-args="-Djava.security.policy=writefile.policy" version="1.5+"/>
+		<jar download="lazy" href="applet/Launch.jar" main="true" part="com"/>
+	</resources>
+	
+    <applet-desc main-class="com.bixly.pastevid.driver.Launch" name="Launch" width="650" height="250">
+		<param name="MAYSCRIPT" value=" true"/>
+     </applet-desc>
+
+    <security>
+        <all-permissions/>
+    </security>
+ </jnlp>

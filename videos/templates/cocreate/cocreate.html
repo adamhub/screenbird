@@ -1,0 +1,547 @@
+{% extends "base.html" %}
+{% load videos_tags %}
+{% load widget_tweaks %}
+
+{% block body_id %}class="wide-page"{% endblock %}
+{% block title %}| Co-create Video{% endblock %}
+{% block extrahead %}
+  {{ block.super }}
+  <!--[if lt IE 9]> 
+    <script type="text/javascript" src="html5.js"> </script>
+    <link rel="stylesheet" type="text/css" href="stylesheet_ie.css">
+  <![endif]-->
+  <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/cocreate_style.css" />
+  <script src="{{ MEDIA_URL }}js/jquery.form.js"></script> 
+  <script src="{{ MEDIA_URL }}js/jquery.simplemodal.1.4.1.min.js"></script>
+  <script src="{{ MEDIA_URL }}js/jquery.jeditable.mini.js"></script>
+   
+  <script type="text/javascript">
+
+      $("div.add_new_section a").live('click', function(e) {
+      	  e.preventDefault();
+      });
+      
+      $("#id_assigned").live('change', function(e) {
+		console.log($(this).val());
+		if($(this).val()=="-1"){
+			$("div#invite_form").modal({
+				minWidth: 300,
+				minHeight: 100,
+        autoResize: true
+			});
+		}
+      });
+      
+      $("div.add_new_section").live('click', function(e) {
+      	  $(this).find('.no_js_link').addClass('hidden');
+      	  $(this).find("#ajax_add_section_form").removeClass('hidden');
+      	  $(this).find("#ajax_add_section_form").focus();
+      });
+      
+      /*
+      $(document).click(function(e) {
+		  $("div.add_new_section").find('.no_js_link').removeClass('hidden');
+      	  $("div.add_new_section").find("#ajax_add_section_form").addClass('hidden');
+      });
+      */
+      
+      $("div.add_new_section").live('click', function(e) {
+		  e.stopPropagation();
+      });
+      
+    var options = {
+        dataType: 'json',
+        beforeSend: function(){
+            $(".input-submit").addClass('hidden');
+            $(".input-container input[type='text'], .input-container select").attr("disabled", "disabled");
+            $("#form-processing-gif").removeClass('hidden');
+        },
+        success:    function(data) {
+            if (data.status == "OK") {
+                $("div.section_container").html(data.content);
+	      	      var mh = $('div.leftcol').height();
+                window.location = data.section_url;
+	      	  } else {
+	      	      var errorlist = "<ul>";
+	      	      for( x in data.errors) {
+                    errorlist = errorlist + "<li>" + x + ": " + data.errors[x] +"</li>";
+				        }
+				        errorlist = errorlist + "</ul>";
+       				  $("#ajax_add_section_form_errors").html(errorlist);
+			       	  $("#ajax_add_section_form_errors").removeClass('hidden');
+                $(".input-submit").removeClass('hidden');
+                $(".input-container input[type='text'], .input-container select").removeAttr("disabled");
+                $("#form-processing-gif").addClass('hidden');
+	          } 
+	      } 
+	  };
+
+	  $('#ajax_add_section_form').live('submit', function(e) {
+	  	  e.preventDefault();
+	  	  $(this).ajaxSubmit(options);
+	  }); 
+
+    $('#invitation-form').live('submit', function(e){
+        e.preventDefault();
+        $(this).ajaxSubmit({
+            success: function(data){
+                console.log(data);
+                console.log(data.status);
+                if (data.status == 'OK') {
+                    var assignDropDown = $('#id_assigned');
+                    assignDropDown.find('option:last-child').remove();
+                    assignDropDown.append(
+                        $('<option></option>').val(data.pk).html(data.username)
+                    );
+                    assignDropDown.append(
+                        $('<option></option>').val(-1).html('Add Member')
+                    );
+                    assignDropDown.val(data.pk);
+                    $.modal.close();
+                    $('div.add_new_section').click();
+                } else {
+                    console.log(data.errors);
+                    for (var error in data.errors) {
+                        for (var i = 0; i < data.errors[error].length; i++) {
+                            $('#invitation-form-errors').append("<p>" + data.errors[error][i] + "</p>");
+                        }
+                    }
+                }
+            }
+        });
+    });
+	  
+	  $(document).ready(function () {
+    {% if video_status == 'WAIT' and selected.video %}
+        $("#popup").modal({onClose: function (dialog) {
+            dialog.data.fadeOut('fast', function () {
+                dialog.container.hide('fast', function () {
+                    dialog.overlay.slideUp('fast', function () {
+                        $.modal.close();
+                    });
+                });
+            });
+        }});
+	  {% endif %}
+    
+	  	{# the player javascript code #}
+	    var playerCount = $('#player').length;
+	    if (playerCount > 0) {
+	        player = new MediaElementPlayer('#player', {
+	            alwaysShowControls: true,
+	            success: function (me) {
+	                me.play();
+	                $("#outline").makeOutline(me, {
+	                    canEditOutline: canEditOutline,
+	                    isFlash: isFlash,
+	                    loadURL: loadURL,
+	                    saveURL: saveURL, 
+	                    controllerID: 'create-outline'
+	                });
+	            }
+	        });
+	    }
+	    
+	    {# edit in place fields #}
+	    {% if is_owner %}
+	    	var $description = $('.description');
+	    	var $adminNote = $('.admin_note_inner');
+	    	var $editNote = $('.grey_button');
+	    	
+		    $description.editable('{% url cocreate_edit cocreate.id "description" %}', {
+		        submitdata: { csrfmiddlewaretoken: "{{ csrf_token }}"},
+		        type: "textarea",
+		        width: 400,
+		        height: 200,
+		        submit: 'Save',
+		        cancel: 'Cancel',
+		        event: 'inplaceEdit'
+		    });
+		    
+		    var showButton = function(e) {
+		        $editNote.show();
+		    }
+		    
+		    $adminNote.editable('{% url cocreate_edit cocreate.id "notes" %}', {
+		        submitdata: { csrfmiddlewaretoken: "{{ csrf_token }}"},
+		        type: "textarea",
+		        width: 550,
+		        height: 200,
+		        submit: 'Save',
+		        cancel: 'Cancel',
+		        callback: showButton,
+		        onreset: showButton,
+		        event: 'inplaceEdit',
+		    });
+		    
+		    
+		    $('.grey_edit').click(function(e) {
+		        e.preventDefault();
+		        $description.trigger('inplaceEdit');
+		    
+		    });
+		    
+		    $editNote.click(function(e) {
+		        e.preventDefault();
+		        $adminNote.trigger('inplaceEdit');
+		        $(this).hide();
+		    });
+
+        $('.section').live('click', function(e){
+            if ($(e.target).is('div') && (!$(e.target).hasClass('input-container') && !($(e.target).parents().hasClass('input-container')))){
+                href = $(this).data("href");
+                window.location = href;
+            }
+        });
+
+		    $(".section-edit").live('click', function(e) {
+		    	e.preventDefault();
+	      		var counter = $(this).data("counter");
+	      		var section_id = $(this).data("id");
+	      		var selected_id = $(this).data("selectedid");
+	      		$.ajax({
+	                url: "/cocreate/edit_section/ajax-show-edit-form/",
+	                type: "POST",
+	                data: {
+	                	"section_id": section_id,
+	                	csrfmiddlewaretoken: "{{ csrf_token }}",
+	                },
+	                success: function(data){
+	                	var div_class = "";
+	                	var section_class = "";
+	                	if (section_id == selected_id) {
+	                		div_class = ".ajax_edit_section_selected_" + counter;
+	                		section_class = ".section_selected_" + counter;
+	                	}
+	                	else {
+	                		div_class = ".ajax_edit_section_" + counter;
+	                		section_class = ".section_" + counter;
+	                	}
+	       				$(section_class).css("height", "80px");
+	                    $(div_class).html(data);
+	                }
+            	});
+	      	});
+
+	      	$(".section-delete").live('click', function(e) {
+	      		e.preventDefault();
+                var section_id = $(this).data("id");
+                var section_name = $(this).data("sectionname");
+                var cocreate_id = $(this).data("cocreateid");
+                var has_video = $(this).data("video");
+                var buttons = "";
+                var message = "";
+                if (has_video==1) {
+                    buttons = "<input type='submit' class='button no simplemodal-close' value='Close' />";
+                    message = "You must delete the video within this section before you can delete the section";
+                }
+                else {
+                    buttons = "<input type='submit' class='button yes' value='OK'> <input type='submit' class='button no simplemodal-close' value='Cancel'>";
+                    message = "Confirmation: Delete " + section_name + "<br><br>";
+                }
+
+                confirm_delete(message, buttons, function () {
+                    $.ajax({
+                        url: "/cocreate/delete_section/ajax-delete-section/",
+                        type: "POST",
+                        data: {
+                            "section_id": section_id,
+                            csrfmiddlewaretoken: "{{ csrf_token }}",
+                        },
+                        dataType: 'json',
+                        success: function(data) {
+                            if (data.status == "OK") {
+                                $("div.section_container").html(data.content);
+                                var cocreate_url = "/cocreate/" + cocreate_id;
+                                window.location = cocreate_url;
+                            } 
+                            else {
+                                var errorlist = "<ul>";
+                                for( x in data.errors) {
+                                    errorlist = errorlist + "<li>" + x + ": " + data.errors[x] +"</li>";
+                                }
+                                errorlist = errorlist + "</ul>";
+                                $("#ajax_edit_section_form_errors").html(errorlist);
+                                $("#ajax_edit_section_form_errors").removeClass('hidden');
+                            } 
+                        } 
+                    });
+                });
+	      		
+	      	});
+
+            $('.section').live('mouseover mouseout', function(event) {
+                var counter = $(this).data("counter");
+                var links_class = ".edit_delete_links_" + counter;
+                if (event.type == 'mouseover') {
+                    $(this).find(links_class).removeClass('hidden');
+                    $(this).find(links_class).css("display", "inline");
+                } else {
+                    $(this).find(links_class).addClass('hidden');
+                    $(this).find(links_class).css("display", "none");
+                }
+            });
+
+            function confirm_delete(message, buttons, callback) {
+                $('#confirm_delete').modal({
+                    closeHTML: "<a href='#' title='Close' class='modal-close'></a>",
+                    //position: ["20%",],
+                    overlayId: 'simplemodal-overlay',
+                    containerId: 'simplemodal-container',
+                    minWidth: 300,
+                    minHeight: 100,
+                    autoResize: true,
+                    onShow: function (dialog) {
+                        var modal = this;
+
+                        $('.message', dialog.data[0]).append(message);
+                        $('.buttons', dialog.data[0]).append(buttons);
+
+                        // if the user clicks "yes"
+                        $('.yes', dialog.data[0]).click(function () {
+                            // call the callback
+                            if ($.isFunction(callback)) {
+                                callback.apply();
+                            }
+                            // close the dialog
+                            modal.close(); // or $.modal.close();
+                        });
+
+                        $('.no', dialog.data[0]).click(function () {
+                            modal.close(); // or $.modal.close();
+                        });
+                    }
+                });
+            }
+		    
+		    {% if selected %}
+		    	var $videoTitle = $('.video_title');
+		    	
+		    	$videoTitle.editable('{% url section_edit selected.id "name" %}', { 
+			        submitdata : { csrfmiddlewaretoken : "{{ csrf_token }}"},
+			        height: 25,
+			        width: 300,
+			        style: 'height: 10; width: 300; padding: 0; margin: 0;',
+			    });
+			    
+			    $('.blue_edit').click(function(e) {
+			    	e.preventDefault();
+			        $videoTitle.click();
+			    });
+		   	{% endif %}
+		   	
+	    {% endif %}
+         
+    });
+    {% if video_status == 'WAIT' and selected.video.slug %}
+        setInterval(function(){
+            $.ajax({
+                url: "{% url is-available selected.video.slug 'web' %}",
+                type: "GET",
+                dataType: "text",
+                success: function(data){
+                    if(data=="True"){
+                        location.reload(true);
+                    }
+                }
+            });
+        }, 5000);
+    {% endif %}
+  </script>     
+<script>
+{% with selected.video as video %}
+{% include "encoder_progress.html" %}
+{% endwith %}
+</script>
+{% endblock extrahead %}
+
+{% block content %}
+<div id="popup">
+    <script>
+    document.getElementById('popup').style.display = 'none';
+    </script>
+    <input id="w" type="hidden" value="{{ selected.video.slug }}"></input>
+    <h2><strong>Screenbird Upload</strong></h2>
+    <div id="upload-progress" class="upload-progress"><span class="progress-info">Enqueued</span>
+    <div id="upload-eta"></div><div style="background-color:black;" id="progress-bar" class="progress-bar"></div><input id="prev-rate" type="hidden" value="0"><input id="prev-rate1" type="hidden" value="0"><input id="prev-prog" type="hidden" value="0"></input><input id="sec-timer" type="hidden" value="0"></input></div> <br> Your video is being processed. This page will refresh once the video is ready.</p>
+</div>
+
+  <div class="wrapper">
+        <div class="container"> 
+          <div class="body_container">
+            <div class="cocreate_title">
+                {{ cocreate.title }}             
+            </div>
+            <div class="by_admin_text">
+                <span style="font-size:18px">By</span>
+                <span style="font-size:18px; color:#dd4444;">{{ cocreate.owner.first_name|default:cocreate.owner.username }}</span>
+                {% if cocreate.cocreators %}
+	                <span style="font-size:14px; color:#767676;">with channel members:</span>
+	                <span style="font-size:14px; color:#dd4444;">{{ cocreate.get_cocreators_string }}</span>
+	            {% endif %}
+            </div>
+
+            
+            <div class="by_admin_text">
+            Video 
+            {% if cocreate.output_video %}
+            <a href="{% url watch-video cocreate.output_video.slug %}">Link</a>
+            {% else %}
+                not compiled yet.
+            {% endif %}
+            {% comment %}
+            Removing, compile cocreate is automatically done after a section video is 
+            marked as available.
+            
+            {% if is_owner %}
+                <a href="{% url cocreate_compile cocreate.pk %}">Compile</a>
+            {% endif %}
+            {% endcomment %}
+            </div>
+
+            
+            <div class="leftcol"> 
+                <div class="outline_header">
+                    <span style="margin:0 0 0 45px;">Outline</span>
+                </div> 
+                <div class="section_container">
+                    {% include "cocreate/sections.html" %}
+                </div>
+            </div>
+            <!-- VIDEO SECTION -->
+            <div class="rightcol">
+                {% if not selected %}
+                    {% include "cocreate/cocreate_note.html" %}
+                {% else %} 
+                <div class="blue_header">
+                    {% if selected %}
+	                    <!-- VIDEO NUMBER -->
+	                    <div class="number_onvideo">#{{ selected_index }}</div>
+	                    <!-- VIDEO TITLE -->
+	                    <div class="video_title">{{ selected.name|truncatesmart:20 }}</div>
+	                    {% if is_owner %}<a href="#" class="edit blue_edit" style="margin: 0 5px 0 5px;"></a>{% endif %}
+		
+		                {% if is_owner or is_assigned and selected.video %}
+		                    <!-- AUTHOR -->
+		                    <div class="author"> 
+		                        by 
+		                        {% if selected.assigned %}
+		                            {{ selected.assigned.first_name|default:selected.assigned}}
+		                        {% else %}
+		                            Unassigned
+		                        {% endif %}
+		                    </div>
+		                    
+		                    <!-- CONTROL BUTTONS -->
+		                    <a href="{% url record-video %}?section={{ selected.id }}" class="record" title="Record New Video"></a>
+		                    <a href="{% url upload-video %}?section={{ selected.id }}" class="upload" title="Upload New Video"></a>
+		                    {% if selected.video %} 
+                                    <a href="{% url delete-video selected.video.slug %}" class="delete" title="Delete This Video"></a>
+	                    	{% endif %}
+	                    {% endif %}
+                    {% endif %}
+                </div>
+                {% if not selected.video %}
+	                <!-- NO VIDEO MESSAGE --><div class="no_video_message">
+	                    <div class="no_video_message_padding">
+	                    	{% if is_owner or is_assigned %}
+		                        <a class="no_video_record_now" href="{% url record-video %}?section={{ selected.id }}">Record Now</a>
+		                        <a class="no_video_upload_now" href="{% url upload-video %}?section={{ selected.id }}">Upload Now</a>
+	                        {% endif %}
+                            <br>
+	                        <span style="color:#dd4444; font-style:italic; font-size:16px; display:inline-block; float:left;">This section currently has no video uploaded</span>
+	                        <br>
+                            {% comment %}
+	                        <br>
+	                        {% if is_owner or is_assigned %}
+	                        	<span style="font-size:16px; display:inline-block; float:left;">Use the Upload or Record Now buttons to get started</span>
+	                        {% endif %}
+                            {% endcomment %}
+	                        <div class="clear"></div>
+	                    </div>
+	                </div>  
+	                {% include "cocreate/cocreate_note.html" %}
+                {% else %}
+                
+	                <div class="video_module">
+	                    <!-- EXAMPLE VIDEO INSERT THE VIDEO HERE -->
+	                    {% if selected and selected.video and video_status == "OK" %} {# change to video status #}
+		                    <video autobuffer controls preload="auto" width="640" height="360" id="player" autoplay="true" poster="{{ MEDIA_URL }}gfx/black-background-640x360.jpg">
+					        	 <source type="video/mp4" src="{% url get-video-content selected.video.id %}"/>
+					             Your browser does not support the video tag.
+								 <object width="640" height="360" type="application/x-shockwave-flash" data="{{ MEDIA_URL }}js/mediaelementjs/flashmediaelement.swf">
+					                <param name="movie" value="{{ MEDIA_URL }}js/mediaelementjs/flashmediaelement.swf" />
+					                {% if selected.video %}
+					                    <param name="flashvars" value="autoplay=true&amp;controls=true&amp;file={% url get-video-content selected.video.id %}" />
+					                {% endif %}
+					                <!-- Image fall back for non-HTML5 browser with JavaScript turned off and no Flash player installed -->
+					                <img src="" width="640" height="360" title="No video playback capabilities" />
+					            </object>
+					        </video>
+					    {% else %}
+						    <div id='video-not-available'>
+					            {% if video_status == 'WAIT' %}
+					                <span class="oops">Sit tight...</span><br />
+					                Your video is being processed</a>.
+					                <br />Thanks.
+					            {% endif %}
+					            {% if video_status == 'DELETED' %}
+					                <span class="oops">Oops!</span><br />
+					                The video you are trying to view was already removed from this site.
+					                <br />Thanks.
+					            {% endif %}
+					            {% if video_status == 'DNE' %}
+					                <span class="oops">No Video yet</span><br />
+					                Upload or record now.
+					                <br />Thanks.
+					            {% endif %}
+					            {% if not selected %}
+					                <span class="oops">No section selected</span><br />
+					                Add or select a section.
+					                <br />Thanks.
+					            {% endif %}
+					        </div>
+					    {% endif %}
+	                </div>   
+	                <!-- AUTHOR/TIMESTAMP --> 
+	                {% if selected.video %}
+	                    <div class="time_stamp">
+	                        Uploaded by <span class="red">{{ selected.video.uploader.first_name|default:selected.video.uploader }}</span> on {{ selected.video.created|date:"M/d/Y" }}</div>
+	                {% endif %}  
+	                <div class="clear"></div>
+	            <!-- DESCRIPTION TITLE -->
+	                {% if cocreate.description or is_owner %}
+		                <div class="description_title">
+		                	Description 
+		                	{% if is_owner %}
+		                	    <a href="#" class="edit grey_edit"></a>
+		                	{% endif %}
+		                </div>
+		                    <div class="clear"></div>
+		                <div class="description">
+		                    {{ cocreate.description }}
+		                </div>
+	                {% endif %}
+	            {% endif %}
+            {% endif %}
+            </div><!-- /rightcol -->
+            <div class="clear"></div>
+          </div><!-- /bodycontainer -->    
+        </div>
+        <div id="invite_form" class="hidden" style="height:140px">
+          	<form id="invitation-form" class="box" method="post" action="{% url add_cocreate_member cocreate.id %}">{% csrf_token %}
+            	{{ invite_form.as_p }}
+              <div id='invitation-form-errors' style='color: red;'></div>
+	            <div class="field submit" style="height: 1px;">
+	              <button type="submit" class="input-submit" id="invitation-submit">Submit</button>
+   	        	</div>
+            </form>
+        </div>
+        <div id='confirm_delete' class="hidden" style="height:140px">
+            <div class="box" style="height:90px">
+                <p class='message'></p>
+                <div class="buttons" style="height: 1px;"></div>
+            </div>
+        </div>
+</div>
+{% endblock content %}

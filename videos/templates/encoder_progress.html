@@ -1,0 +1,132 @@
+{% if video_status == 'WAIT' %}
+    /* Calculates ffmpeg process ETA */
+    setInterval(function(){
+        var $progress = $('#upload-progress')
+        $progress.show();
+        /*
+        $.get('{% url encoding_progress video.slug %}', function(txt) {
+            if (txt) {
+                var phase = txt.substring(0,6);
+                txt = txt.substring(7);
+
+                if (phase == 'ENCODE' && txt != "ENQUEUED") {
+                    var info = txt;
+                    var infoSplit = info.split(" bitrate=");
+                    var durationSplit = info.split(", start:");
+                    // Get total duration of video being encoded
+                    if (durationSplit[0].indexOf("Duration: ") != -1){
+                        var duration = durationSplit[0].split("Duration: ");
+                        var dur = duration[1];
+                        var durSplit = dur.split(":");
+                        var durationSeconds = ((parseInt(durSplit[0]) * 3600) + (parseInt(durSplit[1]) * 60) + parseInt(durSplit[2]))
+                    }
+                    // Get duration of video already encoded
+                    if (infoSplit[infoSplit.length - 2].indexOf("time=") != -1){
+                        var timeArray = infoSplit[infoSplit.length - 2].split("time=");
+                        var time = timeArray[(timeArray.length)-1];
+                        var timeSplit = time.split(":");
+                        var timeSeconds = ((parseInt(timeSplit[0]) * 3600) + (parseInt(timeSplit[1]) * 60) + parseInt(timeSplit[2]))
+                    }
+
+                    // Get previous progress, progress rates, and compute current progress
+                    var prevProg = parseInt($progress.find('#prev-prog').val());
+                    var prevRate = parseFloat($progress.find('#prev-rate').val());
+                    var prevRate1 = parseFloat($progress.find('#prev-rate1').val());
+                    var curProgress = parseInt(timeSeconds) / parseInt(durationSeconds);
+
+                    // Get average of last three progress rate for smoother ETA deltas
+                    var progressRate = (curProgress - (prevProg / 100)); 
+                    if (prevRate != 0){
+                        if (prevRate1 != 0){
+                            progressRate = (progressRate + prevRate + prevRate1)/3;
+                        }else{
+                            progressRate = (progressRate + prevRate)/2;
+                        }
+                    }
+                    var progressLeft = 1 - (curProgress);
+                    // Get estimated total number of seconds before encoding finishes
+                    var totalSeconds = parseInt(progressLeft / progressRate) * 6;
+                    $progress.find('#sec-timer').val(totalSeconds);
+                    $progress.find('#prev-prog').val(curProgress*100);
+                    $progress.find('#prev-rate').val(progressRate);
+
+                    var hours = Math.floor(totalSeconds / 3600);
+                    var minutes = Math.floor((totalSeconds - (hours * 3600)) / 60);
+                    var seconds = totalSeconds - (hours * 3600) - (minutes * 60);
+                    if (hours   < 10) {hours   = "0"+hours;}
+                    if (minutes < 10) {minutes = "0"+minutes;}
+                    if (seconds < 10) {seconds = "0"+seconds;}
+                    var time = hours+':'+minutes+':'+seconds;
+
+                    // Set progress indicator width based on current progress
+                    var width = 489;
+                    var progressWidth = width * curProgress;
+                    $progress.find('#progress-bar').height(5).width(progressWidth);
+                    $progress.find('.progress-info').text('Encoding ' + parseInt(curProgress*100) + '%');
+                    $progress.find('#upload-eta').text('ETA: ' + time);
+                } else if (phase == 'CREATE' && txt != 'ENQUEUED') {
+                    var pos_split = txt.split('Pos: ');
+                    if (pos_split.length == 2) {
+                        console.log(parseInt(pos_split[1].split('s ')));
+                        var percent_split = txt.split('f (');
+                        console.log(percent_split);
+                        if (percent_split.length == 2) {
+                            percent_split = percent_split[1].split('%)');
+                            var progress = parseInt(percent_split[0]);
+                            var percentage = progress / 100 * 489;
+                            $progress.find('#progress-bar').height(5).width(percentage);
+                            var time_split = percent_split[1].split('Trem:');
+                            $progress.find('.progress-info').text('Compiling ' + progress + '%');
+                            $progress.find('#upload-eta').text('ETA: ' + time_split[1]);
+                        } else {
+                            $progress.find('.progress-info').text(txt);
+                        }
+                    } else {
+                        $progress.find('.progress-info').text(txt);
+                    }
+                } else {
+                    $progress.find('.progress-info').text('Enqueued for encoding');
+                }
+            }
+        });
+        */
+        $.getJSON('{% url encoding_progress video.slug %}', function(data) {
+            var phase = data.phase;
+            var status = data.status;
+            if (phase == 'cocreate') {
+                var prevContainer = '#prev-cprog';
+            } else {
+                var prevContainer = '#prev-prog';
+            }
+            console.log(data);
+                $progress.find('.progress-info').text(status);
+                if (data.progress) {
+                    var currentProg = parseFloat(data.progress);
+                    var prevProg = parseFloat($progress.find(prevContainer).val()) / 100;
+                    if (currentProg.toFixed(4) != prevProg.toFixed(4)) {
+                        console.log(currentProg);
+                        console.log(prevProg);
+                        var progRate = currentProg - prevProg;
+                        var progLeft = 1 - currentProg;
+
+                        console.log(progRate);
+                        console.log(progLeft)
+                        var totalSeconds = parseInt(progLeft / progRate) * 6;
+
+                        var hours = Math.floor(totalSeconds / 3600);
+                        var minutes = Math.floor((totalSeconds - (hours * 3600)) / 60);
+                        var seconds = totalSeconds - (hours * 3600) - (minutes * 60);
+                        if (hours   < 10) {hours   = "0"+hours;}
+                        if (minutes < 10) {minutes = "0"+minutes;}
+                        if (seconds < 10) {seconds = "0"+seconds;}
+                        var time = hours+':'+minutes+':'+seconds;
+                        console.log(time);
+
+                        $progress.find(prevContainer).val(data.progress * 100);
+                        $progress.find('#progress-bar').height(5).width(currentProg * 489);
+                        $progress.find('#upload-eta').text('ETA: ' + time);
+                    }
+                }
+        });
+    },6000);
+{% endif %}

@@ -1,0 +1,11 @@
+Dear {{ user.first_name|default:user.username }},
+
+Your 60-Day Trial Account has expired.
+Your account has come back to a Free Account and all your videos will now expire in 60 days.
+If you have enjoyed your 60-day trial account, you may opt to fully upgrade to a premium account.
+Just visit the following link and click on the premium account payment option of your choice.
+    http://{{ site.domain }}{% url features %}
+
+
+Thanks,
+The {{ site.name }} Team

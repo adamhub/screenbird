@@ -1,0 +1,30 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- ########################## IMPORTANT NOTE ############################ -->
+<!-- This preview HTML page will work only with JDK 6 update 10 and higher! -->
+<!-- ###################################################################### -->
+<html>
+    <head>
+        <title>Test page for launching the applet via JNLP</title>
+    </head>
+    <body>
+        <h3>Test page for launching the applet via JNLP</h3>
+        <script src="http://java.com/js/deployJava.js"></script>
+        <script>
+            var attributes = {
+                code:       "com.bixly.pastevid.driver.Anonymous",
+                archive:    "Anonymous.jar, lib/commons-codec-1.4.jar, lib/commons-logging-1.1.1.jar, lib/httpclient-4.1.1.jar, lib/httpclient-cache-4.1.1.jar, lib/httpcore-4.1.jar, lib/httpmime-4.1.1.jar, lib/linuxlibs.jar, lib/maclibs.jar, lib/winlibs.jar",
+                width:      1,
+                height:     1
+            };
+            var parameters = {jnlp_href:"launch.jnlp"}; <!-- Applet Parameters -->
+            var version = "1.5"; <!-- Required Java Version -->
+            deployJava.runApplet(attributes, parameters, version);
+        </script>
+        <!-- Or use the following applet element to launch the applet using jnlp_href -->
+        <!--
+        <applet width="1" height="1">
+            <param name="jnlp_href" value="launch.jnlp"/>
+        </applet>
+        -->
+    </body>
+</html>

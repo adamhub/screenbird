@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block title %}| Upload Videos to Youtube{% endblock %}
+{% block body_id %}id="youtube-page"{% endblock %}
+{% block content %}
+
+<h1>Youtube upload form</h1>
+{% if max_duration %}
+    <div class="errorMsg">
+        Video Length: {{ video.video_duration }} min<br>
+        Your video has already exceeded 15 minutes of video length. <br>
+        Cannot Upload to YouTube due to allowable maximum time for YouTube upload video is only 15 minutes. <br>        
+    </div>
+    <br>
+    <span id='upload'><a style="font-size: 12px;" href="{% url my-videos %}" >Back to My Videos</a></span>
+{% else %}
+    {% if form.errors %}
+        <div class="errorMsg">
+            Please correct the error{{ form.errors|pluralize }} below.
+        </div>
+    {% endif %}
+    {% if error %}
+        <div class="errorMsg">
+            Error in uploading to YouTube. Check your email and password.
+        </div>
+    {% endif %}
+    <form action="{% url upload-youtube video.slug %}" method="POST" class="box">
+        {% csrf_token %}
+            <input name="token" type="hidden" value="{{token}}"/>
+            <input name="yt_url" type="hidden" value="{{yt_url}}"/>
+		<div class="field">
+		    <label>Title <input name="title" id="id_title" class="input-text" type="text" autofocus required value="{{ video.title }}"/></label><br>
+		    {% if form.errors.title %}<span class="spanInputError"></span>{% endif %}<span class="error">{{form.errors.title}}</span>
+	    </div>
+	    <div class="field textarea">
+		    <label>Description <textarea id="id_description" class="input-text" rows="10" cols="40" name="description">{{description}}</textarea></label><br>
+		    {% if form.errors.description %}<span class="spanInputError"></span>{% endif %}<span class="error">{{form.errors.description}}</span>
+	    </div>
+	    <div class="field">
+		    <label>Category {{ form.category }}</label><br>		    
+		    {% if form.errors.category %}<span class="spanInputError"></span>{% endif %}<span class="error">{{form.errors.category}}</span>
+	    </div>
+	    <div class="field">
+			<label for="">Privacy 
+			    <div id="unlisted"><input {% if form.privacy.value == 'unlisted' %}checked="checked"{% endif %} type="radio" id="id_privacy_0" value="unlisted" name="privacy"> Unlisted </div>
+				<div id="public"><input {% if form.privacy.value == 'public' %}checked="checked"{% endif %} type="radio" id="id_privacy_1" value="public" name="privacy"> Public </div>
+			</label>
+		    {% if form.errors.privacy %}<span class="spanInputError"></span>{% endif %}<span class="error">{{form.errors.privacy}}</span>
+	    </div>
+	    <div class="field">
+            <label>Tags <input name="keywords" id="id_keywords" class="input-text" type="text" value="{{ video.keywords }}"/></label><br>
+            {% if form.errors.keywords %}<span class="spanInputError"></span>{% endif %}<span class="error">{{form.errors.keywords}}</span>
+        </div>
+		<div class="field warning">
+	        <p id="warning">Notice: Your video is going to be officially moved from our servers to Youtube. You can use the same ScreenBird link to watch the video after this process is finished. </p>
+		</div>
+	    <div class="field submit">
+		    <input id="submitForm" type="submit" class="input-submit" value="Upload video" />
+	    </div>
+    </form>
+{% endif %}
+{% endblock %}

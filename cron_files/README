@@ -1,0 +1,21 @@
+How to Setup Cron Jobs for Admin:
+
+    Included is a file named chronograph.cron which you need to modify
+    according to your settings.
+
+Add the following jobs in the admin:
+
+    * In Chronograph -> Jobs -> Add Job
+
+    (a) Name: Upload To S3
+        Command: upload_to_s3
+        Frequency: Hourly
+        Next Run: (Today)(Now)
+    (b) Name: Video Daily Tasks
+        Command: video_daily_tasks
+        Frequency: Daily
+        Next Run: (Today)(Now)
+    (c) Name: Trial Expiration Check
+        Command: check_trial
+        Frequency: Daily
+        Next Run: (Today)(Now)

@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block title %}| Upload Videos to Youtube{% endblock %}
+{% block content %}
+
+<h1>Youtube upload Error!</h1>
+<p>
+Status: <strong>{{ status }}</strong><br>
+<strong>{{ reason }}: {{ body }}</strong><br>
+{{ message }}
+<br>
+</p>
+{% endblock %}

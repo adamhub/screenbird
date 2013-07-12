@@ -1,0 +1,39 @@
+distribute==0.6.45
+BeautifulSoup==3.2.0
+Django==1.3
+PIL==1.1.7
+South==0.7.3
+argparse==1.2.1
+boto==2.1.1
+certifi==0.0.8
+#django-chronograph==0.3.2.dev
+django-chronograph==0.3.1
+django-debug-toolbar==0.9.4
+django-extensions==0.7.1
+django-social-auth==0.3.16
+djangoembed==0.1.1
+djangorestframework==0.3.3
+facepy==0.6.3
+gdata==2.0.15
+multiprocessing==2.6.2.1
+oEmbed==0.1.1
+oauth2==1.5.170
+pika==0.9.5
+#pygraphviz==1.1
+python-dateutil==1.5
+python-memcached==1.47
+python-openid==2.2.5
+requests==0.8.9
+simplejson==2.3.2
+tweepy==2.0
+wsgiref==0.1.2
+authorize==0.1.0
+coverage
+pylint
+django-kombu
+django-jenkins==0.12.1
+http://httplib2.googlecode.com/files/httplib2-0.4.0.zip
+-e git://github.com/thornomad/django-hitcount.git@9adf32aa9012db0f88c2683093c44e3d06adae81#egg=django_hitcount-dev
+-e git://github.com/dcramer/django-paypal.git@7ae72d86b01d57b76f3aa9b8001ff6863988c867#egg=django_paypal-dev
+-e git+https://github.com/philomat/django-persistent-messages.git@045ed9b0d896919cd6813ba9fe528ebf6180fa28#egg=django_persistent_messages-dev
+django-widget-tweaks==1.1.2

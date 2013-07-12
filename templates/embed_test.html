@@ -1,0 +1,43 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en-US">
+    <head profile="http://gmpg.org/xfn/11">
+        <title>Test Site</title>
+        <script type="text/javascript">
+        </script>
+    </head>
+    
+    <body>
+        <!-- script to access recorder -->
+        <script type="text/javascript">
+            // Embedded applet from screenbird.com
+            function loadRecorder() {
+                /*  At record button click, create iframe (if none exists) that
+                    links to pastevid's record page, this will load the recorder
+                    applet. if iframe already exists, reload. */
+                var button = document.getElementById('pastevid-record-button');   
+                var recordframe = document.getElementById('RecordFrame');
+                button.innerHTML = 'Loading Recorder..'; 
+                if (recordframe !== null){  
+                    // Reload existing iframe page
+                    recordframe.src = recordframe.src
+                } else {  
+                    // First load
+                    recordframe = document.createElement("iframe");
+                    recordframe.setAttribute('id', 'RecordFrame');
+                    recordframe.setAttribute('style', 'visibility:hidden;display:none');
+                    recordframe.setAttribute('src', 'http://virg.pastevid.bixly.com/record');        
+                    document.body.appendChild(recordframe);
+                }
+                recordframe.onload = function() {
+                    button.innerHTML = "Reload Recorder";
+                    document.getElementById('pastevid-link').setAttribute('style', 'display:block; font-size: 10px');
+                };
+            };
+        </script>
+        
+        <!-- Record button and link -->
+        <p><!--Screenbird's Record Now button--><a href='#' id='pastevid-record-button' style='text-shadow: 0px 1px 0px black; background: #D22; color: white; padding: 2px 10px; text-decoration: none; border-radius: 8px; font: 12px sans-serif; font-weight:bold' onclick='loadRecorder(); return false;'>Record Now</a><a id="pastevid-link" href="http://screenbird.com" target="_blank" style="display:none">Screenbird</a></p>
+    </body>
+</html>

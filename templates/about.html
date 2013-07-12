@@ -1,0 +1,17 @@
+{% extends "site_base.html" %}
+
+{% block header %}{% endblock %}
+
+{% block content %}
+{% if about_page %}
+    <h1>{{ about_page.title }}</h1>
+    {{ about_page.display_HTMLcontent }}
+{% else %}
+    <h1>About</h1>
+    <p>
+    <strong>Screenbird</strong> comes out of Bixly, a development shop in Fresno California. It was created because we saw a need our competitors weren't filling properly, so we went for it! This website is just starting. If you have any suggestions or bugs or inquiries, please send them to  <a href="mailto:admin@screenbird.com">admin@screenbird.com</a>. </p>
+    <p>
+    We plan to offer as much free service as possible. Later on a premium version might appear with a bit more versatility....or not. We don't know where this is taking us. We just know that this needs to be done right, and we can't just wait around for that to happen.</p> 
+    <p>
+{% endif %}
+{% endblock %}

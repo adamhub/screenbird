@@ -1,0 +1,10 @@
+Hi {{ user }},
+
+    Your video, {{ video.title }}, has been denied by the admin.
+
+    {{ link }}
+
+
+-------------------------
+Screenbird Team 
+

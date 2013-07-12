@@ -1,0 +1,40 @@
+<h2>Record Screen</h2>
+<applet id="recorder" 
+		name="Screenbird Screen Recorder"
+		code="com.bixly.pastevid.driver.Launch" 
+		archive="Launch.jar"
+		 width="650" height="250">
+		 
+	<param name="jnlp_href" value="media/applet/launch.jnlp">
+	<param name="csrf_token" value="{{ csrf_token }}">
+	<param name="user_id" value="{% if user_id %}{{ user_id}}{% else %}{{ user.id }}{% endif %}">
+	<param name="an_tok" value="{{ an_tok }}">
+	<param name="channel_id" value="{% if channel_id %}{{ channel_id }}{% endif %}">
+	<param name="base_url" value="http://{{ request.META.HTTP_HOST }}/">
+	<param name="mayscript" value="true">
+	<param name="codebase_lookup" value="false">
+    <param name="slug" value="{{ reserved_slug }}">
+    <param name="slug_length" value="{{ slug_length }}">
+	
+</applet>
+
+
+<!-- <script src="http://java.com/js/deployJava.js"></script> -->
+<!-- <script>
+    var attributes = {
+    	id:         "recorder",
+        code:       "com.bixly.pastevid.screencap.ScreenRecorder",
+        archive:    "ScreenRecorder.jar, lib/commons-codec-1.4.jar, lib/commons-logging-1.1.1.jar, lib/httpclient-4.1.1.jar, lib/httpclient-cache-4.1.1.jar,  lib/httpcore-4.1.jar, lib/httpmime-4.1.1.jar, lib/jmf.jar, lib/javaws.jar",
+        width:      650,
+        height:     250,
+        mayscript:  true
+    };
+    var parameters = {
+    	jnlp_href:  "media/applet/launch.jnlp", 
+    	csrf_token: "{{ csrf_token }}", 
+    	user_id:    "{% if user_id %}{{ user_id}}{% else %}{{ user.id }}{% endif %}",
+    	an_tok:     "{{ an_tok }}", 
+        base_url:   "http://{{ request.META.HTTP_HOST }}/"}; 
+    var version =   "1.6";
+    deployJava.runApplet(attributes, parameters, version);
+</script> -->

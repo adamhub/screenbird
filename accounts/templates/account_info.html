@@ -1,0 +1,207 @@
+{% extends "site_base.html" %}
+{% load videos_tags %}
+{% block extrastyles_block %}
+
+<link rel="stylesheet" href="{{ MEDIA_URL }}css/grid.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="{{ MEDIA_URL }}css/normalize.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="{{ MEDIA_URL }}css/styles.css" type="text/css" media="screen" />
+{% endblock %}
+
+{% block extrahead %}
+<script type="text/javascript" src="{{ MEDIA_URL }}js/jquery-1.5.1.min.js"></script>
+<script src="{{ MEDIA_URL }}js/jquery.simplemodal.1.4.1.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        premium = '{{ premium }}';
+        if (premium == 'premium') {
+            $.modal('<p id="premium-already"><strong>You have already upgraded to a Premium Account.</strong></p>',
+                        {onClose: function (dialog) {
+                            dialog.data.fadeOut('fast', function () {
+                                dialog.container.hide('fast', function () {
+                                    dialog.overlay.slideUp('fast', function () {
+                                        $.modal.close();
+                                    });
+                                });
+                            });
+            }});
+        }
+        $('img ').click(function(){
+        var msg = "";
+        
+        {% for key,value in popupinfo.items %}
+        if($(this).attr("id") == "{{ key }}"){
+            msg = "{{ value|replace_newlines }}";
+            if (msg != "") {
+                msg = '<div style="width:500px; padding:2px;">{{ value|replace_newlines_js }}</div>';
+            }
+        }
+        {% endfor %}
+        $.modal(msg,
+                {onClose: function (dialog) {
+                    dialog.data.fadeOut('fast', function () {
+                        dialog.container.hide('fast', function () {
+                            dialog.overlay.slideUp('fast', function () {
+                                $.modal.close();
+                            });
+                        });
+                    });
+        }});
+        
+    });
+    });
+</script>
+{% endblock%}
+
+{% block content %}
+    <h1>Account Information:</h1>
+    <p class="info">Total Upload Time: {{ user.userprofile.total_upload_time|floatformat:0|default:"0" }} of {{ user.userprofile.account_level.max_video_length }} minutes <img class="info" id="minutes_info" src="{{ MEDIA_URL }}gfx/question.png"></p>
+    <div class="content-block accounts-page">
+        <div class="box bg-blue account-info">
+            <table border="0" cellpadding="10" cellspacing="0">
+                <tbody>
+                    <tr>
+                        <td><strong>Username</strong></td>
+                        <td>{{ user.username }}</td>
+                        <td><a href="{% url manage_account %}">Edit</a></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Email</strong></td>
+                        <td>{{ user.email|default:"Not provided" }}</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td><strong>First Name</strong></td>
+                        <td>{{ user.first_name|default:"Not provided" }}</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Last Name</strong></td>
+                        <td>{{ user.last_name|default:"Not provided" }}</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Nickname</strong></td>
+                        <td>{{ user.userprofile.nickname|default:"Not provided" }}</td>
+                        <td><a href="{% url manage_account %}">Edit</a></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Signed up Via</strong></td>
+                        <td>{% if multiple_providers %}
+                                {% for provider in oauth_user %}
+                                    {{ provider.provider|title }}
+                                    {% if not forloop.last %}|{% endif %}
+                                {% endfor %}
+                            {% else %}
+                                {{ oauth_user.provider|default:"Not provided"|title}}
+                            {% endif %}
+                        </td>
+                        <td></td>
+                    </tr>
+                    {% if user.userprofile.account_level.level == 'Paid' or 'Trial' %}
+                    <tr>
+                        <td><strong>Api Key</strong></td>
+                        <td>
+                            <input type="text" enabled="false" value="{{ user.userprofile.api_key }}"/></a>
+                        </td>
+                        <td></td>
+                    </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div><!-- /.account-info -->
+
+        <div class="box bg-blue account-info short">
+            <table border="0" cellpadding="10" cellspacing="0">
+                <tbody>
+                    <tr>
+                        <td><strong>Subscription Level</strong></td>
+                        <td>{{ user.userprofile.account_level.level }}</td>
+                        <td></td>
+                    </tr>
+                    {% if user.userprofile.account_level.level == 'Trial' %}
+                    <tr>
+                        <td><strong>Trial Expiration Date</strong></td>
+                        <td>{{ user.userprofile.trial_expiry_date|date:"N j, Y" }}</td>
+                        <td></td>
+                    </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div><!-- /.account-info.short -->
+    </div><!-- /.content-block -->
+
+    {% if not user.userprofile.account_level.level == 'Paid' %}
+        <button type="button" onclick="location.href='{% url features %}'" class="wide alignright" >Upgrade to Premium</button>
+    {% endif %}
+
+    <div class="clearfix"></div>
+    <br>
+
+    <section class="content-block">
+        <h1>Social Connections</h1>
+        <div class="column onehalf">
+            <p>Connect your social accounts to let your friends know when you have created a video.</p>
+        </div>
+            {% if not multiple_providers %}    
+                <div> 
+                {% if not oauth_user.provider == 'facebook' %}
+                    <button id="facebook_connect" id="facebook_connect" name="connect_facebook" value="Facebook Connect" class="wide link alignright" onclick="location.href='https://graph.facebook.com/oauth/authorize?client_id={{ FACEBOOK_APPLICATION_ID }}&scope=offline_access,publish_stream&redirect_uri=http://{{ request.META.HTTP_HOST }}{% url facebook_connect %}'">Facebook Connect</button>
+                    <br>
+                {% else %}
+                    {% if user.userprofile.facebook_connect %}
+                        <p>Connected to Facebook. <a href="{% url social_disconnect 'facebook' %}">Disconnect Facebook Account?</a></p>
+                    {% else %}
+                        <p>Connect your current Facebook Account to this account?</p>
+                        <button type="button" onclick="location.href='{% url social_reconnect 'facebook' %}'" class="wide link alignright" name="connect_facebook" >&nbsp;Facebook Connect&nbsp;</button>
+                        <br>
+                    {% endif %}
+                {% endif %}
+                <br>
+                {% if not oauth_user.provider == 'twitter' %}
+                    <form class="nostyle" action="{% url twitter_connect %}" method="POST">
+                    {% csrf_token %}
+                    <button id="submitForm" id="twitter_connect" class="wide link alignright" name="twitter_connect" value="Twitter Connect">Twitter Connect</button>
+                    </form>
+                {% else %}
+                    {% if user.userprofile.twitter_connect %}
+                        <p>Connected to Twitter. <a href="{% url social_disconnect 'twitter' %}">Disconnect Twitter Account?</a></p>
+                    {% else %}
+                        <p>Connect your current Twitter Account to this account?</p>
+                        <button type="button" onclick="location.href='{% url social_reconnect 'twitter' %}'" id="twitter_connect" class="wide link alignright" name="connect_twitter" >&nbsp;Twitter Connect&nbsp;</button>
+                    {% endif %}
+                {% endif %}
+                </div>
+                <br>
+            {% else %}      
+                <div> 
+                {% if 'facebook' not in provider_list %}
+                    <button id="facebook_connect" id="facebook_connect" name="connect_facebook" value="Facebook Connect" class="wide link alignright" onclick="location.href='https://graph.facebook.com/oauth/authorize?client_id={{ FACEBOOK_APPLICATION_ID }}&scope=offline_access,publish_stream&redirect_uri=http://{{ request.META.HTTP_HOST }}{% url facebook_connect %}'">Facebook Connect</button>
+                    <br>
+                {% else %}
+                    {% if user.userprofile.facebook_connect %}
+                        <p>Connected to Facebook. <a href="{% url social_disconnect 'facebook' %}">Disconnect Facebook Account?</a></p>
+                    {% else %}
+                        <p>Connect your current Facebook Account to this account?</p>
+                        <button type="button" onclick="location.href='{% url social_reconnect 'facebook' %}'" id="facebook_connect" class="wide link alignright" name="connect_facebook" >&nbsp;Facebook Connect&nbsp;</button>
+                        <br>
+                    {% endif %}
+                {% endif %}
+                <br>        
+                {% if 'twitter' not in provider_list %}
+                    <form class="nostyle" action="{% url twitter_connect %}" method="POST">{% csrf_token %}
+                        <button id="submitForm" id="twitter_connect" class="wide link alignright" name="twitter_connect" value="Twitter Connect">Twitter Connect</button>
+                    </form>
+                {% else %}
+                    {% if user.userprofile.twitter_connect %}
+                        <p>Connected to Twitter. <a href="{% url social_disconnect 'twitter' %}">Disconnect Twitter Account?</a></p>
+                    {% else %}
+                        <p>Connect your current Twitter Account to this account?</p>
+                        <button type="button" onclick="location.href='{% url social_reconnect 'twitter' %}'" id="twitter_connect" class="wide link alignright" name="connect_twitter" >&nbsp;Twitter Connect&nbsp;</button>
+                    {% endif %}
+                {% endif %}
+                </div>
+                <br>
+            {% endif %}
+    </section><!-- /.content-block -->
+{% endblock content %}

@@ -1,0 +1,89 @@
+[
+    {
+        "pk": 1, 
+        "model": "auth.user", 
+        "fields": {
+            "username": "testuser1", 
+            "first_name": "", 
+            "last_name": "", 
+            "is_active": true, 
+            "is_superuser": true, 
+            "is_staff": true, 
+            "last_login": "2012-08-22 07:43:05", 
+            "groups": [], 
+            "user_permissions": [], 
+            "password": "sha1$1756b$cc3a0c59ef74351996e4e231e0fbada43f0d1c29", 
+            "email": "admin@email.com", 
+            "date_joined": "2012-06-21 09:34:48"
+        }
+    }, 
+    {
+        "pk": 2, 
+        "model": "auth.user", 
+        "fields": {
+            "username": "testuser2", 
+            "first_name": "", 
+            "last_name": "", 
+            "is_active": true, 
+            "is_superuser": false, 
+            "is_staff": false, 
+            "last_login": "2012-08-21 20:05:09", 
+            "groups": [], 
+            "user_permissions": [], 
+            "password": "sha1$36bef$05bfce9d5a0ac89ea8b440536bea141628362201", 
+            "email": "user@email.com", 
+            "date_joined": "2012-06-21 10:22:27"
+        }
+    },
+    {
+        "pk": 3,
+        "model": "auth.user",
+        "fields": {
+            "username": "testuser3", 
+            "first_name": "", 
+            "last_name": "", 
+            "is_active": true, 
+            "is_superuser": false, 
+            "is_staff": false, 
+            "last_login": "2012-08-21 20:05:09", 
+            "groups": [], 
+            "user_permissions": [], 
+            "password": "sha1$36bef$05bfce9d5a0ac89ea8b440536bea141628362201", 
+            "email": "free@email.com", 
+            "date_joined": "2012-06-21 11:22:27"
+        }
+    },
+    {
+        "pk": 1, 
+        "model": "accounts.userprofile", 
+        "fields": {
+            "user": 1
+            
+        }
+    },
+    {
+        "pk": 2, 
+        "model": "accounts.userprofile", 
+        "fields": {
+            "user": 2,
+            "api_key":"96ZX2KTO7AP2",
+            "account_level":2
+        }
+    },
+    {
+        "pk": 1,
+        "model": "authorize_net.authorizearbuser",
+        "fields": {
+            "user_profile": 2,
+            "subscription_id": "sub_id"
+        }
+    },
+    {
+        "pk": 3, 
+        "model": "accounts.userprofile", 
+        "fields": {
+            "user": 3,
+            "account_level":1
+        }
+    }
+]

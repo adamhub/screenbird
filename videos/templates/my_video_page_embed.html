@@ -1,0 +1,86 @@
+<html>
+<head>
+<link rel="stylesheet" href="{{ MEDIA_URL }}css/style_screenbird.css" type="text/css" media="screen" />
+<script type="text/javascript" src="{{ MEDIA_URL }}js/jquery-1.5.1.min.js"></script>
+<script src="{{ MEDIA_URL }}js/mediaelementjs/mediaelement-and-player.min.js"></script>
+<script src="{{ MEDIA_URL }}js/jquery.simplemodal.1.4.1.min.js"></script>
+<script src="{{ MEDIA_URL }}js/script.js"></script>
+<!-- Pat css -->
+<link rel="stylesheet" href="{{ MEDIA_URL }}css/grid.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="{{ MEDIA_URL }}css/normalize.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="{{ MEDIA_URL }}css/styles.css" type="text/css" media="screen" />
+
+<script type='text/javascript'>
+    
+</script>
+
+</head>
+<body style="min-width:640px; height:400px; padding:10px;">
+{% load auth_tags %}
+{% load videos_tags %}
+    <div id="video" style="padding:10px; margin-left:auto; margin-right: auto; height: 400px; width: 640px;">
+        <span style="font-weight:bold;">
+        {% if user.userprofile.nickname %}
+                {{ user.userprofile.nickname|apostrophe_rule }}
+            {% else %}
+                {% if user.first_name %}
+                    {{ user.first_name|apostrophe_rule }}
+                {% else %}
+                    {% if user.username %}
+                        {{ user.username|apostrophe_rule }}
+                    {% else %}
+                        {{ user.email|get_email_localpart|apostrophe_rule }}
+                    {% endif %}
+                {% endif %}
+            {% endif %}
+        Uploaded Videos
+        </span>
+        <div id="table-container" style="{% if scroll %}overflow-x:hidden;overflow-y:scroll;height:340px;{% else %}overflow-x:hidden;overflow-y:hidden;height:340px;{% endif %}">
+            <table style="margin-top: 10px; width: 640px; margin-right: auto; margin-left:auto; position:relative;">
+                <tr>
+                    <th style="width: 5px;"></th>
+                    <th>Name</th>
+                    {% if checked %}
+                        <th>Channel</th>
+                    {% else %}
+                        <th>&nbsp;</th>
+                    {% endif %}
+                </tr>
+                {% for l in latest_submissions_page.object_list %}
+                    <tr{% cycle '' ' class="odd"' %}>
+                            <td style="width: 5px;"><a href="{% url download-video l.slug %}" title="Download video">⇩</a></td>
+                            <td class="td_title"><a href="{% url video-watch-embed user.id l.slug %}">{{ l.title }}</a></td>
+                            <td class="td_channel">{{ l.channel__name|default:"&nbsp;-" }}</td>
+                    </tr>
+                 {% empty %}
+                    <tr>
+                        <td colspan="6">No videos uploaded yet.</td>
+                    </tr>
+                 {% endfor %}
+            </table>
+        </div><!-- /table-container -->
+        {% if paginator.num_pages > 1 %}
+        <div id="pagination" style="position: absolute; margin: 0px; bottom:0px; width:100%;">
+            <p style="text-align:center; position:relative;">
+                {% if latest_submissions_page.has_previous %}
+                    <a style="position:absolute; left:15px;" href="?page={{ latest_submissions_page.previous_page_number }}&pages={{ pages }}{%if checked %}&show_channel=true{% else %}&show_channel=false{% endif %}"><font color="#ccc">previous</font></a>
+                {% else %}
+                    <!--
+                        <a>previous</a>
+                    -->
+                {% endif %}
+                Page {{ latest_submissions_page.number }} of {{ paginator.num_pages }}
+                
+                {% if latest_submissions_page.has_next %}
+                    <a style="position:absolute; right: 30px;{% if scroll %}margin-right:30px;{% endif %}" href="?page={{ latest_submissions_page.next_page_number }}&pages={{ pages }}{% if checked %}&show_channel=true{% else %}&show_channel=false{% endif %}"><font color="#ccc">next</font></a>
+                {% else %}
+                    <!--
+                        <a>next</a>
+                    -->
+                {% endif %}
+            </p>
+        </div><!-- /pagination -->
+        {% endif %}
+    </div><!-- /video -->
+</body>
+</html>

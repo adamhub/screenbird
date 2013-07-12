@@ -1,0 +1,14 @@
+{% extends "site_base.html" %}
+
+{% block heading %}404!{% endblock %}
+
+{% block content %}
+<h1>The link you provided does not exist.</h1>
+<p>
+<strong>Hopefully</strong> we can help you find the right place with one of the following options:<br>
+1. <a href="{% url my-videos %}">Access your recorded videos</a><br>
+2. Search for a video by user or title (This is probably a feature we might want to create)<br>
+3. <a href="/">Start at our home page</a><br>
+4. <a href="{% url contact_us %}">Contact us if nothing else works!</a>
+</p>
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends "site_base.html" %}
+
+{% comment %}
+For deletion
+Didn't find any view or url that uses this
+{% endcomment %}
+
+{% block header %}{% endblock %}
+
+{% block content %}
+<h1>Upgrade Account:</h1>	
+<h3 style="color:#D22;">Paid Account - Monthly Subscription:</h3>
+<ul style="padding-left:20px;">
+<li>Videos Don't Expire on Site From Time</li>
+<li>500 Minute Upgradable Limit</li>
+<li>Multi-User Channel</li>
+<li>$10.00/Month</li>
+</ul>
+{{ form_month.render }}
+<br>
+<h3 style="color:#D22;">Paid Account - One Year Subscription:</h3>
+<ul style="padding-left:20px;">
+<li>Videos Don't Expire on Site From Time</li>
+<li>500 Minute Upgradable Limit</li>
+<li>Multi-User Channel</li>
+<li>$60.00/Year</li>
+</ul>
+{{ form_year.render }}
+
+    
+{% endblock %}

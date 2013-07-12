@@ -1,0 +1,42 @@
+{% extends "site_base.html" %}
+
+{% block extrahead %}
+<link rel="stylesheet" href="{{ MEDIA_URL }}css/intro.css" />
+{% endblock %}
+
+{% block header %}{% endblock %}
+
+{% block content %}
+
+<div id="intro">
+    <div class="heading">
+        <h1>Getting Started with Screenbird</h1>
+        <h2>These simple tips will get you on the path to creating brilliant videos.</h2>
+    </div>
+
+    <div class="congrats">
+        <h2>Congratulations!</h2>
+        <p>Your Screenbird account is fully operational and you now get full access
+        to all the bells and whistles we have to offer in our Free Plan.</p>
+
+        <div class="help">
+            <p>If you ever need help, we have a great support team ready to
+            answer your questions.
+        </div>
+    </div>
+
+    <div class="next-steps">
+        <h2>Next Steps:</h2>
+
+        <ol>
+            <li>Get your video content organized on your desktop.</li>
+            <li>Record it and grab its URL.</li>
+            <li>Send it to others, upload it to your YouTube account or just
+            leave it on our server.</li>
+        </ol>
+    </div>
+
+    <br clear="all" />
+</div>
+
+{% endblock %}

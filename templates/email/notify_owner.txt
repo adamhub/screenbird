@@ -1,0 +1,10 @@
+Hello {{ user.username }},
+
+ A new video has been uploaded to your {% if channel %} channel, ({{channel.name}}){% else %} account{% endif %}.
+ 
+ Title: {{ video.title  }}
+ Description: {{ video.description }}
+ Link: {{ video_link }}
+   
+-------------------------
+Screenbird Team 

@@ -1,0 +1,21 @@
+{% if is_owner %}
+    <div class="edit_section">
+			<form id="ajax_edit_section_form" action="{% url section_edit_in_outline section.id %}" method="POST">
+				{% csrf_token %}
+				<div class="divider"></div>
+				<!-- VIDEO NUMBER -->
+				<div class="input-container">
+					{{ edit_form.order}}
+					{{ edit_form.name }}
+					<div class="lower-row">
+						{{ edit_form.assigned }}
+						<button type="submit" class="input-submit">Submit</button>
+					</div>
+				</div>
+	        	<div id="ajax_edit_section_form_errors" class="hidden">
+					errors
+				</div>
+			</form>
+			
+    </div>           
+{% endif %}

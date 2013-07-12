@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% load auth_tags %}
+{% load videos_tags %}
+
+{% block title %}| Videos{% endblock %}
+
+{% block content %}
+    <h1>Videos</h1>
+    {% if featured %}
+        <p><strong>Featured Videos</strong></p>
+        <div id="feature-list">
+            <div id="featured-videos" class="two-cols">
+                {% autoescape off %}
+                    {{ featured|video_list:"featured" }}
+                    {% comment %} 
+                        This template tag generates the html for featured list. 
+                        Usage:
+                            {{ <list_name_here>|video_list:"<extra_parameter>" }}
+                            extra parameter example: channel,featured,latest (these are strings)
+                    {% endcomment %}
+                {% endautoescape %}            
+            </div>
+        </div>
+    {% endif %}
+
+    {% if channel_videos %}
+        <p>Videos in Channels, Count | <strong>{{ channel_videos_count }}</strong></p>
+        <div id="video-list">
+            <div id="latest-videos" class="two-cols">
+                {% autoescape off %}
+                    {{ channel_videos|video_list:"channel" }}
+                    {% comment %} 
+                        This template tag generates the html for channel videos list. 
+                        Usage:
+                            {{ <list_name_here>|video_list:"<extra_parameter>" }}
+                            extra parameter example: channel,featured,latest (these are strings)
+                    {% endcomment %}
+                {% endautoescape %}
+            </div>
+         </div>
+         <br/>
+     {% endif %}
+    
+    <p>Uploaded Videos Count | <strong>{{ videos_count }}</strong></p>
+    <div id="video-list">
+        <div id="latest-videos" class="two-cols">
+            {% autoescape off %}
+                {{ latest_submissions_page.object_list|video_list:"latest" }}
+                {% comment %} 
+                    This template tag generates the html for paginated video lists. 
+                    Usage:
+                        {{ <list_name_here>|video_list:"<extra_parameter>" }}
+                        extra parameter example: channel,featured,latest (these are strings)
+                {% endcomment %}
+            {% endautoescape %}
+        </div>
+    </div>
+
+    {% if paginator.num_pages > 1 %}
+    <div id="pagination">
+        <p>	
+        {% if latest_submissions_page.has_previous %}
+                <a href="?page={{ latest_submissions_page.previous_page_number }}"><font color="#ccc">previous</font></a>
+        {% endif %}
+        Page {{ latest_submissions_page.number }} of {{ paginator.num_pages }}
+        
+        {% if latest_submissions_page.has_next %}
+                <a href="?page={{ latest_submissions_page.next_page_number }}"><font color="#ccc">next</font></a>
+        {% endif %}
+        </p>
+    </div><!-- /pagination -->
+    {% endif %}
+{% endblock content %}

@@ -1,0 +1,17 @@
+Dear {{ user.first_name|default:user.username }},
+
+The following video{{ videos|pluralize }} {% if videos|length > 1 %}are{% else %}is{% endif %} about to be deleted!
+If you want to keep {% if videos|length > 1 %}these videos{% else %}this video{% endif %}, please upload {% if videos|length > 1%}them{% else %}it{% endif %} to your YouTube account,
+or download {% if videos|length > 1%}each{% else %}the{% endif %} video to your machine.
+{% for v in videos %}
+      Video: {{ v.video.title }}
+      Deletion date: {{ v.deletion_date }} ({% if v.days > 1 %}{{ v.days }} days{% else %}a day{% endif %} from now)
+      Link: http://{{ site.domain }}{{ v.video.get_absolute_url }}
+      Upload to YouTube: http://{{ site.domain }}{% url upload-youtube v.video.slug %}
+      Download: http://{{ site.domain }}{% url download-video v.video.slug %}
+{% endfor %}
+
+Thanks,
+
+-------------------------
+The {{ site.name }} Team

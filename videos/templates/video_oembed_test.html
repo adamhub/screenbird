@@ -1,0 +1,27 @@
+{% load oembed_tags %}
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+<title>oEmbed Test</title>
+</head>
+
+<body>
+
+<h1>Test oEmbed</h1>
+
+<p>Paste the URL of oEmbed-able content in the text box below, then click
+<em>Embed!</em>.</p>
+
+<form method="get">
+    <label>URL: <input type="text" name="url" size="80" value="{{ url }}"> <button type="submit">Embed!</button></label>
+</form>
+
+{% if url %}
+    <div style="border: 5px solid #ff0000; float: left">{% oembed 1280x720 %}{{ url }}{% endoembed %}</div>
+{% else %}
+    <p>Nothing detected</p>
+{% endif %}
+
+</html>

@@ -1,0 +1,64 @@
+{% extends "site_base.html" %}
+
+{% block content %}
+<div id="account-manage-page">
+    <h1>Update Account:</h1>
+    <div class="field-box">
+        <h3>Username</h3>  
+        <form action="." method="POST" class="box account-manage-form">
+            {% csrf_token %}
+	        <div class="field field-no-border">
+	            <label>Username {{ user_form.username }}</label>
+	            {% if user_form.errors.username %}<span class="spanInputError"></span>{% endif %}<span class="error">{{ user_form.errors.username }}</span><br/>
+                <span class="help_text">Update username for logging in and name being displayed on your videos.</span>
+	        </div>  
+	        <div class="field submit">
+                <input id="submitForm" type="submit"  class="button-submit" name="username_update" value="Update Username">
+            </div>
+        </form>
+    </div>
+
+    <div class="field-box">     
+        <h3>Nickname</h3>  
+        <form action="." method="POST" class="box account-manage-form">
+            {% csrf_token %}
+	        <div class="field field-no-border">
+	            <label>Nickname {{ userprof_form.nickname }}</label>
+	            {% if userprof_form.errors.nickname %}<span class="spanInputError"></span>{% endif %}<span class="error">{{ userprof_form.errors.nickname }}</span><br/>
+                <span class="help_text">This will display on the upper-right side portion instead of your first name, username or email.</span>
+	        </div>  
+	        <div class="field submit">
+                <input id="submitForm" type="submit"  class="button-submit" name="userprofile" value="Update Nickname">
+            </div>
+        </form>
+    </div>
+
+    {% if not oauth_user %}
+    <div class="field-box">
+        <h3>Password</h3>
+        <form action="." method="POST" class="box account-manage-form">
+        {% csrf_token %}
+	        <div class="field">
+	            <label>Old Password {{ pass_form.old_password }}</label><br/>
+	            {% if pass_form.errors.old_password %}<span class="spanInputError"></span>{% endif %}<span class="error">{{ pass_form.errors.old_password }}</span>
+	        </div>  
+	        <div class="field">
+	            <label>New Password {{ pass_form.new_password1 }}</label><br/>
+	            {% if pass_form.errors.new_password1 %}<span class="spanInputError"></span>{% endif %}<span class="error">{{ pass_form.errors.new_password1 }}</span>
+	        </div>  
+	        <div class="field">
+	            <label>Confirm Password {{ pass_form.new_password2 }}</label><br/>
+	            {% if pass_form.errors.new_password2 %}<span class="spanInputError"></span>{% endif %}<span class="error">{{ pass_form.errors.new_password2 }}</span>
+	        </div>  
+	        <div class="field submit">
+                <input id="submitForm" type="submit"  class="button-submit" name="change_password" value="Update Password">
+            </div>
+        </form>
+    </div>
+    {% endif %}
+
+    <hr>
+    <p style="float:left;"><a href="{% url account_info %}" >Back to info</a></p>
+</div>
+
+{% endblock %}

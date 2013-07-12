@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+
+{% block title %}| {{ title }}{% endblock %}
+
+{% block extrahead %}
+    <style> 
+    #cocreate-form {
+        width: 100%;
+    }
+    </style>
+{% endblock %}
+
+{% block content %}
+     <h1>{{ form_name }}</h1>
+     <form id="cocreate-form" class="box" method="post">
+     	{% if form.non_field_errors %}<p>{{ form.non_field_errors }}</p>{% endif %}
+        {% csrf_token %}
+        {% for field in form %}
+            {% if not field.is_hidden %}
+            <div class="field {% ifequal field|widget_type 'textarea' %} textarea {% endifequal %}">
+                <label>{{ field.label }}  
+                	{{ field|add_class:"input-text" }}
+                </label>
+                {% if field.help_text %}
+                    <div class="help_text">{{ field.help_text }}</div>
+                {% endif %}
+                <span class="error">{{ field.errors }}</span>
+            </div>
+            {% else %}
+                {{ field }}
+            {% endif %}
+        {% endfor %}
+        
+        <div class="field submit">
+          <button type="submit" class="input-submit">Submit</button>
+        </div>
+     </form>
+{% endblock %}

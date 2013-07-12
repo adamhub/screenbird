@@ -1,0 +1,539 @@
+{% extends "base.html" %}
+{% load hitcount_tags %}
+{% load videos_tags %}
+{% load oembed_tags %}
+{% load auth_tags %}
+
+{% block body_id %}id="youtube-page"{% endblock %}
+
+{% block extrahead %}
+<!--For CSRF on AJAX-->
+<script type="text/javascript" src="{{ MEDIA_URL }}js/jquery-1.5.1.min.js"></script>
+<script src="{{ MEDIA_URL }}js/mediaelementjs/mediaelement-and-player.min.js"></script>
+<script src="{{ MEDIA_URL }}js/jquery.simplemodal.1.4.1.min.js"></script>
+<script src="{{ MEDIA_URL }}js/jquery.maskedinput-1.3.min.js"></script>
+<script src="{{ MEDIA_URL }}js/script.js"></script>
+<link rel="stylesheet" href="{{ MEDIA_URL }}js/mediaelementjs/mediaelementplayer.css" />
+<link rel="stylesheet" href="{{ MEDIA_URL }}js/mediaelementjs/mediaelementplayer.min.css" />
+<link rel="stylesheet" href="{{ MEDIA_URL }}css/outline.css" />
+
+<script type="text/javascript">
+    $.ajaxSetup({
+        beforeSend: function(xhr, settings) {
+            function getCookie(name) {
+                var cookieValue = null;
+                if (document.cookie && document.cookie != '') {
+                    var cookies = document.cookie.split(';');
+                    for (var i = 0; i < cookies.length; i++) {
+                        var cookie = jQuery.trim(cookies[i]);
+                        // Does this cookie string begin with the name we want?
+                        if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }
+            if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
+                // Only send the token to relative URLs i.e. locally.
+                xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+            }
+        }
+    });
+    
+    $(document).ready(function() {
+        {% if not video.youtube_embed_url %}
+            // For video not transferred to YouTube
+            {% if video_status == 'WAIT' %}
+                // For video being encoded
+                $("#popup").modal({onClose: function (dialog) {
+                    dialog.data.fadeOut('fast', function () {
+                        dialog.container.hide('fast', function () {
+                            dialog.overlay.slideUp('fast', function () {
+                                $.modal.close();
+                            });
+                        });
+                    });
+                }});
+                processing();
+            {% else %}
+                // For video ready
+                {% if video_status == 'OK' %}
+                    if(navigator.userAgent.indexOf("Firefox") != -1){
+                        var useragent_chopped = navigator.userAgent.split(" ");
+                        var version = parseInt(useragent_chopped[useragent_chopped.length-1].replace("Firefox/", "").split(".")[0]);
+                        if(version <= 10){
+                            alert("Your browser must support HTML 5 video to create/edit outlines. Please open a more current browser to continue.");
+                            var $video = $("video");
+                            $object = $("object", $video).clone()
+                            $video.after($object);
+                            $video.remove();
+                            $("#create-outline").hide();
+                        }
+                    }
+                    // Hit Counter Function
+                    {% get_hit_count_javascript for video %}
+
+                    var isInt = function(n){
+                        var reInt = new RegExp(/^-?\d+$/);
+                        if (!reInt.test(n)) {
+                            return false;
+                        }
+                        return true;
+                    }
+                    // Vote up handler
+                    $('div#controls div#like a.vote-up').click(function() {
+                        {% if user.is_authenticated %}
+                            var vote_action = 'vote';
+                            var vote_type = 'up';
+                            var id = {{ video.id }};
+                            $.post('{% url vote_ajax %}', {id:id, type:vote_type, action:vote_action}, function(response) {
+                                var obj = JSON.parse(response);
+                                if (isInt(obj.likes)) {
+                                    $('div#controls div#like span.likes_count').html(obj.likes);
+                                }
+                                if (isInt(obj.dislikes)) {
+                                    $('div#controls div#like span.dislikes_count').html(obj.dislikes);
+                                }
+                            });
+                        {% else %}
+                            $.modal('<h2><strong>Screenbird Thumbs Up!</strong></h2>'+
+                                '<p><a href="{% url login %}?next={{ request.build_absolute_uri }}">Login</a> first to thumbs up a video. Thanks.</p>',
+                                {onClose: function (dialog) {
+                                    dialog.data.fadeOut('fast', function () {
+                                        dialog.container.hide('fast', function () {
+                                            dialog.overlay.slideUp('fast', function () {
+                                                $.modal.close();
+                                            });
+                                        });
+                                    });
+                                }});
+                        {% endif %}
+                    });
+                    // Vote down handler
+                    $('div#controls div#like a.vote-down').click(function() {
+                        {% if user.is_authenticated %}
+                            var vote_action = 'vote';
+                            var vote_type = 'down';
+                            var id = {{ video.id }};
+                            $.post('{% url vote_ajax %}', {id:id, type:vote_type, action:vote_action}, function(response) {
+                                var obj = JSON.parse(response);
+                                if (isInt(obj.likes)) {
+                                    $('div#controls div#like span.likes_count').html(obj.likes);
+                                }
+                                if (isInt(obj.dislikes)) {
+                                    $('div#controls div#like span.dislikes_count').html(obj.dislikes);
+                                }
+                            });
+                        {% else %}
+                            $.modal('<h2><strong>Screenbird Thumbs Down!</strong></h2>'+
+                                '<p><a href="{% url login %}?next={{ request.build_absolute_uri }}">Login</a> first to thumbs down a video. Thanks.</p>',
+                                {onClose: function (dialog) {
+                                    dialog.data.fadeOut('fast', function () {
+                                        dialog.container.hide('fast', function () {
+                                            dialog.overlay.slideUp('fast', function () {
+                                                $.modal.close();
+                                            });
+                                        });
+                                    });
+                                }});
+                        {% endif %}
+                    });
+
+                    {% if vikia == 'vikia' %} {# Check if vikia is set on GET parameters #}
+                        // Set timecode of video player based on set-timecode text box 
+                        $('div#set-timecode-div button#set-timecode-button').click(function() { 
+                            var myplayer = jQuery('#player')["0"];
+                            var timecode = document.getElementById('set-timecode').value;
+                            var sec = mejs.Utility.timeCodeToSeconds('00:'+timecode);
+                            console.log(myplayer.player.media)
+                            console.log('seconds:'+sec);
+                            if (isNaN(sec)) {
+                                $.modal('<h2><strong>Screenbird Video</strong></h2>'+
+                                    '<p>Please input correct timecode format, mm:ss. Thanks.</p>',
+                                    {onClose: function (dialog) {
+                                        dialog.data.fadeOut('fast', function () {
+                                            dialog.container.hide('fast', function () {
+                                                dialog.overlay.slideUp('fast', function () {
+                                                    $.modal.close();
+                                                });
+                                            });
+                                        });
+                                    }});
+                            }
+                            else {
+                                myplayer.player.startTime = sec;
+                                myplayer.player.media.setCurrentTime(sec);
+                                myplayer.player.play();
+                            }
+                        });
+                        // Get current timecode of video player and set it on get-timecode text box
+                        $('div#get-timecode-div button#get-timecode-button').click(function() { 
+                            var myplayer = jQuery('#player')["0"];
+                            var timecode = document.getElementById('get-timecode');
+                            var currentTime = mejs.Utility.secondsToTimeCode(myplayer.player.media.currentTime);
+                            timecode.value = currentTime;
+                        });
+                        // Masks set-timecode to input only digits using jquery.maskedinput-1.3.min.js
+                        $("#set-timecode").mask("99:99");
+                    {% endif %}
+
+                    // Display embed code
+                    $('div#desc div#embed a.get_embed').click(function() {
+                        $.modal('<h2><strong>Screenbird Embed Code</strong></h2>'+
+                                    '<textarea id="embed-code" style="width:500px;height:45px;">{{ embed_code }}</textarea>',
+                                    {onClose: function (dialog) {
+                                        dialog.data.fadeOut('fast', function () {
+                                            dialog.container.hide('fast', function () {
+                                                dialog.overlay.slideUp('fast', function () {
+                                                    $.modal.close();
+                                                });
+                                            });
+                                        });
+                        }});
+                    });
+
+                    $("#embed-code").focus(function(e) {
+                        var $this = $(this);
+                        $this.select();
+                        $this.mouseup(function(e) {
+                            $this.unbind("mouseup");
+                            return false;
+                        });
+                    });
+                {% else %}
+                    {% if video_status == 'DNE' %}
+                        // Reloads page after a minute if video does not exist
+                        setTimeout(function(){
+                            window.location.reload();
+                        }, 60000);
+                    {% endif %}
+                {% endif %}
+
+                // Display all available channels
+                $("#add-to-channel .see-more").click(function(e){
+                    $("#add-to-channel .channel").show();
+                    $(this).hide();
+                });
+            {% endif %}
+        {% else %}
+            // For video transferred to YouTube
+            {% if video %}            
+                // Hit Counter Function
+                {% get_hit_count_javascript for video %}
+            {% endif %}
+        {% endif %}
+    });
+
+    // Only the uploader of the video can edit the outline
+    var canEditOutline = false;
+    {% if video %}
+        {% if video.uploader.pk == request.user.pk %}
+            canEditOutline = true;
+        {% else %}
+            {% if request.user.is_anonymous %}
+                {% if anonymous_user %}
+                    {% if video.uploader.pk == anonymous_user.pk %}
+                        canEditOutline = true;
+                    {% endif %}
+                {% endif %}
+            {% else %}
+                canEditOutline = false;
+            {% endif %}
+        {% endif %} 
+        var saveURL = "{% url save-outline video.slug %}";
+        var loadURL = "{% url get-outline video.slug %}";
+    {% endif %}
+
+    // Animate ellipsis in processing message
+    function processing(){
+        setTimeout(function(){
+            if($("#dots").html() == "..."){
+                $("#dots").html("");
+            }else{
+                $("#dots").html($("#dots").html() + ".");
+            }
+            processing();
+        }, 500);
+    }
+    
+    {% if not video_status == 'WAIT' %}
+        // Global for movie player
+        var isFlash = false;
+        var player;
+        timeoutPeriod = 20000;
+        if("{{ video.youtube_embed_url }}" != "" && "{{ video.youtube_embed_url }}" != "None" || navigator.userAgent.indexOf("Firefox") != -1){
+            isFlash = true;
+        }
+        $(document).ready(function () {
+            player = new MediaElementPlayer('#player', {
+                alwaysShowControls: true,
+                success: function (me) {
+                    me.play();
+                    $("#outline").makeOutline(me, {
+                        canEditOutline: canEditOutline,
+                        isFlash: isFlash,
+                        loadURL: loadURL,
+                        saveURL: saveURL, 
+                        controllerID: 'create-outline'
+                    });
+                }
+            }); 
+        });
+    {% else %}
+        // Ping availability of processing video every 5 seconds
+        setInterval(function(){
+            $.ajax({
+                url: "{% url is-available video.slug 'web' %}",
+                type: "GET",
+                dataType: "text",
+                success: function(data){
+                    if(data=="True"){
+                        location.reload(true);
+                    }
+                }
+            });
+        }, 5000);
+    {% endif %}
+</script>
+<script src="{{ MEDIA_URL }}js/outliner.js"></script>
+<script>
+{% include "encoder_progress.html" %}
+</script>
+
+{# Only videos that are public, not expired and active can be oembed-ded. #}
+{% if not video.expired and video.is_active %}
+    {% oembed_autodiscover video %}
+    {% oembed_url_scheme %}
+{% endif %}
+{% endblock %}
+
+{% block title %}| {{ video.title|default:"Watch Video" }}{% endblock %}
+
+{% block content %}
+<div id="popup">
+    <script type="text/javascript">
+    document.getElementById('popup').style.display = 'none';
+    </script>
+    <input id="w" type="hidden" value="{{ video.slug }}"></input>
+    <h2><strong>Screenbird Upload</strong></h2>
+    <div id="upload-progress" class="upload-progress">
+        <span class="progress-info">Enqueued</span>
+        <div id="upload-eta"></div>
+        <div style="background-color:black;" id="progress-bar" class="progress-bar"></div>
+        
+        <input id="prev-rate" type="hidden" value="0">
+        <input id="prev-crate" type="hidden" value="0">
+        <input id="prev-crate1" type="hidden" value="0">
+        <input id="prev-cprog" type="hidden" value="0">
+        <input id="prev-rate1" type="hidden" value="0">
+        <input id="prev-prog" type="hidden" value="0">
+        <input id="sec-timer" type="hidden" value="0">
+    </div>
+    <p>Your video is being processed. This page will refresh once the video is ready.</p>
+</div>
+
+<div id="popup2">
+    <script type="text/javascript">
+    document.getElementById('popup2').style.display = 'none';
+    </script>
+    <h2><strong>Screenbird Youtube Upload</strong></h2>
+    <p>Your video is being processed by Youtube right now.<br> Refresh this page in a few minutes to see your video.<br> In the case that something went wrong, you will get a backup of your video.</p>
+</div>
+
+<div id="video-watch">
+    <h1>{% if video_status == 'EXPIRED' or video_status == 'OK' %}{{ video.title }}{% else %}{{ video_filename }}{% endif %}</h1>
+    <div id="controls">
+		<div id="video-meta">
+            {% if video_status == 'OK' or video_status == 'EXPIRED' %}
+                <p>
+                {% if video.uploader.username %}
+                    {% if video.uploader.userprofile.is_anonymous %}
+                       <a href='{% url user_videos video.uploader.username %}'>Anonymous User</a>
+                    {% else %}
+                       <a href='{% url user_videos video.uploader.username %}'>
+                       {% if video.uploader.userprofile.nickname %}
+                            {{ video.uploader.userprofile.nickname }}
+                       {% else %}
+                            {% if video.uploader.first_name %}
+                                {{ video.uploader.first_name }}
+                            {% else %}
+                                {% if video.uploader.username %}
+                                    {{ video.uploader.username }}
+                                {% else %}
+                                    {{ video.uploader.email|get_email_localpart }}
+                                {% endif %}
+                            {% endif %}
+                       {% endif %}
+                       </a>
+                    {% endif %}
+                {% else %}
+                   {% if video.uploader.email %}
+                       {{ video.uploader.email|get_email_localpart }}
+                   {% else %}
+                    <strong>Anonymous User</strong>
+                   {% endif %}
+                {% endif %}
+                on
+                {{ video.created|date:"M d, Y" }}
+                 &#8226; {% if video %}{% get_hit_count for video %}{% else %}0{% endif %} views
+                </p>
+            {% endif %}
+        </div><!-- /video-meta -->
+        {% if video %}	
+            <div id="like">
+                {% if video.uploader.pk == request.user.pk %}
+                    <a href='#' id='create-outline'>Create Outline</a>
+                {% else %}
+                    {% if request.user.is_anonymous %}
+                        {% if anonymous_user %}
+                            {% if video.uploader.pk == anonymous_user.pk %}
+                                <a href='#' id='create-outline'>Create Outline</a>
+                            {% endif %}
+                        {% endif %}
+                    {% endif %}
+                {% endif %}
+                <a href="#" class="vote-up"><img src="{{ MEDIA_URL }}gfx/like.png" alt="" /></a> <span class="likes_count">{{ video.thumbs.thumbs_up_count }}</span> likes
+                <a href="#" class="vote-down"><img src="{{ MEDIA_URL }}gfx/dislike.png" alt="" /></a> <span class="dislikes_count">{{ video.thumbs.thumbs_down_count }}</span> dislikes
+            </div><!-- /like -->
+        {% endif %}
+	</div>
+
+    <p>
+        {% if video.expired and not video.youtube_embed_url %}
+            <span id='record'><a style="float: right; display: inline; font-size: 12px; margin: 10px 0 30px 0; margin-left:  5px;" href="{% url download-video video.slug %}" >Download Video</a></span><strong>Sorry but this video has expired. To avoid this completely, plus use the Youtube transfer tool in your account, or <a href="{% url features %}">upgrade</a> to a premium account.</strong><br>
+        {% endif %}
+        {% if video and video.youtube_embed_url and video.uploader == request.user and notify_user %}
+            <span id='record'><a style="float: right; display: inline; font-size: 12px; margin: 10px 0 30px 0; margin-left:  5px;" href="{% url download-video video.slug %}" >Download Video</a></span>
+            <strong>Success! Youtube is now processing your video. You can go there to check it out, or wait for a bit and it will appear here.</strong><br>
+            <strong>This video will be downloadable for 1 week({{ video.youtube_video_expiry_date|date:"M d, Y" }}) for backup purposes when YouTube upload errors occur. After 1 week the video would then be deleted from the server. Thanks.</strong><br>
+        {% endif %}
+    </p>
+
+    {# This appears if the video is new and the user has one or more channels. #}
+    {% if video and video_status == 'OK' and video.uploader == user and not video.channel and is_fresh and channels|length > 0 %}
+        <div id="add-to-channel" class="box">
+            <h3>You have uploaded a new video</h3>
+            <p>Add this video to a channel!</p>
+            <p>
+                {% for c in channels|slice:":2" %}
+                    <input type="button" onclick="location.href='{% url add_video_to_channel c.pk video.pk as c_url %}{{ c_url|escapejs }}'" class="button channel" value="{{ c }}" />
+                {% endfor %}
+                {% for c in channels|slice:"2:" %}
+                    <input type="button" style="display: none" onclick="location.href='{% url add_video_to_channel c.pk video.pk as c_url %}{{ c_url|escapejs }}'" class="button channel" value="{{ c }}" />
+                {% endfor %}
+                {% if channels|length > 2 %}
+                    <input type="button" class="button see-more" value="See {{ channels|length|add:-2 }} more..." />
+                {% endif %}
+            </p>
+        </div><!-- /add-to-channel -->
+    {% endif %}
+
+    <div id="outline">
+        <p class="header">Outline</p>
+    </div>
+
+    <div id="video">
+        <div id="media">
+        {% if video_status == 'OK' %}
+            <video autobuffer controls preload="auto" width="640" height="360" id="player" autoplay="true" poster="{{ MEDIA_URL }}gfx/black-background-640x360.jpg">
+                {% if video.youtube_embed_url %}
+                    <source type="video/youtube" src="{{video.youtube_embed_url}}"/>
+                {% else %}
+                    {% if not video.expired %}
+                        {% if video %}
+                            <source type="video/mp4" src="{% if is_local %}{{ MEDIA_URL }}tmp/{{ video.slug }}.mp4{% else %}{% url get-video-content video.id %}{% endif %}"/>
+                        {% endif %}
+                    {% endif %}
+                {% endif %}
+                Your browser does not support the video tag.
+                <!-- Fallback flash player for no-HTML5 browsers with JavaScript turned off -->
+                <object width="640" height="360" type="application/x-shockwave-flash" data="{{ MEDIA_URL }}js/mediaelementjs/flashmediaelement.swf">
+                    <param name="movie" value="{{ MEDIA_URL }}js/mediaelementjs/flashmediaelement.swf" />
+                    {% if video_status == 'OK' %}
+                        <param name="flashvars" value="autoplay=true&amp;controls=true&amp;file={% url get-video-content video.id %}" />
+                    {% endif %}
+                    <!-- Image fall back for non-HTML5 browser with JavaScript turned off and no Flash player installed -->
+                    <img src="" width="640" height="360" title="No video playback capabilities" />
+                </object>
+            </video>
+        {% else %}
+            <div id='video-not-available'>
+                {% if video_status == 'WAIT' %}
+                    <span class="oops">Sit tight...</span><br />
+                    Your video is being processed. Until then, feel free to browse our <a href="{% url videos %}">Video List</a>.
+                    <br />Thanks.
+                {% endif %}
+                {% if video_status == 'DELETED' %}
+                    <span class="oops">Oops!</span><br />
+                    The video you are trying to view was already removed from this site.
+                    <br />Thanks.
+                {% endif %}
+                {% if video_status == 'DNE' %}
+                    <span class="oops">Oops!</span><br />
+                    The video you are trying to view does not exist.
+                    <br />Thanks.
+                {% endif %}
+            </div><!-- /video-not-available -->
+        {% endif %}
+        </div><!-- /media -->
+    </div><!-- /video -->
+
+    <br>
+
+    {% if not video.youtube_embed_url and video_status == 'OK' and not video.expired and vikia == 'vikia'%}
+    {# Check if vikia is set on GET parameters #}
+        <div class="box" style="height:100%; padding:30px 10px 60px 12px;">
+            <div id="set-timecode-div" style="float:left; display:inline; width:48%;">
+                <button id="set-timecode-button" class="button">Go to TimeCode</button>
+                <input type="text" id="set-timecode" maxlength="5" style="width:50px;"/>
+                <p>TimeCode Format(mm:ss)</p>
+            </div>
+            <div id="get-timecode-div" style="float:right; display:inline; width:48%;">
+                <button id="get-timecode-button" class="button">Get Current TimeCode</button>
+                <input type="text" id="get-timecode" maxlength="5" style="width:50px;" readonly="readonly"/>
+                <p>TimeCode Format(mm:ss)</p>
+            </div>
+        </div><!-- /box -->
+    {% endif %}
+
+    {% if video %}
+    <div id="desc">
+        <div id="description">
+        {% if description_hidden %}
+            <p><i>Description contain some censored words and cannot be displayed.</i></p>
+        {%else%}
+            <p>{% if video_description %}{{ video_description|replace_newlines|safe }}{% else %}&nbsp;{% endif %}</p>
+        {% endif %}
+        </div>
+                    
+        <div id="embed">
+            <a href="#" class="get_embed">Show Embed Code</a>
+        </div>
+    </div>
+    {% endif %}
+
+    {# This appears if the video is new and the user has one or more channels. #}
+    {% if video and video_status == 'OK' and video.uploader == user and not video.channel and not is_fresh and channels|length > 0 %}
+        <div id="add-to-channel" class="box">
+            <h3>Add this video to a channel.</h3>
+            <p>
+                {% for c in channels|slice:":2" %}
+                    <input type="button" onclick="location.href='{% url add_video_to_channel c.pk video.pk as c_url %}{{ c_url|escapejs }}'" class="button channel" value="{{ c }}" />
+                {% endfor %}
+                {% for c2 in channels|slice:"2:" %}
+                    <input type="button" style="display: none" onclick="location.href='{% url add_video_to_channel c2.pk video.pk as c2_url %}{{ c2_url|escapejs }}'" class="button channel" value="{{ c2 }}" />
+                {% endfor %}
+                {% if channels|length > 2 %}
+                    <input type="button" class="button see-more" value="See {{ channels|length|add:-2 }} more..." />
+                {% endif %}
+            </p>
+        </div>
+        <br>
+    {% endif %}
+
+    <a href="{{ back_url }}">Back to video list</a>
+</div>
+
+{% endblock %}
