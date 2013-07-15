@@ -1,5 +1,10 @@
-screenbird
+Screenbird
 ==========
+
+You have found a HUGE program, origianlly built by Bixly, and now released to the wild. 
+It's a cross-platform browser based screen recording tool. Check out the live demo:
+
+http://screenbird.com for the fully functioning demo of the project. 
 
 To run locally:
 
