@@ -106,8 +106,4 @@ RABBITMQ_SERVER = "localhost"
 
 # Offshore processing
 AMAZON_NODES = [
-    'linode1.screenbird.com',
-    'linode2.screenbird.com',
-    'linode3.screenbird.com',
-    'linode4.screenbird.com',
 ]

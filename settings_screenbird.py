@@ -93,7 +93,7 @@ STATICFILES_FINDERS = (
 )
 
 # Make this unique, and don't share it with anybody.
-SECRET_KEY = 'v0z2l3==1kwr%-%w+n)^_-%a(e51dme)0sh=0qa+8*n(nd59eh'
+SECRET_KEY = '<django-secret-key>'
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
@@ -272,7 +272,7 @@ LOGGING = {
 }
 
 # Paypal Account
-PAYPAL_RECEIVER_EMAIL = "support@pastevid.com"
+PAYPAL_RECEIVER_EMAIL = "<your-paypal-reciever-email>"
 
 PROFANITY_LIST = profanity_list.CENSORED_LIST
 
@@ -280,25 +280,25 @@ PROFANITY_LIST = profanity_list.CENSORED_LIST
 # override these in your local_settings.py
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_USE_TLS = True
-EMAIL_HOST = 'secure.emailsrvr.com'
-EMAIL_HOST_USER = 'support@screenbird.com'
-EMAIL_HOST_PASSWORD = 'V96IRlNkbv8b'
+EMAIL_HOST = ''
+EMAIL_HOST_USER = ''
+EMAIL_HOST_PASSWORD = ''
 EMAIL_PORT = 465
 
-HOST = "http://173.255.220.228:8000"
+HOST = ""
 
-DEFAULT_FROM_EMAIL = 'Screenbird <support@screenbird.com>'
+DEFAULT_FROM_EMAIL = ''
 EMAIL_SUBJECT_PREFIX = '[Screenbird]'
 EMAIL_FAIL_SILENTLY = False
 
 # AMAZON
 PUSH_TO_S3 = True
-AWS_ACCESS_KEY_ID = "AKIAIBYTZHW7O3WQSQYA"
-AWS_SECRET_ACCESS_KEY = "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"
+AWS_ACCESS_KEY_ID = ""
+AWS_SECRET_ACCESS_KEY = ""
 AWS_VIDEO_BUCKET_NAME = "%s-%s" % (AWS_ACCESS_KEY_ID.lower(), "videos")
 UPLOAD_DELAY = datetime.timedelta(hours=12)
 UPLOAD_CHECKING = datetime.timedelta(minutes=30)
-EC2_KEY_NAME = 'ec2_screenbird_key'
+EC2_KEY_NAME = ''
 QUEUE_NAME = "video_queue"
 COCREATE_QUEUE_NAME = 'cocreate_queue'
 PEM_PATH = os.path.join(PROJECT_ROOT, "amazon", "ec2_files")
@@ -308,14 +308,14 @@ PRODUCTION = False
 
 #Facebook OAuth Keys
 #Production's APP ID; Override on local_settings for test site
-FACEBOOK_APP_ID              = '143900692361638'
-FACEBOOK_API_SECRET          = 'a081eff79be9abe5e51dfdf3fc71e3d3'
+FACEBOOK_APP_ID              = ''
+FACEBOOK_API_SECRET          = ''
 FACEBOOK_EXTENDED_PERMISSIONS = ['offline_access','publish_stream','email']
 
 #Twitter OAuth Keys
 #Production's APP ID; Override on local_settings for test site
-TWITTER_CONSUMER_KEY         = 'Gfh2kPiDMxDfKDgMZpqVw'
-TWITTER_CONSUMER_SECRET      = 'bfTpjdazOkszygnzyZwIHLJlJylEEBUT5tyWiMAtRI'
+TWITTER_CONSUMER_KEY         = ''
+TWITTER_CONSUMER_SECRET      = ''
 
 #Social_Auth Parameters
 SOCIAL_AUTH_CREATE_USERS          = True
@@ -325,7 +325,7 @@ SOCIAL_AUTH_COMPLETE_URL_NAME     = 'complete'
 SOCIAL_AUTH_ASSOCIATE_BY_MAIL     = True
 
 #Youtube
-YOUTUBE_DEV_KEY = 'AI39si7iLtHX-gR6lNspBlmuXDIVyP_-5gbaNBsXWoSKd-iwDboJkBaGfefEiSPear5O5GKhwp5ti2Z758-X7Y44ijQAZBy-yQ'
+YOUTUBE_DEV_KEY = ''
 
 #Login Parameters
 LOGIN_ERROR_URL    = '/login/error/'
@@ -338,13 +338,13 @@ SITE_ID = 2 #Screen Bird Site ID
 # If you are using secure AuthSub, be sure to set your RSA private key so a SecureAuthSubToken is created
 # http://code.google.com/apis/gdata/docs/auth/authsub.html#No-Library
 # SECURE_KEY the location of the RSA private key(For production). None if AuthSub is not secured.
-SECURE_KEY = None #os.path.join(PROJECT_ROOT, 'ssl-cert-mancio.pastevid.bixly.key')
+SECURE_KEY = None #os.path.join(PROJECT_ROOT, '')
 
 ENABLE_VIDEO_APPROVAL = True
 
 # Default Authorize.net credentials
-LOGIN_ID = u'3un8v8PhYc'
-TRANS_KEY = u'3m3884Ts8jS6RgHW'
+LOGIN_ID = u''
+TRANS_KEY = u''
 IS_TEST = True
 DELIMITER = u','
 ENCAPSULATOR = u''
