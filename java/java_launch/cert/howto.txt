@@ -3,26 +3,26 @@ how to:
 run
 keytool -genkey -alias signFiles -keystore bixly
 
-this will as for a series of things and a password, use bixlycert for both store and key pass.
+this will as for a series of things and a password, use your-pass-here for both store and key pass.
 
 alias: signFiles
-storepass: bixlycert
-keypass: bixlycert
+storepass: your-pass-here
+keypass: your-pass-here
 
 -sign the jar files
 move the generated keystore file to the same location as the jars and run:
 
 
-jarsigner -keystore bixly ScreenRecorder.jar signFiles -storepass bixlycert -keypass bixlycert -signedjar
-jarsigner -keystore bixly commons-codec-1.4.jar signFiles -storepass bixlycert -keypass bixlycert -signedjar
-jarsigner -keystore bixly commons-logging-1.1.1.jar signFiles -storepass bixlycert -keypass bixlycert -signedjar
-jarsigner -keystore bixly httpclient-4.1.1.jar signFiles -storepass bixlycert -keypass bixlycert -signedjar
-jarsigner -keystore bixly httpclient-cache-4.1.1.jar signFiles -storepass bixlycert -keypass bixlycert -signedjar
-jarsigner -keystore bixly httpcore-4.1.jar signFiles -storepass bixlycert -keypass bixlycert -signedjar
-jarsigner -keystore bixly httpmime-4.1.1.jar signFiles -storepass bixlycert -keypass bixlycert -signedjar
-jarsigner -keystore bixly linuxlibs.jar signFiles -storepass bixlycert -keypass bixlycert -signedjar
-jarsigner -keystore bixly maclibs.jar signFiles -storepass bixlycert -keypass bixlycert -signedjar
-jarsigner -keystore bixly winlibs.jar signFiles -storepass bixlycert -keypass bixlycert -signedjar
+jarsigner -keystore bixly ScreenRecorder.jar signFiles -storepass your-pass-here -keypass your-pass-here -signedjar
+jarsigner -keystore bixly commons-codec-1.4.jar signFiles -storepass your-pass-here -keypass your-pass-here -signedjar
+jarsigner -keystore bixly commons-logging-1.1.1.jar signFiles -storepass your-pass-here -keypass your-pass-here -signedjar
+jarsigner -keystore bixly httpclient-4.1.1.jar signFiles -storepass your-pass-here -keypass your-pass-here -signedjar
+jarsigner -keystore bixly httpclient-cache-4.1.1.jar signFiles -storepass your-pass-here -keypass your-pass-here -signedjar
+jarsigner -keystore bixly httpcore-4.1.jar signFiles -storepass your-pass-here -keypass your-pass-here -signedjar
+jarsigner -keystore bixly httpmime-4.1.1.jar signFiles -storepass your-pass-here -keypass your-pass-here -signedjar
+jarsigner -keystore bixly linuxlibs.jar signFiles -storepass your-pass-here -keypass your-pass-here -signedjar
+jarsigner -keystore bixly maclibs.jar signFiles -storepass your-pass-here -keypass your-pass-here -signedjar
+jarsigner -keystore bixly winlibs.jar signFiles -storepass your-pass-here -keypass your-pass-here -signedjar
 
 
 
