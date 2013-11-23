@@ -1,0 +1,15 @@
+Hello ({{ email }})
+
+ You are invited to become a member of {{ user }}'s co-create videos on Screenbird.
+ Since you are not yet registered, you are given the following credentials for your initial login and confirmation:
+ 
+ -----------------------------
+ Username: {{ username }}
+ Password: {{ password }}
+ -----------------------------
+
+You may opt to change your username and password at {{ account_link }}.
+ 
+-------------------------
+Screenbird Team 
+

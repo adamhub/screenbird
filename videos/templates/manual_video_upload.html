@@ -1,0 +1,161 @@
+{% extends "base.html" %}
+
+{% block title %}| Video Upload Form{% endblock %}
+{% block extrahead %}
+{{ block.super }}
+<script type="text/javascript" src="{{ MEDIA_URL }}js/jquery-1.5.1.min.js"></script>
+<script type="text/javascript">
+    var ignoreFields = ['title', 'description', 'channel', 'is_public'];
+    var formSubmitted = false;
+
+    window.onbeforeunload = function (e) {
+        if(!formSubmitted) {
+            var e = e || window.event;
+            messagePrompt = 'Warning: Leaving this page will close Screenbird Recorder. If your video has not finished uploading, it will be lost!';
+            if (e) {
+                e.returnValue = messagePrompt;
+            }
+            // For Safari
+            return messagePrompt;
+        }
+        else {
+            formSubmitted = false; //Reset
+        }
+    };	
+    
+    function get_filename_from_path(path) {
+        if (path) {
+            var startIndex = (path.indexOf('\\') >= 0 ? path.lastIndexOf('\\') : path.lastIndexOf('/'));
+            var filename = path.substring(startIndex);
+            if (filename.indexOf('\\') === 0 || filename.indexOf('/') === 0) {
+                    filename = filename.substring(1);
+            }
+            return(filename);
+        }
+    }
+    
+    $(document).ready(function(){
+        // Change video title to upload filename if there is none
+        $('input[name="file"]').bind('change',function () {
+            var targetInput = $('input#id_title');
+            if( $.trim($(targetInput).val()) == "" ) {
+                $(targetInput).val(get_filename_from_path(this.value));
+            }
+        });
+        // Setup fields to be ignored on S3 upload
+        $(".field label input").addClass("input-text");
+        $(".field label select").addClass("input-text");
+        $("input[name='csrfmiddlewaretoken']").attr("name","x-ignore-csrfmiddlewaretoken");
+        $("input[name='slug']").attr("name","x-ignore-slug");
+        $(".field label textarea").addClass("input-text")
+            .parent().parent().addClass("textarea");
+        $(".input-text").each(function(){
+            if(ignoreFields.indexOf($(this).attr('name')) != -1){
+                var origName = $(this).attr('name');
+                $(this).attr('name', 'x-ignore-'+origName );
+            }
+        });
+        // Hide Channel select box if there are no existing choices
+        if($("#id_channel option").length == 1){
+            $("#id_channel").parent().parent().hide();
+        }
+        // Submits form to screenbird server for video object creation
+        $("#video-upload-form").submit(function(){
+            $("#submit-btn").attr("disabled", "disabled");
+            formSubmitted = true;
+            var targetInput = $('input#id_title');
+            
+            if( $.trim($(targetInput).val()) == "" ) {
+                $(targetInput).val(get_filename_from_path($('input[name="file"]').val()));
+            }
+            
+            if(!$(this).attr('validated')){
+                var filename = $("input[name='file']", $(this)).val();
+                if(filename.indexOf(".mp4") == -1){
+                    alert("File format is not valid.");
+                    return false;
+                }
+                var title = $("#id_title").val().replace(/^\s+/,"");
+                if(title == ''){
+                    alert("Title is required");
+                    return false;
+                }
+                var formData = {
+                    'title': $("#id_title").val(),
+                    'description': $("#id_description").val() || "",
+                    'is_public': $("#id_is_public").is(":checked"),
+                    'channel': $("#id_channel").val(),
+                    'slug': $("#id_slug").val()
+                };
+                $.ajax({
+                    type: "POST",
+                    url: "{% url upload-video %}",
+                    data: {"form-data": JSON.stringify(formData), "csrfmiddlewaretoken":$("input[name='x-ignore-csrfmiddlewaretoken']").val()},
+                    dataType: "text",
+                    success: function(data){
+                        if(data=="OK"){
+                            $("#video-upload-form").attr('validated', true);
+                            $("#video-upload-form").submit();
+                        }
+                    },
+                    async: false
+                });
+                return false;
+            }else{
+                return true;
+            }
+        });
+    });
+</script>
+{% endblock %}
+
+{% block content %}
+    <h1>Manual Video Upload Form:</h1>
+    {% if not user.is_authenticated %}
+        <div>
+            You are currently not logged in, this means you cannot edit or delete anything you upload.
+        </div>
+        <br>
+    {% endif %}
+
+    {{ message }}
+
+    {% if max_time %}
+         You have already maxed out your allowable upload time. You could delete another video or <strong>upgrade your account</strong> to continue uploading more videos. Thanks.
+    {% else %}
+        <form id="video-upload-form" class="box" action="https://{{ bucket }}.s3.amazonaws.com/" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="key" value="{{ key }}">
+            <input type="hidden" name="AWSAccessKeyId" value="{{ access_key_id }}"> 
+            <input type="hidden" name="acl" value="private"> 
+            <input type="hidden" name="success_action_redirect" value="{{ success_action_redirect }}">
+            <input type="hidden" name="policy" value="{{ policy }}">
+            <input type="hidden" name="signature" value="{{ signature }}">
+            <input type="hidden" name="Content-Type" value="video/mp4">
+            <!-- Include any additional input fields here -->
+            {% if form.non_field_errors %}<p>{{ form.non_field_errors }}</p>{% endif %}
+            {% csrf_token %}
+            {% for field in form %}
+                {% if not field.is_hidden %}
+                <div class="field">
+                    <label>{{ field.label }} {{ field }}</label>
+                    {% if field.help_text %}
+                        <div class="help_text">{{ field.help_text }}</div>
+                    {% endif %}
+                    <span class="error">{{ field.errors }}</span>
+                </div>
+                {% else %}
+                    {{ field }}
+                {% endif %}
+            {% endfor %}
+            <div class="field">
+                <label>File upload 
+                    <input name="file" type="file">
+                </label>
+                <div class="help_text">Only the video that was produced by the Screenbird recording software will work.</div>
+            </div>
+            <div class="field submit">
+              <button type="submit" class="input-submit" id="submit-btn">Submit</button>
+            </div>
+        </form>
+    {% endif %}
+{% endblock content %}

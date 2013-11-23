@@ -1,0 +1,89 @@
+{% load videos_tags %}
+{% for section in sections %}
+    {% if selected.id == section.id %}
+    <div data-href="{% url cocreate_section cocreate.id forloop.counter %}" class="section selected section_selected_{{ forloop.counter }}">
+    	<div class="ajax_edit_section_selected ajax_edit_section_selected_{{ forloop.counter }}">
+	        <div class="blue_divider"></div>
+	        <div class="selected_arrow"></div>
+	        <!-- VIDEO NUMBER -->
+	        <div class="number bluebg">
+	        	<a href="{% url cocreate_section cocreate.id forloop.counter %}">#{{ forloop.counter }}</a>
+	        </div>
+	        <!-- UPLOADED VIDEO? -->
+	        <div class="video_bluebg {% if section.video %} video_uploaded_bluebg {% endif %}"></div>
+	        <!-- SECTION TITLE -->
+	        <div class="section_title bluebg">
+	            {{ section.name|truncatesmart:20 }} 
+	        </div>
+	        <!-- USER -->
+	        <div class="user bluebg {% if not section.assigned %} unassigned {% endif %}"> 
+	            {% if section.assigned %} 
+	                {{ section.assigned.first_name|default:section.assigned }} 
+	            {% else %} 
+	                Unassigned 
+	            {% endif %}
+	        </div>
+	        <div class="edit_delete_links">
+	        	<br />
+	        	<a class="section-edit" data-selectedid="{{ selected.id }}" data-id="{{ section.id }}" data-counter="{{ forloop.counter }}" href="#">Edit</a> 
+	        	<br />
+	        	<a class="section-delete" data-cocreateid="{{ section.cocreate.id }}" data-sectionname="{{ section.name }}" data-id="{{ section.id }}" data-video="{% if section.video %}1{% else %}0{% endif %}" href="#">Delete</a>
+	        </div>
+	    </div>
+    </div>
+    {% else %}
+    	<div data-counter="{{ forloop.counter }}" data-href="{% url cocreate_section cocreate.id forloop.counter %}" class="section {% cycle 'alpha' 'bravo' %} section_{{ forloop.counter }}">
+    		<div class="ajax_edit_section ajax_edit_section_{{ forloop.counter }}">
+		    	<div class="divider"></div>
+				<!-- VIDEO NUMBER -->
+				<div class="number">
+					<a href="{% url cocreate_section cocreate.id forloop.counter %}">#{{ forloop.counter }}</a>
+				</div>
+				<!-- UPLOADED VIDEO? -->
+				<div class="video_whitebg {% if section.video %} video_uploaded_whitebg {% endif %}"></div>
+				<!-- SECTION TITLE -->
+				<div class="section_title title_whitebg">
+				    {{ section.name|truncatesmart:20 }} 
+				</div>
+				<!-- USER -->
+				<div class="user {% if not section.assigned %} unassigned {% endif %}"> 
+				    {% if section.assigned %} 
+				        {{ section.assigned.first_name|default:section.assigned }} 
+				    {% else %} 
+				        Unassigned 
+				    {% endif %}
+				</div>
+				<div class="edit_delete_links edit_delete_links_{{ forloop.counter }} hidden">
+					<br />
+			    	<a class="section-edit" data-selectedid="{{ selected.id }}" data-id="{{ section.id }}" data-counter="{{ forloop.counter }}" href="#">Edit</a> 
+			    	<br />
+			    	<a class="section-delete" data-cocreateid="{{ section.cocreate.id }}" data-sectionname="{{ section.name }}" data-id="{{ section.id }}" data-video="{% if section.video %}1{% else %}0{% endif %}" href="#">Delete</a>
+			    </div>
+			</div>
+    	</div>
+    {% endif %}
+{% endfor %}
+
+{% if is_owner %}
+    <div class="add_new_section">
+            <a href="{% url cocreate_newsection cocreate.id %}" class="no_js_link">Add New Section</a> 
+			<form id="ajax_add_section_form" action="{% url cocreate_newsection cocreate.id %}" class="hidden" method="POST">
+				{% csrf_token %}
+				<div class="divider"></div>
+				<!-- VIDEO NUMBER -->
+				<div class="input-container">
+					{{ form.order}}
+					{{ form.name }}
+					<div class="lower-row">
+						{{ form.assigned }}
+						<button type="submit" class="input-submit" id="submit-button">Submit</button>
+            <img src="{{ MEDIA_URL }}gfx/loading.gif" class="hidden" id="form-processing-gif">
+					</div>
+				</div>
+	        	<div id="ajax_add_section_form_errors" class="hidden">
+					errors
+				</div>
+			</form>
+			
+    </div>           
+{% endif %}    

@@ -1,0 +1,7 @@
+From: {{ inquiry.get_full_name }}
+Email: {{ inquiry.email }}
+Type: {{ inquiry.type }}
+
+Message:
+
+{{ inquiry.message }}

@@ -1,0 +1,109 @@
+import datetime
+import os
+
+from django.conf import settings
+
+PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
+
+ADMINS = (
+    # ('Your Name', 'your_email@example.com'),
+)
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME': os.path.join(PROJECT_ROOT, 'screenbird.db'),                      # Or path to database file if using sqlite3.
+        'USER': '',                      # Not used with sqlite3.
+        'PASSWORD': '',                  # Not used with sqlite3.
+        'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
+        'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
+    }
+}
+
+# Paypal Account
+PAYPAL_RECEIVER_EMAIL = "webmaster@localhost"
+
+# Used to determine what robots.txt to serve.
+# To allow all crawlers set this to True.
+PRODUCTION = False
+
+# Email Settings
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'localhost'
+EMAIL_HOST_USER = ''
+EMAIL_HOST_PASSWORD = ''
+EMAIL_PORT = 25
+HOST = ""
+DEFAULT_FROM_EMAIL = 'webmaster@localhost'
+EMAIL_SUBJECT_PREFIX = '[Screenbird]'
+EMAIL_FAIL_SILENTLY = False
+
+# Amazon S3
+PUSH_TO_S3 = False
+AWS_ACCESS_KEY_ID = ""
+AWS_SECRET_ACCESS_KEY = ""
+AWS_VIDEO_BUCKET_NAME = ""
+UPLOAD_DELAY = datetime.timedelta(hours=12)
+UPLOAD_CHECKING = datetime.timedelta(minutes=30)
+
+# Amazon EC2
+EC2_KEY_NAME = ""
+QUEUE_NAME = ""
+COCREATE_QUEUE_NAME = ""
+PEM_PATH = ""
+
+# Facebook OAuth Keys
+# Production's APP ID; Override on local_settings for test site
+FACEBOOK_APP_ID = ''
+FACEBOOK_API_SECRET = ''
+FACEBOOK_SECRET_KEY = FACEBOOK_API_SECRET
+FACEBOOK_EXTENDED_PERMISSIONS = ['offline_access','publish_stream','email']
+
+# Twitter OAuth Keys
+# Production's APP ID; Override on local_settings for test site
+TWITTER_CONSUMER_KEY         = ''
+TWITTER_CONSUMER_SECRET      = ''
+
+# Social_Auth Parameters
+SOCIAL_AUTH_CREATE_USERS          = True
+SOCIAL_AUTH_FORCE_RANDOM_USERNAME = False
+SOCIAL_AUTH_DEFAULT_USERNAME      = 'socialauth_user'
+SOCIAL_AUTH_COMPLETE_URL_NAME     = 'complete'
+SOCIAL_AUTH_ASSOCIATE_BY_MAIL     = True
+
+# Youtube
+YOUTUBE_DEV_KEY = ''
+
+# If you are using secure AuthSub, be sure to set your RSA private key so a SecureAuthSubToken is created
+# http://code.google.com/apis/gdata/docs/auth/authsub.html#No-Library
+# SECURE_KEY the location of the RSA private key(For production). None if AuthSub is not secured.
+SECURE_KEY = None
+
+# Authorize.net credentials
+LOGIN_ID = ""
+TRANS_KEY = ""
+IS_TEST = True
+DELIMITER = ","
+ENCAPSULATOR = ""
+
+# djassembla settings
+ASSEMBLA_LOGGER_API_AUTH = ("assembla_username", "assembla_password")
+ASSEMBLA_LOGGER_SETTINGS = {
+                             "space": "space_name",
+                             "priority": 1,
+                             "milestone_id": 0000000,
+                             }
+
+# Settings for Assembla Email2Tickets
+ASSEMBLA_MILESTONE = "Backlog"
+ASSEMBLA_PRIORITY = 2
+ASSEMBLA_COMPONENT = "Website"
+ASSEMBLA_SPACE = "screenbird"
+
+# RabbitMQ
+RABBITMQ_SERVER = "localhost"
+
+# Offshore processing
+AMAZON_NODES = [
+]

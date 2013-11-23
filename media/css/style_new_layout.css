@@ -1,0 +1,136 @@
+* { padding: 0; margin: 0 }
+body { background: #fff; color: #444; font: 14px/1.5 "Helvetica Neue", Helvetica, sans-serif }
+
+a:link { color: #444; font-weight: bold }
+a:visited { color: #444 }
+a:hover { color: #c11 }
+a:active { color: #c11 }
+
+h1 { font-size: 26px; color: #444; margin: 0 0 20px 0; border-bottom: 1px solid #ccc; padding: 0 0 5px 0 }
+h2 { font-size: 18px; color: #444; margin: 0 0 20px 0 }
+h3 { font-size: 26px; color: #444; margin: 0 0 20px 0; text-align: left; border-bottom: 1px solid #ccc; padding: 0 0 5px 0; }
+p { margin: 0 0 20px 0 }
+ul { list-style: square }
+
+.clearfix { clear: both; }
+
+#head { font-weight: bold; font-size: 12px; /*border-top: 10px solid #eee*/ }
+	#head-wrap { border-bottom: 1px solid #ddd; height: 85px; margin: 0 auto 30px auto; width: 860px ; padding: 20px 0px 0px 0px;}
+  	#head-wrap { background: transparent url(../gfx/record_button_and_text.png) no-repeat; background-position: 8% -1px; }
+	#head img { float: left; display: inline; margin: 15px 0 0 40px }
+	#record { }
+		#record a { text-shadow: 0px 1px 0px #000; background: #d22; float: left; margin: 25px 0 0 25px; color: #fff; padding: 2px 10px; text-decoration: none; -webkit-border-radius: 8px; -moz-border-radius: 8px; border-radius: 8px }
+			#record a span { display: none }
+                        #record a:hover {text-decoration: underline;}
+			#record a:hover span { display: inline }
+	#users { float: right; display: inline; margin-top: 26px }
+		a#facebook, a#google { padding: 0 0 2px 20px }
+		a#facebook { background: url(../gfx/social.png) no-repeat }
+		a#google { background: url(../gfx/social.png) 0 -87px no-repeat }
+
+#content { background: #eee; padding: 20px }
+#main:before, #main:after { content:""; display: table }
+#main:after { clear: both }
+	#menu { margin: 0 auto; width: 780px }
+	#menu:before, #menu:after { content:""; display: table }
+	#menu:after { clear: both }
+		#menu ul { list-style: none; font-size: 16px }
+		#menu a, #menu li { float: left }
+		#menu a { background: #ccc; color: #555; padding: 6px 22px; margin: 0 5px 0 0; text-decoration: none; -webkit-border-top-left-radius: 4px; -webkit-border-top-right-radius: 4px; -moz-border-radius-topleft: 4px; -moz-border-radius-topright: 4px; border-top-left-radius: 4px; border-top-right-radius: 4px; text-shadow: 0px 1px 0px #eee }
+		#menu a:hover { color: #c11 }
+		#menu #active a { cursor: default; background: #777; color: #fff; text-shadow: 0px 1px 0px #000 }
+	#main { background: #fff; -webkit-border-radius: 5px; -moz-border-radius: 5px; border-radius: 5px; width: 780px; padding: 20px 40px 40px 40px; margin: 0 auto }
+		#main p, main ul { padding: 0 200px 0 0 }
+		#record-your-screen { margin: auto; width: 780px; padding-bottom: 40px; margin-bottom: 15px; border-bottom: 1px solid #ccc; }
+		#home-illustration { background: url(../gfx/home_illustration_sb.jpg); float: left; margin-left: -25px; width: 507px; height: 321px; }
+		#features_bar { background: url(../gfx/features_bar.png); float: right; width: 214px; height: 37px; margin-right: 84px; margin-top: -7px;}
+		ul.home_features { margin-top: 6px; float: right; margin-right: 38px;}
+		li.red1 a { color: #DD2222; text-decoration: none; }
+		#rec_button { width: 249px; height: 70px; background: url(../gfx/start_rec_button.jpg); float: right; margin-right: 34px; margin-top: 6px; }
+		#rec_button:hover { background: url(../gfx/start_rec_button_over.jpg); }
+		#link_info { background: url(../gfx/link_info.png); float: right; width: 413px; height: 103px; margin-right: 38px; margin-top: -87px; }
+		#link_info p { float: left; margin-left: 182px; margin-top: 6px;}
+		#featured { float: right; display: inline; width: 360px; margin: 50px 0 0 50px; }
+		    #featured ul { list-style: none; margin: 0 0 25px 0 }
+			    #featured li a { background: #fff url(../gfx/video.png) 0% 50% no-repeat; padding: 8px 5px 8px 25px; display: block; text-decoration: none; border-bottom: 1px solid #eee }
+			    #featured li a:hover { border-bottom: 1px solid #ddd }
+		#latest { float: left; width: 380px; }
+		    #latest h1 { width: 360px; height: 71px; background: #fff url(../gfx/latest_vids.png) center top no-repeat; border: none; font-size: 26px; font-weight: bold; text-transform: uppercase; text-align: right; padding: 22px 20px 0 0; margin: 0; }
+		    #latest ul { margin-left: 0px; padding-left: 5px; list-style-position: inside; }
+		    #latest ul li { text-overflow: ellipsis; -o-text-overflow: ellipsis; white-space: nowrap; overflow: hidden; padding-bottom: 10px; }
+		#popular { margin-left: 400px; width: 380px; }
+		    #popular h1 { width: 360px; height: 71px; background: #fff url(../gfx/popular_vids.png) center top no-repeat; border: none; font-size: 26px; font-weight: bold; text-transform: uppercase; text-align: right; padding: 22px 20px 0 0; margin: 0; }
+		    #popular ul { margin-left: 0px; padding-left: 5px; list-style-position: inside; }
+		    #popular ul li { text-overflow: ellipsis; -o-text-overflow: ellipsis; white-space: nowrap; overflow: hidden; padding-bottom: 10px; }
+		    #popular .see-more { text-align: right; border-top: 1px solid #ccc; margin-top: 15px; padding-top: 5px; }
+#upload a { text-shadow: 0px 1px 0px black; background: #D22; float:right; color: white; padding: 2px 10px; text-decoration: none; -webkit-border-radius: 8px; -moz-border-radius: 8px; border-radius: 8px;}
+	#upload a:hover {text-decoration: underline;}
+#features-list { font-size: 16px; list-style: none; /*font-weight: bold; */padding: 0 0 0 0px; line-height: 18px; }
+#more-features-list { font-size: 16px; list-style: none; /*font-weight: bold; */padding: 0 0 0 80px; line-height: 39px; background: url(../gfx/features-list2.png) no-repeat }
+#upgrade-account1 { background-image: url(../gfx/premium_button%201.png); position: absolute; width: 314px; height: 81px; margin-left: 472px; margin-top: -253px; }
+#upgrade-account1:hover { background-image: url(../gfx/premium_button%201_over.png); position: absolute; width: 314px; height: 81px; margin-left: 472px; margin-top: -253px; }
+#upgrade-account2 { background-image: url(../gfx/premium_button%202.png); position: absolute; width: 314px; height: 83px; margin-left: 471px; margin-top: -170px; }
+#upgrade-account2:hover { background-image: url(../gfx/premium_button%202_over.png); position: absolute; width: 314px; height: 83px; margin-left: 471px; margin-top: -170px; }
+#sign-up { background-image: url(../gfx/free_button_hover.png); position: absolute; width: 314px; height: 124px; margin-left: 116px; margin-top: -253px; }
+#simplemodal-overlay {background-color:#000;}
+#simplemodal-container {background-color:#EEE; border:8px solid #444; padding:12px;}
+
+#video-not-available { font-size: 16px; background: #ccc; color: #555; padding: 6px 22px; margin: 0 5px 0 0; text-decoration: none; -webkit-border-top-left-radius: 4px; -webkit-border-top-right-radius: 4px; -moz-border-radius-topleft: 4px; -moz-border-radius-topright: 4px; border-top-left-radius: 4px; border-top-right-radius: 4px; ; -webkit-border-bottom-right-radius: 4px; -moz-border-radius-bottomleft: 4px; -moz-border-radius-bottomright: 4px; border-bottom-left-radius: 4px; border-bottom-right-radius: 4px;text-shadow: 0px 1px 0px #eee}
+
+#video-not-available .oops{font-size: 25px; clear:both; font-weight: bold; color: #FFF; text-shadow: 0px 1px 0px #000}
+
+#watch-actions {width: 640px; overflow: hidden;}
+#watch-actions-views {float: right; display: inline-block;}
+#thumbs_up_btn {font-size: 10px; color: #444; font-weight: bold; line-height: 1.6666em; display: inline-block; vertical-align: middle;}
+#thumbs_down_btn {font-size: 10px; color: #444; font-weight: bold; line-height: 1.6666em; display: inline-block; vertical-align: middle;}
+#watch-actions-vote {display: inline-block; white-space: nowrap;}
+.vote-up {padding: 4px;}
+.vote-down {padding: 4px;}
+.num_likes {font-size: 18px; color: #444; margin: 0 15px 20px 5px; font-weight: bold}
+.num_dislikes {font-size: 18px; color: #444; margin: 0 0 20px 5px; font-weight: bold}
+#vote-tally-up {display: inline-block;}
+#vote-tally-down {display: inline-block;}
+#watch-actions-views {font-size: 18px; color: #444; margin: 0 0 20px 5px; font-weight: bold}
+#watch-actions-label {font-size: 14px; color: #444; margin: 0 5px 20px 10px; font-weight: bold}
+
+#login-box {border: 1px solid #eee; padding: 10px;}
+#login-box .inputDiv{ padding: 10px; margin: 0 10px 0 0; width: 230px;}
+#login-box input{padding: 2px 4px!important;margin-top: 1px;width: 190px;}
+#login-box-options  {clear:both;padding-left:2px;font-size: 11px;}
+#login-box-options a {color: #555;font-size: 11px;text-decoration:none;}
+#login-box-options a:hover {color: #c11;font-size: 11px;text-decoration:underline;}
+#login-box-options input{padding: 0px!important;margin-top: 3px;width: 20px;}
+#login-button input{padding: 2px!important;margin-top: 20px;width: 80px;}
+.spanInputError{float:left;margin: 2px 3px 0 3px!important;height: 19px;width: 19px!important;background: url(../gfx/inputError.png) no-repeat 0 0; }
+.inputError{float: left;padding: 4px 0;border: 1px solid #dd3a34!important;}
+.errorMsg{font-size: 14px; font-weight: bold; padding: 10px 20px; margin: 10px 0 0 0; color: #df3832; background: #ffeeee; border: 1px solid #b51313;}
+
+#yt-box {font-size: 12px; clear:both; padding: 10px 20px; margin: 10px 0 0 0; color: #444; background: #EEE; border: 1px solid #444; -webkit-border-top-left-radius: 4px; -webkit-border-top-right-radius: 4px; -moz-border-radius-topleft: 4px; -moz-border-radius-topright: 4px; border-top-left-radius: 4px; border-top-right-radius: 4px; ; -webkit-border-bottom-right-radius: 4px; -moz-border-radius-bottomleft: 4px; -moz-border-radius-bottomright: 4px; border-bottom-left-radius: 4px; border-bottom-right-radius: 4px; text-shadow: 0px 1px 0px #fff}
+
+#yt-upload-form  .inputDiv{ padding: 10px; margin: 0 10px 0 0; width: 230px;}
+#yt-upload-form  input{padding: 2px 4px!important;margin-top: 1px;width: 190px;}
+#yt-upload-form  ul { list-style: none; padding: 0; margin: 0; color: #df3832;}
+#yt-button input{padding: 2px!important;margin-top: 20px;width: 80px;}
+
+#video-info { clear: both }
+        #video-info h2 { font-size: 18px; color: #444; margin: 0; padding: 0;}
+        #video-info small { font-size: 12px; color: #444; margin: 0; padding: 0;}
+
+#foot { padding: 30px 0 100px 0; font-size: 12px }
+	#foot a { font-weight: normal; color: #999 }
+		#foot a:hover { color: #c11 }
+	#foot p { padding: 20px 40px; color: #999 }
+	#foot-wrap { border-top: 1px solid #ddd; margin: 0 auto 20px auto; width: 860px }
+	#copy { float: left; width: 240px }
+
+.messages li.success {
+    color: green;
+}
+
+.messages li.error {
+    color: red;
+}
+
+.messages li.warning {
+    color: orange;
+}

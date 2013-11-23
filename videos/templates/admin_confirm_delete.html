@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+{% load videos_tags %}
+{% load hitcount_tags %}
+
+{% block extrahead %}
+<!--For CSRF on AJAX-->
+    <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery-1.5.1.min.js"></script>
+    <script src="{{ MEDIA_URL }}js/mediaelementjs/mediaelement-and-player.min.js"></script>
+    <script src="{{ MEDIA_URL }}js/jquery.simplemodal.1.4.1.min.js"></script>
+    <script src="{{ MEDIA_URL }}js/script.js"></script>
+    <link rel="stylesheet" href="{{ MEDIA_URL }}js/mediaelementjs/mediaelementplayer.css" />
+    <script type="text/javascript">
+        // global for movie player
+        var player;
+        timeoutPeriod=20000
+        $(document).ready(function () {
+            player = new MediaElementPlayer('#player', { success: function (me) {
+            me.pause
+                     {% if video %}
+                     me.addEventListener('loadeddata', function () {
+                     if({% get_hit_count for video %}== 0){
+                         $.modal.close();
+                     }
+                     })
+                     {% endif %} 
+            }});
+            // Delete video
+            $(".delete-video").live("click", function(e) {
+                yes = confirm("Are you sure you want to completely remove this video from your list?");
+                if (yes) {
+                    window.location.href = $(this).attr("href");
+                }
+            });
+            // Publish or approve
+            $(".approve-video").live("click", function(e) {
+                window.location.href = $(this).attr("href");
+            });
+            // Display buttons
+            {% ifequal action 'delete' %}
+                $(".approve-video").hide();
+            {% endifequal %}
+            {% ifequal action 'approve' %}
+                $(".delete-video").hide();
+            {% endifequal %}
+        });
+    </script>
+{% endblock %}
+
+{% block title %}| Videos{% endblock %}
+
+{% block content %}
+{% if video %}
+<h1>{{ video.title }}</h1>
+<div id="video-info">
+<small>Uploaded on {{video.created|date:"M d, Y" }}</small>
+</div>
+<br/>
+<div id="placeholder">
+{% if video.youtube_embed_url %}
+	<object width="640" height="360">
+		<param name="movie" value="{{video.youtube_embed_url}}?wmode=transparent&fs=1&autoplay=1&enablejsapi=1&playerapiid=ytPlayer&rel=0"</param>
+		<param name="allowFullScreen" value="true"></param>
+		<param name="allowScriptAccess" value="always"></param>
+		<param name="wmode" value="transparent">
+		<atts name="id" value="ytPlayer"></atts>
+		<embed src="{{video.youtube_embed_url}}?wmode=transparent&fs=1&autoplay=1&enablejsapi=1&playerapiid=ytPlayer&rel=0"
+		  type="application/x-shockwave-flash"
+		  allowfullscreen="true"
+		  allowscriptaccess="always"
+		  width="640" height="360"
+		  id="ytPlayer"
+		  wmode="transparent">
+		</embed>
+	</object>
+{% else %}
+	{% if video.videoupload %}
+	<video width="640" height="360" id="player" controls="controls" preload="none" autoplay="true" poster="{{ MEDIA_URL }}gfx/black-background.jpg">
+	    
+	    {% if not video.expired  %}{% if video %}
+		<source type="video/{{ video.video_type }}" src="{% url get-video-content video.id %}"/>
+	    {% endif %}{% endif %}
+		<!-- Fallback flash player for no-HTML5 browsers with JavaScript turned off -->
+		<object width="640" height="360" type="application/x-shockwave-flash" data="{{ MEDIA_URL }}js/mediaelementjs/flashmediaelement.swf"> 		
+			<param name="movie" value="{{ MEDIA_URL }}js/mediaelementjs/flashmediaelement.swf" /> 
+		{% if video_status == 'OK' %}
+		<param name="flashvars" value="controls=true&amp;file={% url get-video-content video.id %}" /> 		
+		{% endif %}
+			<!-- Image fall back for non-HTML5 browser with JavaScript turned off and no Flash player installed -->
+			<img src="" width="640" height="360" title="No video playback capabilities" />
+		</object> 	
+	</video>
+	{% else %}
+	<div id='video-not-available'>
+	<span class='oops'>Oops!</span><br>
+	{% if video.uploader == request.user %}
+	Your video has been deleted on Pastevid server when you uploaded your video to YouTube. 
+	<br>Thanks.
+	{% else %}
+	The video is not available. It has already been deleted on Pastevid Server.
+	<br>Thanks.
+	{% endif %}
+	</div>
+	{% endif %}
+{% endif %} <!-- end if video -->
+</div>
+<div id="watch-actions">
+    <div id="watch-actions-views">
+        <span id="watch-actions-label">Views</span><span id="watch-actions-views">{% if video %}{% get_hit_count for video %}{% else %}0{% endif %}</span>
+    </div>
+    <div id="watch-actions-vote" class="watch-actions-vote">
+        <div id="vote-tally" class="vote-tally">
+            <span id="watch-actions-label">Likes</span><span class="num">{{ video.thumbs.all.count }}</span>
+        </div>
+    </div> <!-- watch-actions-vote -->
+</div>
+<div>
+    <button class="delete-video" href="{% url delete-video video.slug %}">Delete video permanently</button>
+    <button class="approve-video" href="{% url approve-video video.slug %}?decision=publish">Publish</button>
+    <button class="approve-video" href="{% url approve-video video.slug %}?decision=deny">Deny</button>
+</div>
+{% endif %}
+{% endblock %}

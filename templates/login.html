@@ -1,0 +1,46 @@
+{% extends "site_base.html" %}
+
+{% block header %}{% endblock %}
+
+{% block extrahead %}
+<script type="text/javascript">
+window.onload = function() {
+  document.getElementById("id_username").focus();
+};
+</script>
+{% endblock %}
+
+{% block content %}
+<h1>Log-in</h1>
+<div id="login-box">
+    {% if error %}<div class="errorMsg">{{ error }}</div>
+    {% else %}
+    {% if form.errors.username and  form.errors.password %}<div class="errorMsg">Username or Password Incorrect</div>{% else %}
+    {% if form.errors.username %}<div class="errorMsg">{{ form.errors.username }}</div>{% endif %}
+    {% if form.errors.password %}<div class="errorMsg">{{ form.errors.password }}</div>{% endif %}{% endif %}
+    {% endif %}
+    <form action="./?next={{ next }}" method="post" class="box login-form">
+            {% csrf_token %}
+            <div class="field">
+                <label>Username 
+                {{ form.username }}</label>
+                </div>
+            <div class="field">
+                <label>Password 
+                {{ form.password }}</label>
+            </div>
+            <div class="field">
+                <span id="login-box-options" style="padding-left:150px;">{{ form.remember_me }} Remember Me <a href='/accounts/password_reset/' style="margin-left:30px;">Forgot password?</a></span>
+            </div>
+        <div class="field submit">
+            <input type="submit" class="input-submit" value="Login" />
+        </div>
+        <div class="field">
+            <label id="loginwith"><span id='loginwith'>Login with</span>&nbsp;
+                <a href="{% url begin "facebook" %}?next={% url login_auth %}?oauth_next={{request.build_absolute_uri}}" id="facebook" style="text-decoration: none;">&nbsp;</a>
+                 <a href="{% url begin "google" %}?next={% url login_auth %}?oauth_next={{request.build_absolute_uri}}" id="google" style="text-decoration: none;"></a>
+            </label>
+        </div>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<jnlp codebase="http://pastevid.com/media/applet/" href="http://pastevid.com/media/applet/launch.jnlp" spec="1.0+">
+    <information>
+       <title>PastevidRecorder</title>
+        <vendor>Bixly</vendor>
+        <homepage href="www.bixly.com"/>
+        <description>PastevidRecorder</description>
+        <description kind="short">PastevidRecorder</description>
+    </information>
+	<update check="always"/>
+	<security>
+		<all-permissions/>
+	</security>
+    <resources>
+	<j2se java-vm-args="-Djava.security.policy=writefile.policy" version="1.5+"/>
+		<jar href="ScreenRecorder.jar" main="true"/>
+		<jar href="lib/commons-codec-1.4.jar"/>
+		<jar href="lib/commons-logging-1.1.1.jar"/>
+		<jar href="lib/httpclient-4.1.1.jar"/>
+		<jar href="lib/httpclient-cache-4.1.1.jar"/>
+		<jar href="lib/httpcore-4.1.jar"/>
+		<jar href="lib/httpmime-4.1.1.jar"/>
+	</resources>
+	<resources os="Linux">
+		<jar href="lib/linuxlibs.jar"/>
+	</resources>
+	<resources os="Windows">
+		<jar href="lib/winlibs.jar"/>
+	</resources>
+	<resources os="Mac OS X">
+		<jar href="lib/maclibs.jar"/>
+	</resources>
+    <applet-desc height="250" main-class="com.bixly.pastevid.screencap.ScreenRecorder" name="ScreenRecorder" width="650">
+	<param name="MAYSCRIPT" value=" true"/>
+    </applet-desc>
+</jnlp>

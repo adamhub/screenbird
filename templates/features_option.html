@@ -1,0 +1,145 @@
+{% extends "site_base.html" %}
+
+{% block header %}{% endblock %}
+{% block extrahead %}
+    <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery-1.5.1.min.js"></script>
+    <script src="{{ MEDIA_URL }}js/jquery.simplemodal.1.4.1.min.js"></script>
+    <script src="{{ MEDIA_URL }}js/script.js"></script>
+    <script type="text/javascript">
+    window.onload = function() {
+	    {% if upgrade == '1' %}
+            redirect_paypal();
+            $("#pastevid_monthly").submit();
+	    {% endif %}
+	    {% if upgrade == '2' %}
+            redirect_paypal();
+            $("#pastevid_yearly").submit();
+	    {% endif %}
+    };
+    </script>
+{% endblock %}
+{% block body_id %}id="features-page"{% endblock %}
+{% block content %}
+    <h1>Features</h1>
+    <p id="intro">Discover what makes <em>Screenbird</em> the perfect choice for developers, managers, teachers and large work teams.</p>
+                
+    <div id="plans">
+        <div class="plan box" id="option1">
+            <h2>1: Paypal</h2>
+            {% if userprofile.account_level.video_validity %}
+            <p>{{ form_month.render }}</p>
+            <p>{{ form_year.render }}</p>
+            {% else %}
+            {% if user %}
+                {% if userprofile.account_level.level == 'Trial' %}
+                <p>{{ form_month.render }}</p>
+                <p>{{ form_year.render }}</p>
+                {% else %}
+                <p><a href="{% url account_info premium='premium' %}">$10/Month</a></p>
+                <p><a href="{% url account_info premium='premium' %}">$120/Year</a></p>
+                {% endif %}
+            {% else %}
+            <p><a href="{% url login_register %}?next={% url features %}?upgrade=1">$10/Month</a></p>
+            <p><a href="{% url login_register %}?next={% url features %}?upgrade=2">$120/Year</a></p>
+            {% endif %}               
+            {% endif %}
+        </div><!-- /#option-1 -->
+        
+        {% comment %}{# moved authorize.net option to backlog #}
+        <div id="or"><p> or </p></div>
+        <div class="plan box" id="option2">
+            <h2>2:</h2>
+            {% if userprofile.account_level.video_validity %}
+                <p><a href="{% url authorize_monthly %}">$10/Month (Authorize.net)</a></p>
+                <p><a href="{% url authorize_yearly %}">$120/Year (Authorize.net)</a></p>
+            {% else %}
+                {% if user %}
+                    {% if userprofile.account_level.level == 'Trial' %}
+                        <p><a href="{% url authorize_monthly %}">$10/Month (Authorize.net)</a></p>
+                        <p><a href="{% url authorize_yearly %}">$120/Year (Authorize.net)</a></p>
+                    {% else %}
+                        <p><a href="{% url account_info premium='premium' %}">$10/Month (Authorize.net)</a></p>
+                        <p><a href="{% url account_info premium='premium' %}">$120/Year (Authorize.net)</a></p>
+                    {% endif %}
+                {% else %}
+                <p><a href="{% url login_register %}?next={% url authorize_monthly %}">$10/Month (Authorize.net)</a></p>
+                <p><a href="{% url login_register %}?next={% url authorize_yearly %}">$120/Year (Authorize.net)</a></p>
+                {% endif %}               
+            {% endif %}
+        </div><!-- /#option2 -->
+        {% endcomment %}
+    </div><!-- /plans -->
+
+    {% if userprofile.account_level.video_validity or not user %}
+    <br>
+    <br>
+    {% endif %}
+    <h3>The answer is "Yes" to everything below</h3>
+    <div id="feature-list">
+        <div class="feature-list">
+        <ul>
+        <li>
+            <p>Can I use Screenbird on Windows, Mac, and Linux?</p>
+        </li>
+        <li>
+            <p>Can I record PowerPoints, video, and anything else that shows up on my screen?</p>
+        </li>
+        <li>
+            <p>Can I use shortcuts?</p>
+            <p class="answer">
+            <kbd>Space</kbd> &mdash; record/pause<br>
+            <kbd>Ctrl</kbd> + <kbd>T</kbd> &mdash; toggles from fullscreen to custom size<br>
+            <kbd>Ctrl</kbd> + <kbd>Enter</kbd> &mdash; done<br>
+            <kbd>Ctrl</kbd> + <kbd>M</kbd> &mdash; opens settings menu</p>
+            
+        </li>
+        <li>
+            <p>Can I add my colleagues to the account so they can make a video?</p>
+        </li>
+        <li>
+            <p>Can my colleagues make a video without having to install/pay anything?</p>
+        </li>
+        <li>
+            <p>Can I backup my video after it expires?</p>
+            <p class="answer">You will get an email notifying you of the expiration. At that point you can download it as a backup, push it to Youtube, or re-upload to Screenbird.</p>
+        </li>
+        <li>
+            <p>Can I watch the video with the same link, even after it's on Youtube?</p>
+        </li>
+        <li>
+            <p>Can I record a small, custom sized area?</p>
+        </li>
+        </ul>
+        </div><!-- /.feature-list -->
+        
+        <div class="feature-list">
+        <ul>
+        <li>
+            <p>Can I avoid upgrading my account limit by pushing all my video to Youtube?</p>
+        </li>
+        <li>
+            <p>Can I start recording, and finish it up some other day?</p>
+        </li>
+        <li>
+            <p>Can I backup an mp4 video to my desktop before uploading?</p>
+        </li>
+        <li>
+            <p>Can I play the video on mobile devices?</p>
+        </li>
+        <li>
+            <p>Do you provide embed code for all the videos?</p>
+        </li>
+        <li>
+            <p>Can I record for up to 30 minutes at a time?</p>
+        </li>
+        <li>
+            <p>Can I share a video without creating an account?</p>
+        </li>
+        <li>
+            <p>Can I monitor all the videos that my group creates?</p>
+            <p class="answer">Yes, you can set a user to be monitored, and that will send you an email each time a video is created. Otherwise, they are marked as trusted and all the videos they create are set live.</p>
+        </li>
+        </ul>
+        </div><!-- /.feature-list -->
+    </div><!-- /feature-list -->
+{% endblock %}

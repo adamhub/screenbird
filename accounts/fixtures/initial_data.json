@@ -1,0 +1,65 @@
+[
+    {
+        "pk": 1,
+        "model": "accounts.accountlevel",
+        "fields": {
+            "max_video_length": 150,
+            "video_validity": 60,
+            "authnet_line_item_id": "PV0000",
+            "authnet_item_name": "Free",
+            "authnet_item_description": "Free Account",
+            "authnet_item_price": "0.00",
+            "description": "Free Account",
+            "level": "Free"
+        }
+    },
+    {
+        "pk": 2,
+        "model": "accounts.accountlevel",
+        "fields": {
+            "max_video_length": 500,
+            "video_validity": 0,
+            "authnet_line_item_id": "PV0001",
+            "authnet_item_name": "Paid",
+            "authnet_item_description": "Paid Account",
+            "authnet_item_price": "10.00",
+            "description": "Paid Account",
+            "level": "Paid"
+        }
+    },
+    {
+        "pk": 3,
+        "model": "accounts.accountlevel",
+        "fields": {
+            "max_video_length": 9999,
+            "video_validity": 0,
+            "authnet_line_item_id": "PV0002",
+            "authnet_item_name": "Admin",
+            "authnet_item_description": "Admin Account",
+            "authnet_item_price": "0.00",
+            "description": "Admin Account",
+            "level": "Admin"
+        }
+    },
+    {
+        "pk": 4,
+        "model": "accounts.accountlevel",
+        "fields": {
+            "max_video_length": 500,
+            "video_validity": 0,
+            "authnet_line_item_id": "PV0003",
+            "authnet_item_name": "Trial",
+            "authnet_item_description": "Trial Account",
+            "authnet_item_price": "10.00",
+            "description": "Trial Account",
+            "level": "Trial"
+        }
+    },
+    {
+         "pk": 2, 
+         "model": "sites.site", 
+         "fields": {
+             "domain": "screenbird.com", 
+             "name": "Screenbird"}
+    }
+]

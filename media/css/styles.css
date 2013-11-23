@@ -1,0 +1,139 @@
+@import url('../css/normalize.css') screen;
+@import url('../css/grid.css') screen;
+
+/*
+* Screenbird CSS
+* by DM Afrondoza
+* 
+* Uses normalize.css to render elements as close as possible among browsers
+* instead of using resets, which you have to code for every element
+*
+* Syntax/format of the CSS single-line code:
+* 
+* element/selector { display; position; top/bottom; left/right; overflow/z-index; float; margin; 
+* padding; width; height; color; font; font-effects; text-effects; box-effects; border; 
+* border-effects; background }
+*
+* CSS is organized as sections flowing from top-down and tabbed according to organization
+* and location. Please follow accordingly.
+*
+* Generic classes are provided in a section at the bottom to facilitate ease-of-use
+*
+*/
+
+html, body { height:100% }
+		div { position:relative }
+		a { text-decoration:none; border:0 }
+		img { border:0 }
+		form { overflow:hidden }
+		
+		button { padding:3px 15px; -moz-border-radius:3px; -webkit-border-radius:3px; -o-border-radius:3px; color:#fff; font:bold 13px 'Arial',sans-serif; border:0; -webkit-border-radius:3px; -moz-border-radius:3px; -o-border-radius:3px; border-radius:3px; background:#ff7700 }
+	
+	/* - typography - */
+	h1 { margin:0 0 20px; padding:0 0 12px; color:#655b5b; font:bold 24px 'Arial',sans-serif; border-bottom:1px solid #ccc }
+	/*h3 { margin:0 0 20px; padding:0 0 10px; font:bold 18px 'Arial',sans-serif; border-bottom:1px solid #ccc }*/
+	h4 {
+		margin: 0 0 20px;
+		padding: 0 0 10px;
+		font: bold 18px 'Arial',sans-serif;
+		border-bottom: 1px solid #CCC;
+	}
+	/* - container - */
+	.container { margin:0 auto; width:860px }
+		
+	/* - header - */
+	.header { height:114px; color:#fff; border-top:3px solid #ff7700; border-bottom:1px solid #ddd; background:#fff }
+		.header .logo { position:absolute; top:32px; left:32px }
+		.header a.record-now { position:absolute; top:55px; left:270px; padding:3px 10px; -moz-border-radius:3px; -webkit-border-radius:3px; -o-border-radius:3px; color:#fff; font:bold 13px 'Arial',sans-serif; background:#dd4444 }
+		
+		.header ul { position:absolute; top:55px; right:0; overflow:hidden; margin:0; padding:0; color:#766; font-weight:bold; font-size:13px; list-style:disc }
+			.header li { margin-left:20px; float:left }
+				.header li:first-child { list-style:none }
+				.header li a { margin-left:-5px; color:#1199dd }
+		
+		.header .info { position:absolute; top:15px; right:20px; color:#352a22; font-size:23px; line-height:35px; text-align:right }
+		
+	/* - contents - */
+	.contents { clear:both; overflow:hidden; padding:20px 0 }
+		ul.main-nav { display:block; clear:both; margin:0 0 0 40px; padding:0; color:#655b5b; font:bold 14px 'Arial',sans-serif; text-shadow:0 1px 1px #fff; list-style:none }
+			ul.main-nav li { display:inline; float:left; margin:0 5px 0 0; padding:8px 12px; border-radius:3px 3px 0 0; background:#d8d5d5 }
+				ul.main-nav li a { color:#655b5b }
+					ul.main-nav li a:hover { color:#dd4444 }
+			
+		.main { clear:both; padding:20px 30px; -webkit-border-radius:5px; -moz-border-radius:5px; -o-border-radius:5px;  border-radius:5px; background:#fff }
+		
+			p.info { position:absolute; top:30px; right:50px; color:#FF7700; font:bold 12px 'Arial',sans-serif }
+		
+			.content-block { overflow:hidden; margin:0 0 20px }
+				.box { padding:30px 20px }
+					.bg-blue { border:1px solid #cfdfe6; -webkit-border-radius:5px; -moz-border-radius:5px; -o-border-radius:5px; border-radius:5px; background:#ebf7fc }
+					
+					.column { float:left; margin-right:10%; width:35% }
+						.column p { margin-top:0; color:#666; font-size:13px; line-height:20px }
+					
+					.account-info { padding:10px 20px; margin-bottom:10px; }
+					.account-info.short { padding:0 20px }
+					
+					.box hr { margin:20px 0; height:1px; border:0; background:#bbccdd }
+						.box hr.alt { margin:20px 0 0 }
+					
+					input, select, label, button { display:block; float:left }
+					.box label { padding:0 10px; width:120px; color:#766; font:bold 14px 'Arial',sans-serif; text-align:right }
+					
+					.box input[type="text"] { margin-right:15px; padding:2px 10px; width:180px; border:1px solid #ccc; border-top:1px solid #7c7c7c }
+					
+					button.wide { margin:0 0 10px; padding:3px 28px; width:190px }
+						button.link { background:#d7d6d4 }
+							button.link:hover { background:#2f84d4 }
+						button.top-right { position:absolute; top:0; right:0 }
+						
+					table { margin:20px 0; width:100%; font-size:13px; text-align:left }
+						thead { color:#fff; border:0; -webkit-border-radius:5px; -moz-border-radius:5px; -o-border-radius:5px; border-radius:5px; background:#7b6f6f }
+						
+						table a { color:#1199dd; font-weight:bold }
+							table a.link { font-size:11px }
+								table a.link img { margin-left:5px; vertical-align:bottom }
+								
+						td.div { padding:0; height:1px; background:#ccc }
+						
+						.account-info table { margin:0 }
+							.account-info table tr td:first-child { width:350px }
+							
+						.channels table { width:100%; font-size:13px; text-align:left; margin-top:0px;}
+							.channels table tr:nth-child(even) { background:#ecf7fb }
+							
+						
+	/* - footer - */
+	.footer { padding:20px 0 0; height:126px; background:#fff }
+		.footer hr { margin:20px 0; color:#ccc }
+		.footer a { color:#ff7700 }
+		.footer p { display:block; margin:0; padding:0 20px; width:44%; color:#666; font:10px/30px 'Arial',sans-serif }
+		
+/* - generic CSS - */
+	/* - float - */
+	.alignleft { float:left }
+	.alignright { float:right }
+
+	/* - clear - */
+	.clearleft { clear:left }
+	.clearright { clear:right }
+	.clear { clear:both }
+
+	/* - text alignment - */
+	.textleft { text-align:left }
+	.textright { text-align:right }
+	.textcenter { text-align:center }
+	.textjustify { text-align:justify }
+
+	/* - text transform - */
+	.normal { font-weight:normal; text-transform:none }
+	.uppercase { text-transform:uppercase }
+	.lowercase { text-transform:lowercase }
+
+	/* - display - */
+	.hidden { display:none }
+	.block { display:block }
+	
+	.noborder { border:0 }
+    
+form.nostyle { background: none; border: none; -webkit-border-radius: 3px; -moz-border-radius: 3px; border-radius: 3px; padding: 0px }

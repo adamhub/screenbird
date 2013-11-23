@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block title %}| Video Upload Form{% endblock %}
+{% block content %}
+     <h1>Video Upload Form:</h1>
+     {% if not user.is_authenticated %}
+     You are currently not logged in, this means you cannot edit or delete anything you upload.</br></br>
+     {% endif %}
+     {{ message }}
+     <form enctype="multipart/form-data" action="" method="post" class="box">
+          <input type="hidden" name="usereditingform" value="on">
+          {% csrf_token %}
+          <div class="fieldWrapper">
+              <div class="wrap">
+                  <div class="inline">
+                  <label>Title:</label>{{ form.title }}<span class="error">{{ form.errors.title }}</span><br>
+                  <div class="help_text">{{ form.title.help_text }}</div>
+                  </div>
+              </div>
+          </div>
+          <div class="fieldWrapper">
+              <div class="wrap">
+                  <div class="inline">
+                  <label>Description:</label><br>{{ form.description }}<span class="error">{{ form.errors.description }}</span><br>
+                  <div class="help_text">{{ form.description.help_text }}</div>
+                  </div>
+              </div>
+          </div>
+          <br>
+          <div class="fieldWrapper">
+	          <label>{{ form.is_public }} Is public</label>      
+                  <span class="error">{{ form.errors.is_public }}</span>
+          </div>
+          <div class="fieldWrapper">
+              <div class="wrap">
+                  <div class="inline">
+                  <label>Video:</label>{{ form.videoupload }}<span class="error">{{ form.errors.videoupload }}</span><br>
+                  <div class="help_text">{{ form.videoupload.help_text }}</div>
+                  </div>
+              </div>
+          </div>
+          <div class="fieldWrapper">
+	          {{ form.slug }}     
+                  <span class="error">{{ form.errors.slug }}</span>
+          </div>
+          <div class="fieldWrapper">
+	          {{ form.video_type }}     
+                  <span class="error">{{ form.errors.video_type }}</span>
+          </div>
+          <input type="hidden" name="an_tok" value="{{ an_tok }}" />
+	  <br>
+          <button type="submit" style="float: left; margin-right: 20px; width: 150px">Submit</button><br/><br />
+     </form>
+
+{% endblock %}

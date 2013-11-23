@@ -1,0 +1,13 @@
+[
+    {
+        "pk": 1,
+        "model": "videos.channel",
+        "fields": {
+            "name": "Channel 1",
+            "owner": 2,
+            "api_link": "a"
+        }
+    }
+ 
+]
+

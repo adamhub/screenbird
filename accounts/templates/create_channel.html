@@ -1,0 +1,21 @@
+{% extends "site_base.html" %}
+
+{% block title %}| My Channels{% endblock %}
+
+{% block content %}
+    <h1>Create Channel</h1>
+    {% if user.is_authenticated %}
+        <form action="." method="post" class="box">
+            {% csrf_token %}
+            <div class="field field-no-border">
+                <label>Channel Name {{ form.name }}</label>
+                {% if form.errors.name %}<span class="spanInputError"></span>{% endif %}<span class="error">{{ form.errors.name }}</span><br/>
+            </div>  
+            <div class="field submit">
+                <input id="submitForm" type="submit"  class="button-submit" name="create-group" value="Create">
+            </div>
+        </form>
+    {% else %}
+        <p>You have not logged in yet. <strong>Log-in</strong> to create a channel.</p>
+    {% endif %}   
+{% endblock %}

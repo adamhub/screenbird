@@ -1,0 +1,121 @@
+
+/* CSS for the Outline tools*/
+#fakebody {
+    background-color: blue;
+    width: 0px;
+    height: 0px;
+    margin: 0px auto 0px auto;
+}
+
+#outline {
+    width: 188px;
+    padding: 5px;
+    background: white;
+    margin-right: 835px;
+    border: solid 1px #efefee;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+    display: none;
+    float: right;
+}
+#outline p.header {
+    font-weight: bold;
+    height: 10px;
+}
+#outline span.text {
+    cursor:pointer;
+}
+#outline span.text:hover {
+    color: #1f99dd;
+}
+
+#outline form {
+    padding: 5px;
+}
+#outline form input{
+    margin-left: 1px;
+    width: 144px;
+}
+
+#outline form br{
+}
+#outline form button#save-outline{
+    margin-left: 15px;
+    margin-bottom: 5px;
+}
+#outline form button#add-header{
+    margin-left: 40px;
+    margin-bottom: 5px;
+}
+#video span.outline-pin {
+    position: absolute;
+    top: -32px;
+    display: inline;
+    background: transparent;
+    height: 35px;
+    width: 24px;
+    overflow: hidden;
+
+    /*display: none;*/
+}
+
+#video span.outline-pin:hover {
+    cursor: pointer;
+}
+
+#video span.outline-pin .outline-remove {
+    background: transparent;
+    display: block;
+    text-align: center;
+    width: 24px;
+    font-weight: bold;
+    /*display: none;*/
+}
+#video span.outline-pin .outline-remove:hover {
+    color: red;
+    cursor: pointer;
+}
+#video span.outline-pin .outline-text {
+    background: red;
+    padding-top: 2px;
+    margin-top:14px;
+    color: white;
+    display: block;
+    text-align: center;
+    width: 24px;
+    height: 13px;
+}
+
+#video span.outline-pin .outline-text:hover {
+    cursor: pointer;
+}
+
+#video span.outline-pin .outline-corner {
+    display: block;
+    width: 1px;
+    height: 1px;
+    margin-top: 28px;
+    margin-left: 7px;
+    border: solid 5px blue;
+    border-color: red transparent transparent transparent;
+    -webkit-border-radius: 0;
+}
+
+#video span.outline-pin .outline-corner: hover {
+    cursor: pointer;
+}
+#create-outline {
+    font-weight: bold; 
+} 
+
+.mejs-container .mejs-controls {
+    
+}
+
+#outline-link {
+    text-align: right;
+    margin-bottom: 0px;
+    padding: 5px;
+    font-size: 10px;
+}
+

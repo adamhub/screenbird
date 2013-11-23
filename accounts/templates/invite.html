@@ -1,0 +1,49 @@
+{% extends "site_base.html" %}
+
+{% comment %}
+    <!-- Found no view or url that uses this template 
+         Marked for deletion -->
+{% endcomment %}
+
+{% block title %}| My Videos{% endblock %}
+{% block content %}
+
+<!-- Pat css -->
+<style>
+#videoCreated {
+    font:11px Arial, Helvetica, sans-serif;
+}
+</style>
+
+<div>
+    <h1>Invite channel members</h1>
+    {% if success %}
+        <p>An invitation has been sent successfully.</p>
+    {% else %}
+        {% if request.user.is_superuser %}<!-- as requested by bryant -->
+            <br/>
+            <p><b><i>NOTE: You are logged in as superuser. (payment not required)</i></b></p>
+            <form method="post">{% csrf_token %}
+                <table>
+                    {{ form.as_table }}
+                </table>
+                <input type="submit" value="Invite!" />
+            </form>
+        {% else %}
+            {% if request.user == channel.owner %}
+                {% if request.user.get_profile.is_paid %}
+                    <form method="post">{% csrf_token %}
+                        <table>
+                            {{ form.as_table }}
+                        </table>
+                        <input type="submit" value="Invite!" />
+                    </form>                
+                {% else %}
+                    <p>For Paid Accounts Only</p>
+                {% endif %}
+            {% endif %}
+        {% endif %}
+    {% endif %}
+</div>
+
+{% endblock %}

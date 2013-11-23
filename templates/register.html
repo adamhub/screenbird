@@ -1,0 +1,40 @@
+{% extends "site_base.html" %}
+
+{% block extrahead %}
+<link rel="stylesheet" href="{{ MEDIA_URL }}css/jquery.tooltip.css" />
+<script type="text/javascript" src="{{ MEDIA_URL }}js/jquery-1.5.1.min.js"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}js/jquery.tooltip.min.js"></script>
+<script type="text/javascript">
+    $(function() {
+        $('#tooltip').tooltip();
+    });
+</script>
+{% endblock %}
+
+{% block header %}{% endblock %}
+
+{% block content %}
+<h1>Registration Form:</h1>
+<form action="{% url register %}?next={{ next }}" method="post" class="box box160">{% csrf_token %}
+    <div class="field">
+        <label>Email Address {{ form.email }}</label><br>
+        {% if form.errors.email %}<span class="spanInputError"></span>{% endif %}<span class="error">{{ form.errors.email }}</span>
+    </div>
+    <div class="field">
+        <label>Password {{ form.password }}</label><br>
+        {% if form.errors.password %}<span class="spanInputError"></span>{% endif %}<span class="error">{{ form.errors.password }}</span>
+    </div>
+    <div class="field">
+        <label>Confirm Password {{ form.confirm_password }}</label><br>
+        {% if form.errors.confirm_password %}<span class="spanInputError"></span>{% endif %}<span class="error">{{ form.errors.confirm_password }}</span>
+    </div>
+    <div class="field">
+        <label><i>Username</i> {{ form.username }}</label>
+        <div class="help_text">Optional&nbsp;<b title="Fill this out if you don't want the first part of your email to show as your username. You can always edit this later."  id="tooltip">[?]</b></div><br>
+        {% if form.errors.username %}<span class="spanInputError"></span>{% endif %}<span class="error">{{ form.errors.username }}</span>
+    </div>
+    <div class="field submit">
+        <input type="submit" class="input-submit" value="Submit" />
+    </div>
+</form>
+{% endblock content %}

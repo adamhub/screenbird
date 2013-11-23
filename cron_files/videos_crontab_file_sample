@@ -1,0 +1,2 @@
+0 6 * * * cd /home/mancio/pastevid/env/pastevid && /home/mancio/pastevid/env/bin/python /home/mancio/pastevid/env/pastevid/manage.py video_daily_tasks > /tmp/mancio_cronlog.txt 2>&1
+0 6 * * * cd /opt/webapps/pastevid-test/env/pastevid && /opt/webapps/pastevid-test/env/bin/python /opt/webapps/pastevid-test/env/pastevid/manage.py video_daily_tasks > /tmp/pastevid_test_cronlog.txt 2>&1

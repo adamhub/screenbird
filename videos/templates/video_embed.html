@@ -1,0 +1,298 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+{% load hitcount_tags %}
+{% load videos_tags %}
+
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en-US">
+
+<head profile="http://gmpg.org/xfn/11">
+<title>Screenbird Video</title>
+
+<!--For CSRF on AJAX-->
+<script type="text/javascript" src="{{ MEDIA_URL }}js/jquery-1.5.1.min.js"></script>
+<script src="{{ MEDIA_URL }}js/mediaelementjs/mediaelement-and-player.min.js"></script>
+<script src="{{ MEDIA_URL }}js/jquery.simplemodal.1.4.1.min.js"></script>
+<script src="{{ MEDIA_URL }}js/script.js"></script>
+<link rel="stylesheet" href="{{ MEDIA_URL }}js/mediaelementjs/mediaelementplayer.css" />
+
+<script type="text/javascript">
+{% if video.youtube_embed_url %}
+    var yt_url = ''
+    // This function is automatically called by the player once it loads
+    function onYouTubePlayerReady(playerId) {
+        ytplayer = document.getElementById(playerId);
+        yt_url = ytplayer.getVideoUrl()
+        ytplayer.addEventListener("onError", "onPlayerError");
+        ytplayer.addEventListener('onStateChange', 'playerStateChanged');
+    }
+    // Called when changing state
+    function PlayerStateChanged() {
+        var sStatus = ytplayer.getPlayerState();
+        if (sStatus == -1) {
+            console.log("Video has not started.");
+        } else if (sStatus == 0) {
+            console.log("Video has ended.");
+            $("#pastevid-record-button").show();
+        } else if (sStatus == 1) {
+            console.log("Video is playing.");
+            $("#pastevid-record-button").hide();
+        } else if (sStatus == 2) {
+            console.log("Video is paused.");
+            $("#pastevid-record-button").show();
+        } else if (sStatus == 3) {
+            console.log("Video is buffering.");
+        } else if (sStatus == 5) {
+            console.log("Video is cued.");
+        }
+    }
+    // This function is called when an error is thrown by the player
+    function onPlayerError(errorCode) {
+        {% if not yt_processing %}
+                if (errorCode==100){
+                location.href = '/{{ video.slug }}/yt_url_removed/'+youtubeIDextract(yt_url)
+            }else{
+                alert("An error occured of type:" + errorCode);
+            }
+        {% else %}
+            $("#popup2").modal({onClose: function (dialog) {
+            dialog.data.fadeOut('fast', function () {
+                dialog.container.hide('fast', function () {
+                dialog.overlay.slideUp('fast', function () {
+                    $.modal.close();
+                });
+                });
+            });
+                }});
+        {% endif %}
+    }
+{% else %}
+    // global for movie player
+    var player;
+    timeoutPeriod=20000
+    $(document).ready(function () {
+        player = new MediaElementPlayer('#player',
+        {
+        success: function (me) {
+            me.pause
+            if({% if video %}{% get_hit_count for video %}{% else %}0{% endif %} == 0){
+                $("#popup").modal({onClose: function (dialog) {
+                    dialog.data.fadeOut('fast', function () {
+                        dialog.container.hide('fast', function () {
+                            dialog.overlay.slideUp('fast', function () {
+                                $.modal.close();
+                            });
+                        });
+                    });
+                }});
+            }else{
+            }
+            {% if video %}
+             // add event listener
+             me.addEventListener('loadeddata',
+                function () {
+                    if({% get_hit_count for video %}== 0){
+                        $.modal.close();
+                    }
+             });
+             me.addEventListener('ended', function(e) {
+                 console.log("ended");
+                 $("#pastevid-record-button").show();
+             }, false);
+             me.addEventListener('pause', function(e) {
+                 console.log("paused");
+                 $("#pastevid-record-button").show();
+             }, false);
+             me.addEventListener('play', function(e) {
+                 console.log("play");
+                 $("#pastevid-record-button").hide();
+             }, false);
+
+            {% endif %}
+        }});
+
+    });
+{% endif %}
+
+$(document).ready(function(e) {
+    // Display record button
+
+    var video = document.getElementById('player');
+    if(!video.paused){
+        $("#pastevid-record-button").hide();
+    }
+
+    video.addEventListener("play", function () {
+        $("#pastevid-record-button").hide();
+        video.play();
+    }, false);
+    video.addEventListener("ended", function () {
+        $("#pastevid-record-button").show();
+    }, false);
+    video.addEventListener("pause", function () {
+        $("#pastevid-record-button").show();
+       video.pause();
+    }, false);
+});
+
+</script>
+
+<!-- script to access recorder -->
+<script src="{{ MEDIA_URL }}js/applet.js"></script>
+<script>
+function loadRecorder() {
+    var $recorder = $("#recorder");
+
+    if($recorder.length > 0 && !confirm("The video recorder has already loaded. Reloading may cause unsaved changes to be lost.\n\nContinue?")){
+        return;
+    }
+
+    $("#pastevid-record-button").text("Loading...");
+    var attributes = {
+    	id:         "recorder",
+        code:       "com.bixly.pastevid.screencap.ScreenRecorder",
+        archive:    "ScreenRecorder.jar, lib/commons-codec-1.4.jar, lib/commons-logging-1.1.1.jar, lib/httpclient-4.1.1.jar, lib/httpclient-cache-4.1.1.jar, lib/httpcore-4.1.jar, lib/httpmime-4.1.1.jar, lib/jmf.jar, lib/javaws.jar",
+        width:      1,
+        height:     1,
+        mayscript:  true,
+        classloader_cache: false
+    };
+    var parameters = {
+    	jnlp_href:  "/media/applet/launch.jnlp",
+    	csrf_token: "{{ csrf_token }}",
+    	user_id:    "{{ user.id }}",
+    	an_tok:     "{{ an_tok }}",
+        base_url:   "http://{{ request.META.HTTP_HOST }}/"};
+    var version =   "1.5";
+    $("#applet_location").html(appletjs.mixed_html(attributes, parameters, version));
+    setTimeout(function(){
+        $("#pastevid-record-button").text("Reload");
+    }, 1000);
+}
+</script>
+
+<style type="text/css">
+body {
+    padding: 0;
+    margin: 0;
+}
+
+#pastevid-record-button {
+    display: block;
+    text-shadow: 0px 1px 0px black;
+    background: #D22;
+    color: white;
+    padding: 10px 10px;
+    text-decoration: none;
+    border-radius: 8px;
+    font: 15px sans-serif;
+    font-weight: bold;
+    z-index: 1000;
+}
+#pastevid-record {
+    display: block;
+    position: absolute;
+    margin: 0;
+    padding: 0;
+    top: 10px;
+    left: 10px;
+    height: 30px;
+    width: 110px;
+    z-index: 999;
+    background: transparent;
+}
+
+#pastevid-record-button:hover {
+    -webkit-box-shadow: 0px 0px 17px rgba(255, 255, 255, 1);
+    -moz-box-shadow: 0px 0px 17px rgba(255, 255, 255, 1);
+    box-shadow: 0px 0px 17px rgba(255, 255, 255, 1);
+}
+</style>
+
+</head>
+<body>
+
+<div id="popup">
+    <script type="text/javascript">document.getElementById('popup').style.display = 'none';</script>
+    <h2><strong>Screenbird Upload</strong></h2>
+    <p>
+        Video is still being processed on server.<br>
+        You may hit refresh or escape to play video immediately.
+    </p>
+</div>
+
+<div id="popup2">
+    <script type="text/javascript">document.getElementById('popup2').style.display = 'none';</script>
+    <h2><strong>Screenbird Youtube Upload</strong></h2>
+    <p>Video is still being processed on Youtube.<br />Check video later after it has finished being processed on Youtube.</p>
+</div>
+
+<div id="placeholder">
+    <div id="pastevid-record"><!--Screenbird's Record Now button-->
+        <a href='javascript:;' id='pastevid-record-button' onclick='loadRecorder(); return false;'>Record Now</a>
+    </div>
+
+    {% if video.youtube_embed_url %}
+        <object width="{{ width|default:640 }}" height="{{ height|default:360 }}" class="player-tag">
+            <param name="movie" value="{{ video.youtube_embed_url }}?wmode=transparent&fs=1&autoplay=1&enablejsapi=1&playerapiid=ytPlayer&rel=0"</param>
+            <param name="allowFullScreen" value="true"></param>
+            <param name="allowScriptAccess" value="always"></param>
+            <param name="wmode" value="transparent">
+            <atts name="id" value="ytPlayer"></atts>
+
+            <embed src="{{ video.youtube_embed_url }}?wmode=transparent&fs=1&autoplay=1&enablejsapi=1&playerapiid=ytPlayer&rel=0"
+                   type="application/x-shockwave-flash"
+                   allowfullscreen="true"
+                   allowscriptaccess="always"
+                   width="{{ width|default:640 }}" height="{{ height|default:360 }}"
+                   id="ytPlayer"
+                   wmode="transparent"></embed>
+        </object>
+    {% else %}
+        {% if video_status == 'OK' %}
+            <video width="{{ width|default:640 }}"
+                   height="{{ height|default:360 }}"
+                   id="player"
+                   class="player-tag"
+                   controls="controls"
+                   preload="none"
+                   autoplay="false"
+                   poster="{{ MEDIA_URL }}gfx/black-background.jpg">
+
+                {% if not video.expired  %}{% if video %}
+                    <source type="video/{{ video.video_type }}" src="{% url get-video-content video.id %}"/>
+                {% endif %}{% endif %}
+
+                <!-- Fallback flash player for no-HTML5 browsers with JavaScript turned off -->
+                <object width="{{ width|default:640 }}"
+                        height="{{ height|default:360 }}"
+                        type="application/x-shockwave-flash"
+                        data="{{ MEDIA_URL }}js/mediaelementjs/flashmediaelement.swf">
+                    <param name="movie" value="{{ MEDIA_URL }}js/mediaelementjs/flashmediaelement.swf" />
+                    <param name="autoplay" value="false" />
+                    {% if video_status == 'OK' %}
+                        <param name="flashvars" value="controls=true&amp;file={% url get-video-content video.id %}" />
+                    {% endif %}
+                    <!-- Image fall back for non-HTML5 browser with JavaScript turned off and no Flash player installed -->
+                    <img src="" width="{{ width|default:640 }}" height="{{ height|default:360 }}" title="No video playback capabilities" />
+                </object>
+            </video>
+        {% else %}
+            <div id='video-not-available'>
+                <span class='oops'>Oops!</span><br />
+                {% if video.uploader == request.user %}
+                    Your video has been deleted on Screenbird server when you uploaded your video to YouTube.
+                    <br />Thanks.
+                {% else %}
+                    The video is not available. It has already been deleted on Screenbird Server.
+                    <br />Thanks.
+                {% endif %}
+            </div>
+        {% endif %}
+    {% endif %}
+
+    <div id="applet_location"></div>
+</div>
+
+</body>
+</html>

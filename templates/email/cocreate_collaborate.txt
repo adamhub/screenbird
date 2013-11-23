@@ -1,0 +1,7 @@
+Hello ({{ email }})
+
+ You are invited to become a member of {{ user }}'s co-create videos on Screenbird.
+
+-------------------------
+Screenbird Team 
+

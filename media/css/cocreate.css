@@ -1,0 +1,110 @@
+ul{
+    margin: 0 auto;
+    padding: 0;
+}
+
+/* The wider the #list_wrapper is, the more columns will fit in it */
+div#list_wrapper{
+    width: 297px;
+    height: 100%;
+    background-color: silver;
+}
+
+/* The wider this li is, the fewer columns there will be */
+ul.outline li {
+    text-align: left;
+    float: left;
+    list-style: none;
+    height: 40px;
+}
+
+ul.outline lh {
+    width: 100%;
+    display: block;
+    text-align: center;
+}
+
+ul.outline li.first {
+    width: 36px;
+    background-color: silver;
+    text-align: center;
+}
+
+ul.outline li.second {
+    width: 261px;
+    background-color: silver;
+}
+
+ul.inner li {
+    float:none;
+    height: 20px;
+    width: 261px;
+}
+    
+div.clearer {
+    clear: both;
+}
+
+div#video2 {
+    float: right;
+    width: 640px; 
+}
+
+div#content {
+   width: 962px;
+   padding-left: 50px;
+   padding-top: 24px;
+   padding-right: 50px;
+   font-size: 13.5px;
+}
+
+div#description {
+   width: 440px;
+}
+
+div#description h2 {
+   font-size: 20px;
+   color: #131313;
+   margin-bottom: 10px;
+}
+
+div.uploaddate {
+   font-style: italic;
+   color: #acacac;
+   font-size: 12.5px;
+}
+
+.larger {
+   font-size: 18px;
+}
+
+.largerh1 {
+   font-size: 24px;
+}
+
+a.highlight {
+   color: #e26666;
+   display: inline;
+   font-weight: 400;
+}
+
+a.bluelight {
+   color: #1199dd;
+}
+
+h1.cocreate {
+   color: black;
+   font-size: 24px;
+   margin: 0;
+   padding: 0;
+   border-bottom: none;
+   font-weight: 525;
+}
+
+h1.inline {
+   display: inline;
+}
+
+div.header {
+   margin-bottom: 30px;
+}

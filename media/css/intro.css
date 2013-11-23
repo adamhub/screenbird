@@ -1,0 +1,79 @@
+#intro .heading {
+    border-bottom: 1px solid #CCC;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+}
+
+#intro .heading h1 {
+    border: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+    line-height: 150%;
+}
+
+#intro .heading h2 {
+    width: 390px;
+    font-size: 12pt;
+    font-weight: normal;
+    margin: 0;
+    padding: 0;
+    line-height: 125%;
+}
+
+#intro .congrats {
+    float: left;
+    width: 400px;
+    background: url(../gfx/film_strip.png) top center no-repeat;
+    padding-top: 115px;
+}
+
+#intro .congrats h2 {
+    margin-top: 30px;
+    margin-bottom: 0;
+    font-size: 16pt;
+}
+
+#intro .congrats p {
+    margin: 0 0 20px 0;
+    padding: 0;
+}
+
+#intro .congrats .help {
+    padding-left: 100px;
+    padding-right: 100px;
+    padding-top: 30px;
+    background: url(../gfx/support_icon.png) left center no-repeat;
+    min-height: 90px;
+}
+
+#intro .next-steps {
+    margin-left: 430px;
+    width: 338px;
+    height: 282px;
+    position: relative;
+    background: url(../gfx/next_steps.png) center no-repeat;
+}
+
+#intro .next-steps h2 {
+    padding: 0;
+    margin: 0;
+    position: absolute;
+    top: 4px;
+    left: 15px;
+    color: #ffffff;
+    text-transform: uppercase;
+    font-size: 16pt;
+}
+
+#intro .next-steps ol {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    top: 60px;
+    left: 60px;
+}
+
+#intro .next-steps li {
+    height: 90px;
+}

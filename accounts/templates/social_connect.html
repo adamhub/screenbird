@@ -1,0 +1,9 @@
+{% extends "site_base.html" %}
+
+{% block content %}
+<h1>Social Connections</h1>
+{% if prompt_message %}
+    <p {% if not success %}style="color:red;"{% endif %}>{{ prompt_message }}</p>
+{% endif %}
+    <a href="{% url account_info %}">Back To Account Info</a>
+{% endblock %}

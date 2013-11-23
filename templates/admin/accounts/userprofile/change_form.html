@@ -1,0 +1,94 @@
+{% extends "admin/change_form.html" %}
+{% load videos_tags i18n %}
+ {% block object-tools-items %}
+    <li><a href="history/" class="historylink">{% trans "History" %}</a></li>
+    <li><a href="{% url user_videos object_id|get_username_from_id %}" class="viewsitelink">Public Profile</a></li>
+{% endblock %}
+{% block after_related_objects %}
+<style>
+table {
+    border: 0 none;
+    border-collapse: collapse;
+    margin: 10px 10px 10px 10px;
+    padding: 0;
+    width: 90%;
+}
+th:first-child, td:first-child {
+    border-bottom-left-radius: 3px;
+    border-top-left-radius: 3px;
+}
+th:last-child, td:last-child {
+    border-bottom-right-radius: 3px;
+    border-top-right-radius: 3px;
+}
+th {
+    background: none repeat scroll 0 0 #7B6F6F;
+    color: #FFFFFF;
+    font-weight: bold;
+    padding: 7px 6px 7px 8px;
+    text-align: left;
+}
+td {
+    padding: 10px;
+    font-size: 13px;
+}
+.odd td {
+    background: none repeat scroll 0 0 #EBF7FC;
+}
+.td_title {
+    width: 300px;
+}
+.td_channel {
+    width: 200px;
+}
+</style>
+
+<div class="module">
+    <p><h3>Video List</h3></p>
+    {% with object_id|get_vids_from_profile:request as videos %}
+    {% if videos %}
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Status</th>
+            <th>Channel</th>
+        </tr>
+        {% for l in videos.latest_submissions_page.object_list %}
+        <tr {% cycle '' ' class="odd"' %}>
+            <td><a href="{{ l.video.get_absolute_url }}">{{ l.video.title }}</a></td>
+            {% if l.account_level.pk == 1 and l.video.videoupload and not l.video.youtube_embed_url %}
+                <td class="expiry">{% if not l.video.expired %}{{ l.days_left }} day{{ l.days_left|pluralize }} left{% else %}Expired!{% endif %}</td>
+            {% else %}
+                <td class="expiry">∞</td>
+            {% endif %}
+            <td class="td_channel"><a href="{{ l.video.channel.get_absolute_url }}">{{ l.video.channel|default:"&nbsp;" }}</a></td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <div id="pagination">
+        <p>
+            {% if videos.latest_submissions_page.has_previous %}
+                <a href="?page={{ videos.latest_submissions_page.previous_page_number }}"><font color="#ccc">previous</font></a>
+            {% else %}
+                <!--
+                    <a>previous</a>
+                -->
+            {% endif %}
+            Page {{ videos.latest_submissions_page.number }} of {{ videos.paginator.num_pages }}
+
+            {% if videos.latest_submissions_page.has_next %}
+                <a href="?page={{ videos.latest_submissions_page.next_page_number }}"><font color="#ccc">next</font></a>
+            {% else %}
+                <!--
+                    <a>next</a>
+                -->
+            {% endif %}
+        </p>
+    </div>
+	{% else %}
+	No videos to display
+	{% endif %}
+	{% endwith %}
+</div>
+{% endblock %}

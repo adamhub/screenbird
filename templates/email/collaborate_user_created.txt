@@ -1,0 +1,19 @@
+Hello ({{ email }})
+
+ You are invited to become a member of {{ user }}'s channel on Screenbird, and can now share in the features of a premium account.
+ Since you are not yet registered, you are given the following credentials for your initial login and confirmation:
+ 
+ -----------------------------
+ Username: {{ username }}
+ Password: {{ password }}
+ -----------------------------
+ 
+To confirm, please follow the link below:
+
+   {{ confirm_link }}
+   
+You may opt to change your username and password at {{ account_link }} after confirmation.
+ 
+-------------------------
+Screenbird Team 
+

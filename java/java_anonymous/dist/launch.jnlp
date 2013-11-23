@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<jnlp codebase="file:/E:/screenbird/java/java_anonymous/dist/" href="launch.jnlp" spec="1.0+">
+    <information>
+        <title>PastevidRecorder</title>
+        <vendor>Bixly</vendor>
+        <homepage href="www.bixly.com"/>
+        <description>PastevidRecorder</description>
+        <description kind="short">PastevidRecorder</description>
+
+    </information>
+<update check="background"/>
+
+    <resources>
+<j2se java-vm-args="-Djava.security.policy=applet.policy" version="1.5+"/>
+<jar href="Anonymous.jar" main="true"/>
+
+
+    <jar href="lib/commons-codec-1.4.jar"/>
+<jar href="lib/commons-logging-1.1.1.jar"/>
+<jar href="lib/httpclient-4.1.1.jar"/>
+<jar href="lib/httpclient-cache-4.1.1.jar"/>
+<jar href="lib/httpcore-4.1.jar"/>
+<jar href="lib/httpmime-4.1.1.jar"/>
+<jar href="lib/linuxlibs.jar"/>
+<jar href="lib/maclibs.jar"/>
+<jar href="lib/winlibs.jar"/>
+</resources>
+    <applet-desc height="1" main-class="com.bixly.pastevid.driver.Anonymous" name="PastevidRecorder" width="1">
+
+    </applet-desc>
+</jnlp>

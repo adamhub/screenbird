@@ -1,0 +1,10 @@
+[
+    {
+        "pk": 2,
+        "model": "sites.site",
+        "fields": {
+            "name": "screenbird.com",
+            "domain": "screenbird.com"
+        }
+    }
+]

@@ -1,0 +1,194 @@
+/*
+RESET
+*/
+body, div, dl, dt, dd, ul, ol, li,
+h1, h2, h3, h4, h5, h6,
+pre, form, fieldset, input, textarea,
+p, blockquote, th, td {
+  margin: 0;
+  padding: 0;
+}
+table {
+ border-collapse: collapse;
+ border-spacing: 0;
+}
+fieldset, img {
+ border: 0;
+}
+address, caption, cite, dfn, th, var {
+ font-style: normal;
+ font-weight: normal;
+}
+caption, th {
+ text-align: left;
+}
+h1, h2, h3, h4, h5, h6 {
+ font-size: 100%;
+ font-weight: normal;
+}
+q:before, q:after {
+ content: '';
+}
+abbr, acronym {
+ border: 0;
+}
+
+/*
+MAIN
+*/
+html {
+ background: #fff;
+ color: #333;
+}
+
+		
+body 			{ font-family: Arial, san-serif; font-size:16px; text-align:center;}
+#wrap 			{ width:960px; margin: 0 auto; text-align: left;}
+.logo 			{ width:300px; margin: 10 auto; padding: 10px; text-align: left;}
+#top 			{ border: 0; text-align: right;}
+#content 		{ margin: 5px 0; border: 1px solid #DFDFDF;}
+#bottom 		{ border: 0; }
+.wrapper_inner  { width:960px; margin: 0 auto; border: 1px solid #DFDFDF;  text-align: center; padding:10px;}
+.header 		{ height: 100px; width:100%; border: 0;}
+#features                   { float:left;width:480px; margin: 10 auto;}
+#video_list                { float:right;width:480px; margin: 10 auto;}
+.full-middle	{ margin: 15px 0 0 0; float: left; width: 960px; padding: 10px;}
+#footer 		{ clear: both; height: 20px; padding: 15px; text-align:center;}
+.clear 			{ clear: both;}
+.clearfix {
+    min-height: 1%;
+}
+.clearfix:after {
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+}
+		
+/*
+HEADINGS
+*/
+		
+h1, h2, h3, h4, h5, h6 { margin-bottom: 24px; font-weight: bold;}
+h1 		{ font-size: 1.5em;   line-height: 1em; }
+h2 		{ font-size: 1.375em; line-height: 1.0909em; }
+h3 		{ font-size: 1.25em;  line-height: 1.2em; }
+h4 		{ font-size: 1.125em; line-height: 1.333em; }
+h5, h6 	{ font-size: 1em; line-height: 1.5em; }
+
+/*
+HEADER
+*/
+
+#tabhead {
+    background: #FFFFFF;
+    border-bottom: 1px solid #FFFFFF; /* tab border */
+    position: relative;
+}
+
+#left_tabs {
+    position: absolute;
+    bottom: -2px; /* must be same thickness as tab border */
+    left: 15px; /* based on width and padding of logo */
+}
+#right_tabs {
+    position: absolute;
+    right: 15px;
+    bottom: -2px; /* must be same thickness as tab border */
+}
+
+ul.tabs a, ul.tabs a:visited {
+    color: #444; /* unselected tab text colour */
+    font-weight: bold;
+    text-decoration: none;
+}
+ul.tabs a:hover {
+    color: #DFDFDF; /* unselected tab text hover colour */
+}
+ul.tabs li {
+    list-style-type: none;
+    display: inline;
+    background-color: #FFFFFF; /* unselected tab colour */
+    padding: 5px 0 4px;
+    margin: 0 1px; /* to compensate for border */
+}
+ul.tabs li a {
+    padding: 2px 12px;
+}
+ul.tabs {
+    margin: 0 0 5px;
+}
+
+#subnav {
+    margin: 0;
+    padding: 0;
+    background: #FFFFFF; /* tab colour */
+    border-bottom: 1px solid #FFFFFF;
+}
+#subnav ul {
+    float: right;
+    margin: 0 15px;
+    padding: 0;
+}
+#subnav ul li {
+    display: inline;
+    list-style-type: none;
+}
+#subnav ul a:link, #subnav ul a:visited {
+    float: left;
+    font-weight: bold;
+    text-decoration: none;
+    color: #444;
+    padding: 0px 12px;
+}
+#subnav ul a:hover {
+    color: #DFDFDF;
+    background: #FFF;
+}
+
+/*
+LISTS 
+*/
+ul, ol { margin-bottom: 24px; }
+ul { list-style: square inside;}
+ul ul, ol ol {  margin: 0 0 0 60px;	}
+
+/*
+FORMS
+*/
+
+input.text {
+	border-bottom: 1px solid #e1e1e1;
+	border-left: 1px solid #c1c1c1;
+	border-right: 1px solid #c1c1c1;
+	border-top: 1px solid #848484;
+	color: #666;
+	height: 19px;
+	line-height: 19px;
+}
+
+label {
+	display: block;
+	text-transform: capitalize;
+}
+label.inline {
+	display: inline;
+	float: none;
+}
+.fieldWrapper {
+    padding: 3px 0 3px;
+}
+.fieldWrapper .wrap {padding: 2px; }
+.error { color: #a53713; }
+.errorlist{
+    margin: 0 10px;
+    list-style: square inside;
+    color: red;
+}
+
+.help_text{    
+    font-size:0.875em;
+    margin-bottom: 15px;
+    color: #B3B3B3;
+}

@@ -1,0 +1,7 @@
+<script>
+    chrome.browserAction.onClicked.addListener(function(tab) {
+	  chrome.tabs.create({'url': "http://screenbird.com/record"}, function(tab) {
+	    // Tab opened.
+	  });
+	});
+</script>

@@ -1,0 +1,232 @@
+<!-- Samples Last updated  7/26/2012-->
+
+<ticket>
+	<assigned-to-id>aef-SOJIGr4B_LacwqjQXA</assigned-to-id>
+	<completed-date type="datetime" />
+	<component-id type="integer" />
+	<created-on type="datetime">2012-07-12T09:03:19-07:00</created-on>
+	<description>Currently we are all emailed about errors, but there is little tracking on the follow through. I propose a system to put these errors into assembla so customer issues don't fall through the cracks. This can be a fully or semi automated system, but it can't be all manual. It takes too much time.</description>
+	<from-support type="integer">1</from-support>
+	<id type="integer">27647843</id>
+	<importance type="integer">1</importance>
+	<importance-float type="float">1.0</importance-float>
+	<is-story type="boolean">false</is-story>
+	<milestone-id type="integer">1323653</milestone-id>
+	<notification-list>aef-SOJIGr4B_LacwqjQXA,cfvvXYYHWr4zxjacwqjQXA</notification-list>
+	<number type="integer">848</number>
+	<priority type="integer">2</priority>
+	<reporter-id>aef-SOJIGr4B_LacwqjQXA</reporter-id>
+	<space-id>cpGLb8MUqr4ztFacwqjQWU</space-id>
+	<status type="integer" />
+	<status-name>In Progress</status-name>
+	<story-importance type="integer">0</story-importance>
+	<summary>Add Ticket Making System For All Live Errors</summary>
+	<updated-at type="datetime">2012-07-26T04:37:17-07:00</updated-at>
+	<working-hours type="float">0.0</working-hours>
+	<working-hour type="float" warning="deprecated">0.0</working-hour>
+	<estimate type="float">1.0</estimate>
+	<total-estimate type="float">1.0</total-estimate>
+	<invested-hours type="float">10.5</invested-hours>
+	<assigned-to>
+		<id>aef-SOJIGr4B_LacwqjQXA</id>
+		<login>bryant.theirwork</login>
+		<login_name warning="deprecated">bryant.theirwork</login_name>
+		<name>Bryant Cardwell</name>
+	</assigned-to>
+	<reporter>
+		<id>aef-SOJIGr4B_LacwqjQXA</id>
+		<login>bryant.theirwork</login>
+		<login_name warning="deprecated">bryant.theirwork</login_name>
+		<name>Bryant Cardwell</name>
+	</reporter>
+	<documents type="array" />
+	<ticket-comments type="array">
+		<ticket-comment>
+			<comment>Throw tickets in to active on cardwall with highest priority</comment>
+			<rendered type="boolean">false</rendered>
+			<created-on type="datetime">2012-07-19T16:20:52-07:00</created-on>
+			<updated-at type="datetime">2012-07-19T16:20:52-07:00</updated-at>
+			<ticket-id type="integer">27647843</ticket-id>
+			<user-id>aef-SOJIGr4B_LacwqjQXA</user-id>
+			<ticket-changes>--- []</ticket-changes>
+			<user>
+				<id>aef-SOJIGr4B_LacwqjQXA</id>
+				<login>bryant.theirwork</login>
+				<login_name warning="deprecated">bryant.theirwork</login_name>
+				<name>Bryant Cardwell</name>
+			</user>
+		</ticket-comment>
+		<ticket-comment>
+			<comment>email back to the customer telling them we're working on the error.</comment>
+			<rendered type="boolean">false</rendered>
+			<created-on type="datetime">2012-07-19T16:19:03-07:00</created-on>
+			<updated-at type="datetime">2012-07-19T16:19:03-07:00</updated-at>
+			<ticket-id type="integer">27647843</ticket-id>
+			<user-id>aef-SOJIGr4B_LacwqjQXA</user-id>
+			<ticket-changes>--- []</ticket-changes>
+			<user>
+				<id>aef-SOJIGr4B_LacwqjQXA</id>
+				<login>bryant.theirwork</login>
+				<login_name warning="deprecated">bryant.theirwork</login_name>
+				<name>Bryant Cardwell</name>
+			</user>
+		</ticket-comment>
+		<ticket-comment>
+			<comment nil="true" />
+			<rendered type="boolean">false</rendered>
+			<created-on type="datetime">2012-07-18T16:37:58-07:00</created-on>
+			<updated-at type="datetime">2012-07-18T16:37:58-07:00</updated-at>
+			<ticket-id type="integer">27647843</ticket-id>
+			<user-id>aef-SOJIGr4B_LacwqjQXA</user-id>
+			<ticket-changes>--- - - status - Active - In Progress</ticket-changes>
+			<user>
+				<id>aef-SOJIGr4B_LacwqjQXA</id>
+				<login>bryant.theirwork</login>
+				<login_name warning="deprecated">bryant.theirwork</login_name>
+				<name>Bryant Cardwell</name>
+			</user>
+		</ticket-comment>
+		<ticket-comment>
+			<comment />
+			<rendered type="boolean">false</rendered>
+			<created-on type="datetime">2012-07-12T16:37:20-07:00</created-on>
+			<updated-at type="datetime">2012-07-12T16:37:20-07:00</updated-at>
+			<ticket-id type="integer">27647843</ticket-id>
+			<user-id>cfvvXYYHWr4zxjacwqjQXA</user-id>
+			<ticket-changes>--- - - assigned_to_id - gregg.jacobs@sportsboard-win.com - bryant.theirwork - - milestone_id - Backlog - Cardwall - - priority - Normal (3) - High (2)</ticket-changes>
+			<user>
+				<id>cfvvXYYHWr4zxjacwqjQXA</id>
+				<login>gregg.jacobs@sportsboard-win.com</login>
+				<login_name warning="deprecated">gregg.jacobs@sportsboard-win.com</login_name>
+				<name>Gregg Jacobs</name>
+			</user>
+		</ticket-comment>
+		<ticket-comment>
+			<comment />
+			<rendered type="boolean">false</rendered>
+			<created-on type="datetime">2012-07-12T09:03:19-07:00</created-on>
+			<updated-at type="datetime">2012-07-12T09:03:19-07:00</updated-at>
+			<ticket-id type="integer">27647843</ticket-id>
+			<user-id>aef-SOJIGr4B_LacwqjQXA</user-id>
+			<ticket-changes nil="true" />
+			<user>
+				<id>aef-SOJIGr4B_LacwqjQXA</id>
+				<login>bryant.theirwork</login>
+				<login_name warning="deprecated">bryant.theirwork</login_name>
+				<name>Bryant Cardwell</name>
+			</user>
+		</ticket-comment>
+	</ticket-comments>
+	<tasks type="array">
+		<task>
+			<created-at type="datetime">2012-07-20T09:20:13-07:00</created-at>
+			<begin-at type="datetime">2012-07-20T09:20:13-07:00</begin-at>
+			<updated-at type="datetime">2012-07-20T09:20:13-07:00</updated-at>
+			<end-at type="datetime">2012-07-20T09:20:13-07:00</end-at>
+			<url>/spaces/wst/tickets/848</url>
+			<ticket-id type="integer">27647843</ticket-id>
+			<id type="integer">8759153</id>
+			<billed type="boolean">false</billed>
+			<user-id>aef-SOJIGr4B_LacwqjQXA</user-id>
+			<description>Add Ticket Making System For All Live Errors</description>
+			<hours type="float">6.0</hours>
+			<job-agreement-id type="integer" nil="true" />
+			<space-id>cpGLb8MUqr4ztFacwqjQWU</space-id>
+			<ticket-number type="integer">848</ticket-number>
+		</task>
+		<task>
+			<created-at type="datetime">2012-07-26T04:37:17-07:00</created-at>
+			<begin-at type="datetime">2012-07-26T04:37:17-07:00</begin-at>
+			<updated-at type="datetime">2012-07-26T04:37:17-07:00</updated-at>
+			<end-at type="datetime">2012-07-26T04:37:17-07:00</end-at>
+			<url>/spaces/wst/tickets/848</url>
+			<ticket-id type="integer">27647843</ticket-id>
+			<id type="integer">8886633</id>
+			<billed type="boolean">false</billed>
+			<user-id>aef-SOJIGr4B_LacwqjQXA</user-id>
+			<description>Add Ticket Making System For All Live Errors</description>
+			<hours type="float">4.5</hours>
+			<job-agreement-id type="integer" nil="true" />
+			<space-id>cpGLb8MUqr4ztFacwqjQWU</space-id>
+			<ticket-number type="integer">848</ticket-number>
+		</task>
+	</tasks>
+	<ticket-associations type="array" />
+</ticket>
+
+<space>
+	<name>IDLE</name>
+	<default-showpage>Tickets</default-showpage>
+	<created-at type="datetime">2012-06-06T13:26:05-07:00</created-at>
+	<is-commercial type="boolean">true</is-commercial>
+	<watcher-permissions type="integer">1</watcher-permissions>
+	<updated-at type="datetime">2012-06-11T11:19:22-07:00</updated-at>
+	<wiki-name>idlehours</wiki-name>
+	<team-permissions type="integer">2</team-permissions>
+	<is-manager type="boolean">true</is-manager>
+	<can-join type="boolean">false</can-join>
+	<id>dxFqFWSbur4yCeacwqjQYw</id>
+	<parent-id nil="true"></parent-id>
+	<public-permissions type="integer">0</public-permissions>
+	<description></description>
+	<is-volunteer type="boolean">false</is-volunteer>
+	<spaces-tools type="array">
+		<spaces-tool type="TimeTool">
+			<created-at type="datetime">2012-06-06T13:26:06-07:00</created-at>
+			<watcher-permissions type="integer" nil="true"></watcher-permissions>
+			<url type="TimeTool" nil="true"></url>
+			<team-permissions type="integer">3</team-permissions>
+			<id type="TimeTool">dx28KmSbur4yCeacwqjQYw</id>
+			<tool-id type="integer">14</tool-id>
+			<parent-id type="TimeTool" nil="true"></parent-id>
+			<public-permissions type="integer" nil="true"></public-permissions>
+			<name type="TimeTool">Time</name>
+		</spaces-tool>
+		<spaces-tool type="TicketTool">
+			<created-at type="datetime">2012-06-06T13:26:06-07:00</created-at>
+			<watcher-permissions type="integer">1</watcher-permissions>
+			<url type="TicketTool" nil="true"></url>
+			<team-permissions type="integer">2</team-permissions>
+			<id type="TicketTool">dx5G0ySbur4yCeacwqjQYw</id>
+			<tool-id type="integer">13</tool-id>
+			<parent-id type="TicketTool" nil="true"></parent-id>
+			<public-permissions type="integer" nil="true"></public-permissions>
+			<name type="TicketTool">Tickets</name>
+			<tool-settings>
+				<estimate-by type="integer">0</estimate-by>
+			</tool-settings>
+		</spaces-tool>
+		<spaces-tool type="MilestoneTool">
+			<created-at type="datetime">2012-06-06T13:26:06-07:00</created-at>
+			<watcher-permissions type="integer" nil="true"></watcher-permissions>
+			<url type="MilestoneTool" nil="true"></url>
+			<team-permissions type="integer" nil="true"></team-permissions>
+			<id type="MilestoneTool">dycpPISbur4yCeacwqjQYw</id>
+			<tool-id type="integer">9</tool-id>
+			<parent-id type="MilestoneTool" nil="true"></parent-id>
+			<public-permissions type="integer" nil="true"></public-permissions>
+			<name type="MilestoneTool">Milestones</name>
+		</spaces-tool>
+	</spaces-tools>
+</space>
+<milestone>
+  <planner-type type="integer">0</planner-type>
+  <created-at type="datetime">2012-05-09T11:49:50-07:00</created-at>
+  <completed-date type="date" nil="true"></completed-date>
+  <is-completed type="boolean">false</is-completed>
+  <title>Cardwall</title>
+  <basecamp-milestone-id type="integer" nil="true"></basecamp-milestone-id>
+  <release-level type="integer" nil="true"></release-level>
+  <updated-at type="datetime">2012-05-09T11:49:50-07:00</updated-at>
+  <created-by>dXFO1QJGer3RJeeJe5aVNr</created-by>
+  <id type="integer">1323653</id>
+  <user-id>dXFO1QJGer3RJeeJe5aVNr</user-id>
+  <due-date type="date" nil="true"></due-date>
+  <from-basecamp type="boolean">false</from-basecamp>
+  <updated-by>dXFO1QJGer3RJeeJe5aVNr</updated-by>
+  <description></description>
+  <release-notes nil="true"></release-notes>
+  <space-id>cpGLb8MUqr4ztFacwqjQWU</space-id>
+  <pretty-release-level>None</pretty-release-level>
+  <documents type="array"/>
+</milestone>

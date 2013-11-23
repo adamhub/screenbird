@@ -1,0 +1,33 @@
+{% extends "site_base.html" %}
+
+{% block content %}
+<div>
+    <h1>Authorize.net Yearly Subscription:</h1>
+    <div>
+        <form action="." method="POST" class="box authorize-form" autocomplete="off">
+        {% csrf_token %}
+	        <div class="field">
+	            <label>Credit Card Number {{ form.card_number }}</label><br/>
+	            {% if form.errors.card_number %}<span class="spanInputError"></span>{% endif %}<span class="error">{{ form.errors.card_number }}</span>
+	        </div>  
+	        <div class="field">
+	            <label>Expiration Date {{ form.expiration_date }}</label><br/>
+	            {% if form.errors.expiration_date %}<span class="spanInputError"></span>{% endif %}<span class="error">{{ form.errors.expiration_date }}</span>
+	        </div>  
+	        <div class="field">
+	            <label>First Name {{ form.bill_first_name }}</label><br/>
+	            {% if form.errors.bill_first_name %}<span class="spanInputError"></span>{% endif %}<span class="error">{{ form.errors.bill_first_name }}</span>
+	        </div>
+	        <div class="field">
+	            <label>Last Name {{ form.bill_last_name }}</label><br/>
+	            {% if form.errors.bill_last_name %}<span class="spanInputError"></span>{% endif %}<span class="error">{{ form.errors.bill_last_name }}</span>
+	        </div>    
+	        <div class="field submit">
+                <input id="submitForm" type="submit" class="button-submit" value="Submit">
+            </div>
+        </form>
+    </div>
+    <br/>
+</div>
+
+{% endblock %}

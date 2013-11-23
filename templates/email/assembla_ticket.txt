@@ -1,0 +1,6 @@
+Milestone: {{ milestone }}
+Component: {{ component }}
+Priority: {{ priority }}
+Description:
+{{ description }}
+.

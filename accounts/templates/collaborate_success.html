@@ -1,0 +1,21 @@
+{% extends "site_base.html" %}
+
+{% comment %}
+    <!-- Found no view or url that uses this template 
+         Marked for deletion -->
+{% endcomment %}
+
+{% block title %}| My Videos{% endblock %}
+{% block content %}
+
+<!-- Pat css -->
+<style>
+#videoCreated {
+    font:11px Arial, Helvetica, sans-serif;
+}
+</style>
+
+<h1>Congratulations!</h1>
+<br/>
+<p>You are now a member of {{ channel.owner.username }}'s channel: {{ channel }}</p>
+{% endblock %}

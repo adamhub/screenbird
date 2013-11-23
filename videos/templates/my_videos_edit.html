@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}| Video Upload Form{% endblock %}
+{% block content %}
+     <h1>Video Upload Form:</h1>
+
+     <form action="" method="post">
+          <input type="hidden" name="usereditingform" value="on">
+          {% csrf_token %}
+	  {% for field in form %}
+			<div {% if field.label == "Description" %}class="field textarea"{% else %}class="field"{% endif %}>
+                <label for="">{{ field.label_tag }} {{ field }}</label>
+			    <div class="help_text">
+			        {{ field.help_text }}
+			    </div><br>		    
+		        <span class="error">{{ field.errors }}</span>
+    		</div>
+	  {% endfor %}
+		<div class="field submit">
+          <button type="submit" class="input-submit">Submit</button>
+        </div>
+     </form>
+
+{% endblock %}

@@ -1,0 +1,72 @@
+deb http://us-east-1.ec2.archive.ubuntu.com/ubuntu/ lucid main universe
+deb-src http://us-east-1.ec2.archive.ubuntu.com/ubuntu/ lucid main universe
+deb http://us-east-1.ec2.archive.ubuntu.com/ubuntu/ lucid-updates main universe
+deb-src http://us-east-1.ec2.archive.ubuntu.com/ubuntu/ lucid-updates main universe
+deb http://security.ubuntu.com/ubuntu lucid-security main universe
+deb-src http://security.ubuntu.com/ubuntu lucid-security main universe
+
+
+# added by the release upgrader
+deb cdrom:[Ubuntu 10.04 LTS _Lucid Lynx_ - Release i386 (20100427.1)]/ lucid main restricted
+
+# added by the release upgrader
+# deb cdrom:[Ubuntu 9.10 _Karmic Koala_ - Release i386 (20091027)]/ karmic main restricted
+# See http://help.ubuntu.com/community/UpgradeNotes for how to upgrade to
+# newer versions of the distribution.
+
+# deb cdrom:[Ubuntu 9.04 _Jaunty Jackalope_ - Alpha i386 (20090225.1)]/ jaunty main restricted
+deb http://ubuntu.oss.eznetsols.org/ubuntu/ lucid main restricted
+deb-src http://ubuntu.oss.eznetsols.org/ubuntu/ lucid main restricted
+
+## Major bug fix updates produced after the final release of the
+## distribution.
+deb http://ubuntu.oss.eznetsols.org/ubuntu/ lucid-updates main restricted
+deb-src http://ubuntu.oss.eznetsols.org/ubuntu/ lucid-updates main restricted
+
+## N.B. software from this repository is ENTIRELY UNSUPPORTED by the Ubuntu
+## team. Also, please note that software in universe WILL NOT receive any
+## review or updates from the Ubuntu security team.
+deb http://ubuntu.oss.eznetsols.org/ubuntu/ lucid universe
+deb-src http://ubuntu.oss.eznetsols.org/ubuntu/ lucid universe
+deb http://ubuntu.oss.eznetsols.org/ubuntu/ lucid-updates universe
+deb-src http://ubuntu.oss.eznetsols.org/ubuntu/ lucid-updates universe
+
+## N.B. software from this repository is ENTIRELY UNSUPPORTED by the Ubuntu
+## team, and may not be under a free licence. Please satisfy yourself as to
+## your rights to use the software. Also, please note that software in
+## multiverse WILL NOT receive any review or updates from the Ubuntu
+## security team.
+deb http://ubuntu.oss.eznetsols.org/ubuntu/ lucid multiverse
+deb-src http://ubuntu.oss.eznetsols.org/ubuntu/ lucid multiverse
+deb http://ubuntu.oss.eznetsols.org/ubuntu/ lucid-updates multiverse
+deb-src http://ubuntu.oss.eznetsols.org/ubuntu/ lucid-updates multiverse
+
+## Uncomment the following two lines to add software from the 'backports'
+## repository.
+## N.B. software from this repository may not have been tested as
+## extensively as that contained in the main release, although it includes
+## newer versions of some applications which may provide useful features.
+## Also, please note that software in backports WILL NOT receive any review
+## or updates from the Ubuntu security team.
+
+## Uncomment the following two lines to add software from Canonical's
+## 'partner' repository. This software is not part of Ubuntu, but is
+## offered by Canonical and the respective vendors as a service to Ubuntu
+## users.
+deb http://archive.canonical.com/ubuntu lucid partner
+deb-src http://archive.canonical.com/ubuntu lucid partner
+
+deb http://ubuntu.oss.eznetsols.org/ubuntu/ lucid-security main restricted
+deb-src http://ubuntu.oss.eznetsols.org/ubuntu/ lucid-security main restricted
+deb http://ubuntu.oss.eznetsols.org/ubuntu/ lucid-security universe
+deb-src http://ubuntu.oss.eznetsols.org/ubuntu/ lucid-security universe
+deb http://ubuntu.oss.eznetsols.org/ubuntu/ lucid-security multiverse
+deb-src http://ubuntu.oss.eznetsols.org/ubuntu/ lucid-security multiverse
+
+
+deb http://ppa.launchpad.net/norsetto/ppa/ubuntu lucid main
+deb http://ppa.launchpad.net/tualatrix/ubuntu lucid main
+deb http://ppa.launchpad.net/c-korn/ppa/ubuntu lucid main
+deb http://ppa.launchpad.net/ubuntu-wine/ppa/ubuntu lucid main
+deb http://ppa.launchpad.net/ubuntu-mozi...ily/ppa/ubuntu lucid main
+deb http://packages.medibuntu.org/ lucid free non-free

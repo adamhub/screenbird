@@ -1,0 +1,66 @@
+[
+    {
+        "pk": 1, 
+        "model": "flatpages.flatpage", 
+        "fields": {
+            "registration_required": false, 
+            "title": "Content License", 
+            "url": "/content/license/", 
+            "template_name": "", 
+            "sites": [
+                1,
+                2
+            ], 
+            "content": "<p>This is the content license page.</p>\r\n\r\n<h3>Private</h3>\r\n<p>If the video isn't shared, then it falls under the private license. We won't touch it, unless you share it.</p>\r\n<h3>Public</h3>\r\n<p>Licensed under creative commons.</p>", 
+            "enable_comments": false
+        }
+    },
+    {
+        "pk": 2, 
+        "model": "flatpages.flatpage", 
+        "fields": {
+            "registration_required": false, 
+            "title": "About Screenbird", 
+            "url": "/about/", 
+            "template_name": "", 
+            "sites": [
+                1,
+                2
+            ], 
+            "content": "<p><strong>Screenbird</strong> comes out of Bixly, a development shop in Fresno California. It was created because we saw a need our competitors weren't filling properly, so we went for it! This website is just starting. If you have any suggestions or bugs or inquiries, please send them to  <a href=\"mailto:support@screenbird.com\">support@screenbird.com</a>.</p><p>We plan to offer as much free service as possible. Later on a premium version might appear with a bit more versatility....or not. We don't know where this is taking us. We just know that this needs to be done right, and we can't just wait around for that to happen.</p>",
+            "enable_comments": false
+        }
+    },
+    {
+        "pk": 3, 
+        "model": "flatpages.flatpage", 
+        "fields": {
+            "registration_required": false, 
+            "title": "Features", 
+            "url": "/features/", 
+            "template_name": "", 
+            "sites": [
+                1,
+                2
+            ], 
+            "content": "<p id=\"intro\">Discover what makes <em>Screenbird</em> the perfect choice for developers, managers, teachers and large work teams.</p><div id=\"plans\"><div class=\"plan box\" id=\"basic\"><h2>Basic</h2><ul><li class=\"odd\">YouTube integration</li><li>Short Links</li><li class=\"odd\">30min Videos</li><li>Play on any device</li><li class=\"odd\">Record screen or just a part</li><li>Record Audio</li><li class=\"odd\"><strong>Account Video Limit: 150min</strong></li><li><strong>Video Expiration: 6 months</strong></li><li class=\"odd\"><strong>Users Per Account: 1</strong></li></ul><p><a href=\"/register/\">Absolutely Free!</a></p></div><div class=\"plan box\" id=\"premium\"><h2>Premium</h2><ul><li class=\"odd\">YouTube integration</li><li>Short Links</li><li class=\"odd\">30Min videos</li><li>Play on any device</li><li class=\"odd\">Record screen or just a part</li><li>Record Audio</li><li class=\"odd\"><strong>Account Video Limit: 500min</strong></li><li><strong>Video Expiration: Never</strong></li><li class=\"odd\"><strong>Users Per Account: Unlimited</strong></li></ul><p><a href=\"/login_register/?next=/accounts/upgrade_trial/\">60-Day Trial</a></p><p><a href=\"/login_register/?next=/features/?upgrade=1\">$10/Month</a></p><p><a href=\"/login_register/?next=/features/?upgrade=2\">$60/Year <strong>(50% off!)</strong></a></p><p><a href=\"/login_register/?next=/authorize/monthly/\">$10/Month (Authorize.net)</a></p><p><a href=\"/login_register/?next=/authorize/yearly/\">$60/Year <strong>(50% off!)</strong> (Authorize.net)</a></p></div></div><!-- /plans --><br /><br /><br /><br /><br /><br /><h3>The answer is \"Yes\" to everything below</h3><div id=\"feature-list\"><div class=\"feature-list\"><ul><li><p>Can I use Screenbird on Windows, Mac, and Linux?</p></li><li><p>Can I record PowerPoints, video, and anything else that shows up on my screen?</p></li><li><p>Can I use shortcuts?</p><p class=\"answer\"><kbd>Space</kbd> — record/pause<br /><kbd>Ctrl</kbd> + <kbd>T</kbd> — toggles from fullscreen to custom size<br /><kbd>Ctrl</kbd> + <kbd>Enter</kbd> — done<br /><kbd>Ctrl</kbd> + <kbd>M</kbd> — opens settings menu</p></li><li><p>Can I add my colleagues to the account so they can make a video?</p></li><li><p>Can my colleagues make a video without having to install/pay anything?</p></li><li><p>Can I backup my video after it expires?</p><p class=\"answer\">You will get an email notifying you of the expiration. At that point you can download it as a backup, push it to Youtube, or re-upload to Screenbird.</p></li><li><p>Can I watch the video with the same link, even after it's on Youtube?</p></li><li><p>Can I record a small, custom sized area?</p></li></ul></div><!-- /.feature-list --><div class=\"feature-list\"><ul><li><p>Can I avoid upgrading my account limit by pushing all my video to Youtube?</p></li><li><p>Can I start recording, and finish it up some other day?</p></li><li><p>Can I backup an mp4 video to my desktop before uploading?</p></li><li><p>Can I play the video on mobile devices?</p></li><li><p>Do you provide embed code for all the videos?</p></li><li><p>Can I record for up to 30 minutes at a time?</p></li><li><p>Can I share a video without creating an account?</p></li><li><p>Can I monitor all the videos that my group creates?</p><p class=\"answer\">Yes, you can set a user to be monitored, and that will send you an email each time a video is created. Otherwise, they are marked as trusted and all the videos they create are set live.</p></li></ul></div><!-- /.feature-list --></div><!-- /feature-list -->",
+            "enable_comments": false
+        }
+    },
+    {
+        "pk": 4, 
+        "model": "flatpages.flatpage", 
+        "fields": {
+            "registration_required": false, 
+            "title": "Documentation", 
+            "url": "/documentation/", 
+            "template_name": "", 
+            "sites": [
+                1,
+                2
+            ], 
+            "content": "<h2>Features</h2><p>The API feature is available only to Paid and Trial users. Upon upgrading into either one, the user will be given a random and unique api_key. This is essential for using the api. The api_link can be found under the accounts page. Also, a user can change his/her channel's api_link through the update channel page.</p><p>&nbsp;</p><h2>Service calls</h2><p>There are currently four different services. They all need a parameter named api_key.</p><ul><li>get_all_videos - returns all videos, sorted on create date, in a particular account. url for this service is (http://www.screenbird.com/get_all_videos)</li><li>get_channel_videos - returns all videos in a particular channel. url for this service is (http://www.screenbird.com/get_channel_videos /&lt;custom_link&gt;)</li><li>get_latest_video - returns the latest video in a particular account. url for this service is (http://www.screenbird.com/get_latest_video)</li><li>get_latest_channel_video - returns the latest video in a particular channel. url for this service is (http://www.screenbird.com/get_latest_channel_video/&lt;custom_link&gt;)</li></ul><p>&nbsp;</p><h2>Ajax calls</h2><p>Sample ajax syntax. This is used for the get_latest_video service.</p><pre><code>var data_arg = {api_key:\"XKDIWLEJ1C32\"};<br />$.ajax(<br />&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; {<br />&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;type: \"GET\",<br /> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;url: \"http://www.screenbird.com/get_channel_videos/ZXCV1234ASDF1234QWER\",<br /> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;data: data_arg,<br /> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;dataType: \"text\",<br /> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;contentType: \"application/json; charset=utf-8\",<br /> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;error: function(response)<br /> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;{<br /> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;console.log(response);<br /> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;},<br /> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;success: function(response)<br /> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;{<br /> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;console.log(response);<br /> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;}<br />&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; }<br />&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;).done(function()<br /> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;{<br /> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;});</code></pre><p>&nbsp;</p><h2>Response object</h2><p>This is the current structure of the response object:</p><pre><code>{<br />&nbsp; id: 1,<br />&nbsp; channel: null,<br />&nbsp; url: \"/62LD9BQN/\",<br />&nbsp; title: \"test\",<br />&nbsp; embed_code: \"&lt;script src=\"http://screenbird.com/embed/62LD9BQN.js?width=640&amp;height=360&amp;r=5927150\"&gt;<br />&lt;/script&gt;&lt;div id=\"_paste_vid__master__62LD9BQN\"&gt;&lt;/div&gt;\"<br /> } &nbsp;</code></pre>",
+            "enable_comments": false
+        }
+    }
+]

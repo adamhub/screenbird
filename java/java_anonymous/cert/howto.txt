@@ -1,0 +1,25 @@
+how to:
+- generate cert file:
+run
+keytool -genkey -alias signFiles -keystore keystore-name-here
+
+this will as for a series of things and a password, use your-pass-here for both store and key pass.
+
+alias: signFiles
+storepass: your-pass-here
+keypass: your-pass-here
+
+-sign the jar files
+move the generated keystore file to the same location as the jars and run:
+
+
+jarsigner -keystore keystore-name-here ScreenRecorder.jar signFiles -storepass your-pass-here -keypass your-pass-here -signedjar
+jarsigner -keystore keystore-name-here commons-codec-1.4.jar signFiles -storepass your-pass-here -keypass your-pass-here -signedjar
+jarsigner -keystore keystore-name-here commons-logging-1.1.1.jar signFiles -storepass your-pass-here -keypass your-pass-here -signedjar
+jarsigner -keystore keystore-name-here httpclient-4.1.1.jar signFiles -storepass your-pass-here -keypass your-pass-here -signedjar
+jarsigner -keystore keystore-name-here httpclient-cache-4.1.1.jar signFiles -storepass your-pass-here -keypass your-pass-here -signedjar
+jarsigner -keystore keystore-name-here httpcore-4.1.jar signFiles -storepass your-pass-here -keypass your-pass-here -signedjar
+jarsigner -keystore keystore-name-here httpmime-4.1.1.jar signFiles -storepass your-pass-here -keypass your-pass-here -signedjar
+jarsigner -keystore keystore-name-here linuxlibs.jar signFiles -storepass your-pass-here -keypass your-pass-here -signedjar
+jarsigner -keystore keystore-name-here maclibs.jar signFiles -storepass your-pass-here -keypass your-pass-here -signedjar
+jarsigner -keystore keystore-name-here winlibs.jar signFiles -storepass your-pass-here -keypass your-pass-here -signedjar

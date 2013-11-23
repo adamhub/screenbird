@@ -1,0 +1,11 @@
+Hello ({{ email }})
+
+ You are invited to become a member of {{ user }}'s channel on Screenbird, and can now share in the features of a premium account.
+
+To confirm, please follow the link below:
+
+   {{ confirm_link }}
+   
+-------------------------
+Screenbird Team 
+

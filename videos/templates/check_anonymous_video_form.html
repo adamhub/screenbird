@@ -1,0 +1,13 @@
+ <script src="http://java.com/js/deployJava.js"></script>
+<script>
+    var attributes = {
+        code:       "com.bixly.pastevid.driver.Anonymous",
+        archive:    "Anonymous.jar, lib/commons-codec-1.4.jar, lib/commons-logging-1.1.1.jar, lib/httpclient-4.1.1.jar, lib/httpclient-cache-4.1.1.jar,  lib/httpcore-4.1.jar, lib/httpmime-4.1.1.jar, lib/jmf.jar, lib/javaws.jar",
+        width:      1,
+        height:     1,
+        mayscript:  true
+    };
+    var parameters = {jnlp_href:"media/applet/launch-anonymous.jnlp", base_url:"http://{{ request.META.HTTP_HOST }}/"}; 
+    var version = "1.5";
+    deployJava.runApplet(attributes, parameters, version);
+</script>

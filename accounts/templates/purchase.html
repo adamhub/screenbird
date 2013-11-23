@@ -1,0 +1,33 @@
+{% extends "site_base.html" %}
+
+{% block header %}{% endblock %}
+
+{% block content %}
+<style>
+    #main form p{
+        padding: 0 420px 0 60px;
+    }
+    #main form p input{
+        float: right;
+    }
+</style>
+    <h1>Upgrade to a Paid Account</h1>
+    
+    {% if error_message %}
+           <h3>{{error_message}}</h3>
+    {% else %}
+            <h3>{{success_message}}</h3>
+    {% endif%}
+        <div>
+            <form action="{% url verify_details %}" method="post">{% csrf_token %}
+                {{ form.as_p }}
+                <p>
+                {% if success_message %}
+                    <input type="button" value="Ok" />
+                {% else %}
+                    <input type="submit" value="Submit" />
+                {% endif %}
+                </p>
+            </form>
+        </div>   
+{% endblock %}
