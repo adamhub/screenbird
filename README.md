@@ -1,10 +1,8 @@
 Screenbird
 ==========
 
-You have found a HUGE program, origianlly built by Bixly, and now released to the wild. 
-It's a cross-platform browser based screen recording tool. Check out the live demo:
-
-http://screenbird.com for the fully functioning demo of the project. 
+You have found a HUGE program, origianlly built by http://Bixly.com, and now released to the wild. 
+It's a cross-platform browser based screen recording tool. Features include a Java screen recorder with local compression, multi-tenant architecture, outlines for your videos, sharing videos to Youtube, and much more. 
 
 To run locally:
 
